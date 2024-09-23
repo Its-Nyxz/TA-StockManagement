@@ -7,11 +7,42 @@
         <div class="col-lg-12">
             <div class="card w-100">
                 <div class="card-header row">
-                    <div class="d-flex justify-content-end align-items-center w-100">
-                        <button class="btn btn-success" type="button"  data-toggle="modal" data-target="#TambahData" id="modal-button"><i class="fas fa-plus m-1"></i> {{__('add data')}} </button>
-                    </div>
+                <div class="row w-100">
+                        <div class="col-lg-12  w-100">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="date_start">{{__("start date")}}: </label>
+                                        <input type="date" name="start_date" class="form-control w-100">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="date_start">{{__("end date")}}: </label>
+                                         <input type="date" name="end_date" class="form-control w-100">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="date_start">{{__("inputer")}}: </label>
+                                         <select name="inputer" id="inputer" class="form-control w-100">
+                                            <option value="">-- {{ __("select inputer") }} --</option>
+                                            @foreach ($users as $user)
+                                                <option value="{{$user->id}}">{{$user->name}}</option>
+                                            @endforeach
+                                         </select>
+                                    </div>
+                                </div>
+                                <div class="text-end col-sm-3 pt-4">
+                                    <div class = "d-flex justify-content-end">
+                                    <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i class="fas fa-filter m-1"></i>{{ __("filter") }}</button>
+                                    <button class="btn btn-success m-1 mt-1" type="button"  data-toggle="modal" data-target="#TambahData" id="modal-button"><i class="fas fa-plus m-1"></i> {{__('add data')}} </button>
+                                    </div>                                
+                                </div>
+                            </div>
+                        </div>
                 </div>
-
+                
                 <!-- Modal Barang -->
             <div class="modal fade" id="modal-barang" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog  modal-xl modal-dialog-scrollable">
@@ -35,7 +66,7 @@
                                             <th class="border-bottom-0">{{__('type')}}</th>
                                             <th class="border-bottom-0">{{__('unit')}}</th>
                                             <th class="border-bottom-0">{{__('brand')}}</th>
-                                            <th class="border-bottom-0">{{__('first stock')}}</th>
+                                            <th class="border-bottom-0">{{__('stock amount')}}</th>
                                             <th class="border-bottom-0">{{__('price')}}</th>
                                             <th class="border-bottom-0" width="1%">{{__('action')}}</th>
                                         </tr>
@@ -119,7 +150,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" id="kembali">{{__("cancel")}}</button>
-                            <button type="button" class="btn btn-success" id="simpan">{{__("save")}}</button>
+                            <button type="button" class="btn btn-success" id="simpan">{{__("simpan")}}</button>
                         </div>
                         </div>
                     </div>
@@ -164,7 +195,7 @@
             lengthChange: true,
             processing:true,
             serverSide:true,
-            ajax:`{{route('barang.list')}}`,
+            ajax: `{{route('barang.list')}}`,
             columns:[
                 {
                     "data":null,"sortable":false,
@@ -194,8 +225,8 @@
                     name:'brand_name'
                 },
                 {
-                    data:'quantity',
-                    name:'quantity'
+                    data:'total',
+                    name:'total'
                 },
                 {
                     data:'price',
@@ -262,9 +293,6 @@
 
     }
 
-
-
-
     function simpan(){
         const item_id =  $("input[name='id_barang']").val();
         const user_id = `{{Auth::user()->id}}`;
@@ -311,7 +339,6 @@
         })
     }
 
-
     function ubah(){
         const id =  $("input[name='id']").val();
         const item_id =  $("input[name='id_barang']").val();
@@ -350,13 +377,20 @@
     }
 
     $(document).ready(function(){
-        $('#data-tabel').DataTable({
+        const tabel = $('#data-tabel').DataTable({
             lengthChange: true,
             processing:true,
             serverSide:true,
-            ajax:`{{route('transaksi.masuk.list')}}`,
+            ajax:{
+                url:`{{route('transaksi.masuk.list')}}`,
+                data:function(d){
+                    d.start_date = $("input[name='start_date']").val();
+                    d.end_date = $("input[name='end_date']").val();
+                    d.inputer = $("#inputer").val();
+                }
+            },      
             columns:[
-                {
+                {    
                     "data":null,"sortable":false,
                     render:function(data,type,row,meta){
                         return meta.row + meta.settings._iDisplayStart+1;
@@ -401,11 +435,12 @@
         $("#cari-barang").on("click",detail);
 
         $('#simpan').on('click',function(){
-            if($(this).text() === "{__('update')}"){
+            if($(this).text() === "Simpan Perubahan"){
                 ubah();
             }else{
                 simpan();
             }
+            // console.log();
         });
 
         $("#modal-button").on("click",function(){
@@ -423,6 +458,9 @@
             $('#simpan').text("{{__('save')}}");
         });
 
+        $("#filter").on('click',function(){
+            tabel.draw();
+        });
 
     });
 
@@ -430,7 +468,7 @@
 
     $(document).on("click",".ubah",function(){
         $("#modal-button").click();
-        $("#simpan").text("{{__('update')}}");
+        $("#simpan").text("Simpan Perubahan");
         let id = $(this).attr('id');
         $.ajax({
             url:"{{route('transaksi.masuk.detail')}}",

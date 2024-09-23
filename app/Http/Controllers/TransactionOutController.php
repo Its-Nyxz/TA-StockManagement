@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
 use App\Models\GoodsOut;
 use App\Models\GoodsIn;
 use App\Models\Customer;
 use App\Models\Item;
+use App\Models\User;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 
@@ -18,12 +20,25 @@ class TransactionOutController extends Controller
     {
         $in_status = Item::where('active','true')->count();
         $customers = Customer::all();
-        return view('admin.master.transaksi.keluar',compact('customers','in_status'));
+        $users = User::all();
+        return view('admin.master.transaksi.keluar',compact('customers','in_status','users'));
     }
 
     public function list(Request $request):JsonResponse
     {
-        $goodsouts = GoodsOut::with('item','user','customer')->latest()->get();
+        if( !empty($request->start_date) && !empty($request->end_date) ){
+            $goodsouts = GoodsOut::with('item','user','customer');
+            $goodsouts -> whereBetween('date_out',[$request->start_date,$request->end_date]);
+            if($request->inputer){
+                $goodsouts -> where('user_id',[$request->inputer]);
+            }
+        }else if(!empty($request->inputer)){
+            $goodsouts = GoodsOut::with('item','user','customer');
+            $goodsouts -> where('user_id',[$request->inputer]);
+        }else{
+            $goodsouts = GoodsOut::with('item','user','customer');
+        }
+        $goodsouts ->latest()->get();
         if($request->ajax()){
             return DataTables::of($goodsouts)
             ->addColumn('quantity',function($data){
@@ -36,9 +51,9 @@ class TransactionOutController extends Controller
             ->addColumn("kode_barang",function($data){
                 return $data -> item -> code;
             })
-            ->addColumn("customer_name",function($data){
-                return $data -> customer -> name;
-            })
+            // ->addColumn("customer_name",function($data){
+            //     return $data -> customer -> name;
+            // })
             ->addColumn("item_name",function($data){
                 return $data -> item -> name;
             })
@@ -73,7 +88,7 @@ class TransactionOutController extends Controller
             'quantity'=>$request->quantity,
             'invoice_number'=>$request->invoice_number,
             'date_out'=>$request->date_out,
-            'customer_id'=>$request->customer_id
+            'customer_id'=>1
         ];
         GoodsOut::create($data);
         return response() -> json([

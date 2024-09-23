@@ -7,7 +7,7 @@
 
         <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-green">
+            <div class="small-box bg-purple">
               <div class="inner">
                 <h3>{{$product_count}}</h3>
 
@@ -22,7 +22,7 @@
 
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-red">
+            <div class="small-box bg-pink">
               <div class="inner">
                 <h3>{{$category_count}}</h3>
 
@@ -37,7 +37,7 @@
 
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-blue">
+            <div class="small-box bg-olive">
               <div class="inner">
                 <h3>{{$unit_count}}</h3>
 
@@ -52,7 +52,7 @@
 
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-pink">
+            <div class="small-box bg-teal">
               <div class="inner">
                 <h3>{{$brand_count}}</h3>
 
@@ -84,7 +84,7 @@
 
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-orange">
+            <div class="small-box bg-red">
               <div class="inner" style="color:white !important;">
                 <h3>{{$goodsout}}</h3>
 
@@ -97,9 +97,9 @@
             </div>
           </div>
 
-          <div class="col-lg-3 col-6">
+          <!-- <div class="col-lg-3 col-6"> -->
             <!-- small box -->
-            <div class="small-box bg-purple">
+            <!-- <div class="small-box bg-purple">
               <div class="inner">
                 <h3>{{$customer}}</h3>
 
@@ -109,12 +109,12 @@
                 <i class="ion ion-android-person"></i>
               </div>
               <a href="{{route('customer')}}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
+            </div> -->
+          <!-- </div> -->
 
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-purple">
+            <div class="small-box bg-gray">
               <div class="inner">
                 <h3>{{$supplier}}</h3>
 
@@ -123,13 +123,15 @@
               <div class="icon">
                 <i class="fas fa-shipping-fast"></i>
               </div>
-              <a href="{{route('customer')}}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{route('supplier')}}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
 
+          @if(Auth::user()->role->name != 'staff')
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-yellow" style="color:white !important;">
+            <div class="small-box bg-info" >
+            <!-- style="color:white !important;" -->
               <div class="inner">
                 <h3>{{$staffCount}}</h3>
 
@@ -141,10 +143,29 @@
               <a href="{{route('settings.employee')}}" class="small-box-footer" style="color:white !important;">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
+          @endif
 
+          @if(Auth::user()->role->name == 'staff')
           <div class="col-lg-3 col-6">
             <!-- small box -->
-            <div class="small-box bg-yellow" style="color:white !important;">
+            <div class="small-box bg-info" >
+            <!-- style="color:white !important;" -->
+              <div class="inner">
+                <h3>{{$total_stok}}</h3>
+
+                <p class="font-weight-bold">{{ __("stock report") }}</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-solid fa-book"></i>
+              </div>
+              <a href="{{route('laporan.stok')}}" class="small-box-footer" style="color:white !important;">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          @endif
+
+          <!-- <div class="col-lg-3 col-6"> -->
+            <!-- small box -->
+            <!-- <div class="small-box bg-yellow" style="color:white !important;">
               <div class="inner">
                 <h3 id="total-pendapatan-bulan-ini">Rp. 0</h3>
                 <p class="font-weight-bold">{{ __("total income") }}</p>
@@ -153,8 +174,8 @@
                 <i class="ion ion-cash"></i>
               </div>
               <a href="" class="small-box-footer" style="color:white !important;">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
+            </div> -->
+          <!-- </div> -->
 
   </div>
 </div>
@@ -186,7 +207,7 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-12 col-lg-6">
+    <!-- <div class="col-sm-12 col-lg-6">
 
       <div class="card">
         <div class="card-header">
@@ -212,7 +233,7 @@
           </div>
         </div>
 
-    </div>
+    </div> -->
   </div>
 </div>
 

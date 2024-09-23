@@ -13045,13 +13045,13 @@ body:not(.layout-fixed) .main-sidebar .sidebar {
 
 .sidebar-dark-navy .nav-sidebar > .nav-item > .nav-link.active,
 .sidebar-light-navy .nav-sidebar > .nav-item > .nav-link.active {
-  background-color: #001f3f;
+  background-color: #001f3f ;
   color: #fff;
 }
 
 .sidebar-dark-navy .nav-sidebar.nav-legacy > .nav-item > .nav-link.active,
 .sidebar-light-navy .nav-sidebar.nav-legacy > .nav-item > .nav-link.active {
-  border-color: #001f3f;
+  border-color: ;
 }
 
 .sidebar-dark-olive .nav-sidebar > .nav-item > .nav-link.active,

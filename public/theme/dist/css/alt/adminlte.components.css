@@ -681,7 +681,7 @@ body.text-sm .input-group-text {
 }
 
 .custom-switch.custom-switch-off-navy .custom-control-input ~ .custom-control-label::before {
-  background-color: #001f3f;
+  background-color: #001f3f ;
   border-color: black;
 }
 
@@ -694,7 +694,7 @@ body.text-sm .input-group-text {
 }
 
 .custom-switch.custom-switch-on-navy .custom-control-input:checked ~ .custom-control-label::before {
-  background-color: #001f3f;
+  background-color: #001f3f ;
   border-color: black;
 }
 
@@ -1525,7 +1525,7 @@ body.text-sm .input-group-text {
 }
 
 .custom-range.custom-range-navy::-webkit-slider-thumb {
-  background-color: #001f3f;
+  background-color: ;
 }
 
 .custom-range.custom-range-navy::-webkit-slider-thumb:active {

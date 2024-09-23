@@ -7,10 +7,45 @@
         <div class="col-lg-12">
             <div class="card w-100">
                 <div class="card-header row">
-                    <div class="d-flex justify-content-end align-items-center w-100">
+                <div class="row w-100">
+                        <div class="col-lg-12  w-100">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="date_start">{{__("start date")}}: </label>
+                                        <input type="date" name="start_date" class="form-control w-100">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="date_start">{{__("end date")}}: </label>
+                                         <input type="date" name="end_date" class="form-control w-100">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label for="date_start">{{__("inputer")}}: </label>
+                                         <select name="inputer" id="inputer" class="form-control w-100">
+                                            <option value="">-- {{ __("select inputer") }} --</option>
+                                            @foreach ($users as $user)
+                                                <option value="{{$user->id}}">{{$user->name}}</option>
+                                            @endforeach
+                                         </select>
+                                    </div>
+                                </div>
+                                <div class="text-end col-sm-3 pt-4">
+                                    <div class = "d-flex justify-content-end">
+                                    <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i class="fas fa-filter m-1"></i>{{ __("filter") }}</button>
+                                    <button class="btn {{$in_status!=0?'btn-success':'btn-danger'}} m-1 mt-1" type="button"  data-toggle="modal" {{$in_status!=0?'data-target="#TambahData"':'data-target="alert"'}} id="modal-button"><i class="fas fa-plus m-1"></i> {{__('add data')}}</button>
+                                    </div>                                
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                    <!-- <div class="d-flex justify-content-end align-items-center w-100">
                         <button class="btn {{$in_status!=0?'btn-success':'btn-danger'}}" type="button"  data-toggle="modal" {{$in_status!=0?'data-target="#TambahData"':'data-target="alert"'}} id="modal-button"><i class="fas fa-plus m-1"></i> {{__('add data')}}</button>
                     </div>
-                </div>
+                </div> -->
 
 
 
@@ -37,7 +72,7 @@
                                             <th class="border-bottom-0">{{__('type')}}</th>
                                             <th class="border-bottom-0">{{__('unit')}}</th>
                                             <th class="border-bottom-0">{{__('brand')}}</th>
-                                            <th class="border-bottom-0">{{__('first stock')}}</th>
+                                            <th class="border-bottom-0">{{__('stock amount')}}</th>
                                             <th class="border-bottom-0">{{__('price')}}</th>
                                             <th class="border-bottom-0" width="1%">{{__('action')}}</th>
                                         </tr>
@@ -75,7 +110,7 @@
                                         <label for="tanggal_keluar" class="form-label">{{__("out date")}} <span class="text-danger">*</span></label>
                                         <input type="date" name="tanggal_keluar" class="form-control">
                                     </div>
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label for="customer" class="form-label">{{__("choose customers")}}<span class="text-danger">*</span></label>
                                         <select name="customer" class="form-control">
                                             <option selected value="-- Pilih Customer --">-- {{__("choose customers")}} --</option>
@@ -83,7 +118,7 @@
                                             <option value="{{$customer->id}}">{{$customer->name}}</option>
                                             @endforeach
                                         </select>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="col-md-5">
                                     <label for="kode_barang" class="form-label">{{__('item code')}} <span class="text-danger">*</span></label>
@@ -136,7 +171,7 @@
                                     <th class="border-bottom-0">{{__("date")}}</th>
                                     <th class="border-bottom-0">{{__("outgoing item code")}}</th>
                                     <th class="border-bottom-0">{{__("item code")}}</th>
-                                    <th class="border-bottom-0">{{__("customer")}}</th>
+                                    <!-- <th class="border-bottom-0">{{__("customer")}}</th> -->
                                     <th class="border-bottom-0">{{__("item")}}</th>
                                     <th class="border-bottom-0">{{__("outgoing amount")}}</th>
                                     <th class="border-bottom-0" width="1%">{{__("action")}}</th>
@@ -164,7 +199,7 @@
             lengthChange: true,
             processing:true,
             serverSide:true,
-            ajax:`{{route('barang.list.in')}}`,
+            ajax:`{{route('barang.list')}}`,
             columns:[
                 {
                     "data":null,"sortable":false,
@@ -194,8 +229,8 @@
                     name:'brand_name'
                 },
                 {
-                    data:'quantity',
-                    name:'quantity'
+                    data:'total',
+                    name:'total'
                 },
                 {
                     data:'price',
@@ -262,9 +297,6 @@
 
     }
 
-
-
-
     function simpan(){
         const item_id =  $("input[name='id_barang']").val();
         const user_id = `{{Auth::user()->id}}`;
@@ -278,7 +310,7 @@
         Form.append('item_id',item_id);
         Form.append('date_out', date_out );
         Form.append('quantity', quantity );
-        Form.append('customer_id', customer_id );
+        // Form.append('customer_id', customer_id );
         Form.append('invoice_number', invoice_number );
         $.ajax({
             url:`{{route('transaksi.keluar.save')}}`,
@@ -329,7 +361,7 @@
         const item_id =  $("input[name='id_barang']").val();
         const user_id = `{{Auth::user()->id}}`;
         const date_out = $("input[name='tanggal_keluar']").val();
-        const customer_id = $("select[name='customer']").val();
+        const customer_id = 1;
         const invoice_number = $("input[name='kode']").val();
         const quantity = $("input[name='jumlah'").val();
         $.ajax({
@@ -363,11 +395,18 @@
     }
 
     $(document).ready(function(){
-        $('#data-tabel').DataTable({
+        const tabel = $('#data-tabel').DataTable({
             lengthChange: true,
             processing:true,
             serverSide:true,
-            ajax:`{{route('transaksi.keluar.list')}}`,
+            ajax:{
+                url:`{{route('transaksi.keluar.list')}}`,
+                data:function(d){
+                    d.start_date = $("input[name='start_date']").val();
+                    d.end_date = $("input[name='end_date']").val();
+                    d.inputer = $("#inputer").val();
+                }
+            },
             columns:[
                 {
                     "data":null,"sortable":false,
@@ -386,10 +425,11 @@
                 data:"kode_barang",
                 name:"kode_barang"
                },
+            //    {
+            //     data:"customer_name",
+            //     name:"customer_name"
+            //    },
                {
-                data:"customer_name",
-                name:"customer_name"
-               },{
                 data:"item_name",
                 name:"item_name"
                },
@@ -439,7 +479,7 @@
             $("input[name='kode']").val("BRGMSK-"+id);
             $("input[name='id']").val(null);
             $("input[name='id_barang']").val(null);
-            $("select[name='customer']").val('-- Pilih Customer --');
+            // $("select[name='customer']").val('-- Pilih Customer --');
             $("input[name='nama_barang']").val(null);
             $("input[name='tanggal_keluar']").val(null);
             $("input[name='kode_barang']").val(null);
@@ -447,6 +487,10 @@
             $("input[name='satuan_barang']").val(null);
             $("input[name='jumlah']").val(null);
             $('#simpan').text("Simpan");
+        });
+
+        $("#filter").on('click',function(){
+            tabel.draw();
         });
 
 

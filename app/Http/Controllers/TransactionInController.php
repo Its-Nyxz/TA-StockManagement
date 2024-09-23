@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use App\Models\GoodsIn;
 use App\Models\Supplier;
+use App\Models\User;
 use App\Models\Item;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
@@ -16,12 +17,26 @@ class TransactionInController extends Controller
     public function index():View
     {
         $suppliers = Supplier::all();
-        return view('admin.master.transaksi.masuk',compact('suppliers'));
+        $users = User::all();
+        return view('admin.master.transaksi.masuk',compact('suppliers','users'));
     }
 
     public function list(Request $request):JsonResponse
     {
-        $goodsins = GoodsIn::with('item','user','supplier')->latest()->get();
+        if( !empty($request->start_date) && !empty($request->end_date) ){
+            $goodsins = GoodsIn::with('item','user','supplier');
+            $goodsins -> whereBetween('date_received',[$request->start_date,$request->end_date]);
+            if($request->inputer){
+                $goodsins -> where('user_id',[$request->inputer]);
+            }
+        }else if(!empty($request->inputer)){
+            $goodsins = GoodsIn::with('item','user','supplier');
+            $goodsins -> where('user_id',[$request->inputer]);
+        }else{
+            $goodsins = GoodsIn::with('item','user','supplier');
+        }
+        $goodsins -> latest() -> get();
+        // $goodsins = GoodsIn::with('item','user','supplier')->latest()->get();
         if($request->ajax()){
             return DataTables::of($goodsins)
             ->addColumn('quantity',function($data){
@@ -40,6 +55,7 @@ class TransactionInController extends Controller
             ->addColumn("item_name",function($data){
                 return $data -> item -> name;
             })
+            
             ->addColumn('tindakan',function($data){
                 $button = "<button class='ubah btn btn-success m-1' id='".$data->id."'><i class='fas fa-pen m-1'></i>".__("edit")."</button>";
                 $button .= "<button class='hapus btn btn-danger m-1' id='".$data->id."'><i class='fas fa-trash m-1'></i>".__("delete")."</button>";

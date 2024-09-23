@@ -36,38 +36,38 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="{{route('barang.jenis')}}" class="nav-link text-white">
-                <i class="fas fa-angle-right"></i>
+                <i class="fas fa-circle"></i>
                   <p>{{ __("category") }}</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('barang.satuan')}}" class="nav-link text-white">
-                <i class="fas fa-angle-right"></i>
+                <i class="fas fa-circle"></i>
                   <p>{{ __("unit") }}</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('barang.merk')}}" class="nav-link text-white">
-                <i class="fas fa-angle-right"></i>
+                <i class="fas fa-circle"></i>
                   <p>{{ __("brand") }}</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('barang')}}" class="nav-link text-white">
-                <i class="fas fa-angle-right"></i>
+                <i class="fas fa-circle"></i>
                   <p>{{ __("goods") }}</p>
                 </a>
               </li>
             </ul>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="{{route('customer')}}" class="nav-link text-white">
               <i class="nav-icon far fa-user"></i>
               <p>
               {{ __("customer") }}
               </p>
             </a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a href="{{route('supplier')}}" class="nav-link text-white">
               <i class="nav-icon fas fa-shipping-fast"></i>
@@ -87,18 +87,19 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="{{route('transaksi.masuk')}}" class="nav-link text-white">
-                <i class="fas fa-angle-right"></i>
+                <i class="fas fa-circle"></i>
                   <p>{{ __("incoming transaction") }}</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('transaksi.keluar')}}" class="nav-link text-white">
-                <i class="fas fa-angle-right"></i>
+                <i class="fas fa-circle"></i>
                   <p>{{ __("outbound transaction") }}</p>
                 </a>
               </li>
             </ul>
           </li>
+          
           <li class="nav-item">
             <a href="javascript:void(0)" class="nav-link text-white">
               <i class="nav-icon fas fa-print"></i>
@@ -108,26 +109,29 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
+              @if(Auth::user()->role->name != 'staff')
               <li class="nav-item">
                 <a href="{{route('laporan.masuk')}}" class="nav-link text-white">
-                <i class="fas fa-angle-right"></i>
+                <i class="fas fa-circle"></i>
                   <p>{{ __("incoming goods report") }}</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('laporan.keluar')}}" class="nav-link text-white">
-                <i class="fas fa-angle-right"></i>
+                <i class="fas fa-circle"></i>
                   <p>{{ __("outgoing goods report") }}</p>
                 </a>
               </li>
+              @endif
               <li class="nav-item">
                 <a href="{{route('laporan.stok')}}" class="nav-link text-white">
-                <i class="fas fa-angle-right"></i>
+                <i class="fas fa-circle"></i>
                   <p>{{ __("stock report") }}</p>
                 </a>
               </li>
             </ul>
           </li>
+       
           <li class="nav-header">{{ __("others") }}</li>
           <li class="nav-item">
             <a href="javascript:void(0)" class="nav-link text-white">
@@ -138,23 +142,23 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-            @if(Auth::user()->role->name != 'employee')
+            @if(Auth::user()->role->name != 'staff')
               <li class="nav-item">
                 <a href="{{route('settings.employee')}}" class="nav-link text-white">
-                <i class="fas fa-angle-right"></i>
+                <i class="fas fa-regular-circle"></i>
                   <p>{{ __("employee") }}</p>
                 </a>
               </li>
             @endif
               <!-- <li class="nav-item">
                 <a href="" class="nav-link text-white">
-                <i class="fas fa-angle-right"></i>
+                <i class="fas fa-regular-circle"></i>
                   <p>web</p>
                 </a>
               </li> -->
               <li class="nav-item">
                 <a href="{{route('settings.profile')}}" class="nav-link text-white">
-                <i class="fas fa-angle-right"></i>
+                <i class="fas fa-regular-circle"></i>
                   <p>{{ __("profile") }}</p>
                 </a>
               </li>

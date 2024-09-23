@@ -41,7 +41,7 @@
                                 <label for="role">{{ __("role") }}</label>
                                 <select class="form-control" id="role">
                                     <option selected value="-- {{ __('role') }} --">-- {{ __("role") }} --</option>
-                                    @foreach($roles as $role)
+                                    @foreach($roles->where('name','!=','super_admin') as $role)
                                         <option value="{{$role->id}}">{{$role->name}}</option>
                                     @endforeach
                                 </select>

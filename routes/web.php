@@ -85,7 +85,7 @@ Route::middleware(['auth', "localization"])-> group(function(){
 
 
     // customer (izin untuk staff hanya read)
-    Route::controller(CustomerController::class)->prefix('/customer')->group(function(){
+    Route::controller(CustomerController::class)->prefix('/customer')->middleware(['false.detect'])->group(function(){
         Route::get('/','index')->name('customer');
         Route::get('/daftar','list')->name('customer.list');
         Route::middleware(['employee.middleware'])->group(function(){
@@ -133,13 +133,13 @@ Route::middleware(['auth', "localization"])-> group(function(){
     });
 
     // laporan barang masuk
-    Route::controller(ReportGoodsInController::class)->prefix('/laporan/masuk')->group(function(){
+    Route::controller(ReportGoodsInController::class)->prefix('/laporan/masuk')->middleware('employee.middleware')->group(function(){
         Route::get('/','index')->name('laporan.masuk');
         Route::get('/list','list')->name('laporan.masuk.list');
     });
 
     // laporan barang keluar
-    Route::controller(ReportGoodsOutController::class)->prefix('/laporan/keluar')->group(function(){
+    Route::controller(ReportGoodsOutController::class)->prefix('/laporan/keluar')->middleware('employee.middleware')->group(function(){
         Route::get('/','index')->name('laporan.keluar');
         Route::get('/list','list')->name('laporan.keluar.list');
     });

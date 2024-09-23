@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="{{asset('theme/alert/css/sweetalert2.css')}}">
   <!-- jQuery -->
   <script src="{{asset('theme/plugins/jquery/jquery.min.js')}}"></script>
-    <!-- jQuery UI 1.11.4 -->
+  <!-- jQuery UI 1.11.4 -->
   <script src="{{asset('theme/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
   <script>
@@ -45,7 +45,7 @@
             background-image: url('{{ asset("localizations/flags.png") }}');
         }
   </style>
-</head>
+
 <body class="hold-transition sidebar-mini layout-fixed">
 
 <div class="wrapper">
@@ -103,6 +103,10 @@
 <script src="{{asset('theme/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('theme/dist/js/adminlte.js')}}"></script>
+<!-- Include Bootstrap JS -->
+<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script> -->
+<!-- Include Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
   function changeLanguage(lang) {

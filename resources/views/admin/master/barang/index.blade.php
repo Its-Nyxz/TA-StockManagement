@@ -1,6 +1,11 @@
 @extends('layouts.app')
 @section('title', __("goods"))
 @section('content')
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" /> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> -->
+<!-- Select2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@1.3.2/dist/select2-bootstrap4.min.css">
 <x-head-datatable/>
 <div class="container-fluid">
     <div class="row">
@@ -13,10 +18,8 @@
                     @endif
                     </div>
                 </div>
-
-
                 <!-- Modal -->
-                <div class="modal fade" id="TambahData" tabindex="-1" aria-labelledby="TambahDataModalLabel" aria-hidden="true">
+                <div class="modal fade" id="TambahData" aria-labelledby="TambahDataModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-centered">
                         <div class="modal-content">
                         <div class="modal-header">
@@ -39,7 +42,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="jenisbarang" class="form-label">{{ __("types of goods") }} <span class="text-danger">*</span></label>
-                                        <select name="jenisbarang" class="form-control">
+                                        <select name="jenisbarang" id="jenisbarang" class="form-control">
                                             <option value="">-- {{ __("select category") }} --</option>
                                             @foreach ($jenisbarang as $jb)
                                                 <option value="{{$jb->id}}">{{$jb->name}}</option>
@@ -48,19 +51,19 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="satuan" class="form-label">{{ __("unit of goods") }} <span class="text-danger">*</span></label>
-                                        <select name="satuan" class="form-control">
+                                        <select name="satuan" id="satuan" class="form-control">
                                             <option value="">-- {{ __("select unit") }} --</option>
                                             @foreach ($satuan as $s)
-                                            <option value="{{$s->id}}">{{$s->name}}</option>
+                                                <option value="{{$s->id}}">{{$s->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="merk" class="form-label">{{ __("brand of goods") }} <span class="text-danger">*</span></label>
-                                        <select name="merk" class="form-control">
+                                        <select name="merk" id="merk" class="form-control">
                                             <option value="">-- {{ __("select brand") }} --</option>
                                             @foreach ($merk as $m)
-                                            <option value="{{$m->id}}">{{$m->name}}</option>
+                                                <option value="{{$m->id}}">{{$m->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -68,10 +71,10 @@
                                         <label for="harga" class="form-label">{{ __("initial amount") }} <span class="text-danger">*</span></label>
                                         <input type="number" value="0" name="jumlah" class="form-control">
                                     </div>
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label for="harga" class="form-label">{{ __("price of goods") }} <span class="text-danger">*</span></label>
                                         <input type="text"  id="harga" name="harga" class="form-control" placeholder="RP. 0">
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="col-md-5">
                                     <div class="form-group">
@@ -89,7 +92,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="data-tabel" width="100%"  class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
@@ -103,7 +105,7 @@
                                     <th class="border-bottom-0">{{ __("unit") }}</th>
                                     <th class="border-bottom-0">{{ __("brand") }}</th>
                                     <th class="border-bottom-0">{{ __("initial stock") }}</th>
-                                    <th class="border-bottom-0">{{ __("price") }}</th>
+                                    <!-- <th class="border-bottom-0">{{ __("price") }}</th> -->
                                     @if(Auth::user()->role->name != 'staff')
                                     <th class="border-bottom-0" width="1%">{{ __("action") }}</th>
                                     @endif
@@ -117,12 +119,15 @@
     </div>
 </div>
 <x-data-table/>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script>
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
 
     function harga(){
         this.value = formatIDR(this.value.replace(/[^0-9.]/g, ''));
@@ -186,10 +191,10 @@
                     data:'quantity',
                     name:'quantity'
                 },
-                {
-                    data:'price',
-                    name:'price'
-                },
+                // {
+                //     data:'price',
+                //     name:'price'
+                // },
                 @if(Auth::user()->role->name != 'staff')
                 {
                     data:'tindakan',
@@ -207,7 +212,7 @@
         const category_id = $("select[name='jenisbarang']").val();
         const unit_id = $("select[name='satuan']").val();
         const brand_id = $("select[name='merk']").val();
-        const price = $("input[name='harga']").val();
+        // const price = $("input[name='harga']").val();
         // return console.log({name,code,category_id,unit_id,brand_id,price,quantity});
         const Form = new FormData();
         Form.append('image', image[0]);
@@ -216,7 +221,7 @@
         Form.append('category_id', category_id);
         Form.append('unit_id', unit_id);
         Form.append('brand_id', brand_id);
-        Form.append('price', price);
+        // Form.append('price', price);
         if(name.length == 0){
             return Swal.fire({
                 position: "center",
@@ -258,7 +263,7 @@
                     $("select[name='satuan']").val(null);
                     $("select[name='merk']").val(null);
                     $("input[name='jumlah']").val(0);
-                    $("input[name='harga']").val(null);
+                    // $("input[name='harga']").val(null);
                     $('#data-tabel').DataTable().ajax.reload();
                 },
                 error:function(err){
@@ -328,6 +333,13 @@
         $("#harga").on("input",harga);
         isi();
 
+        $('#jenisbarang, #satuan, #merk').select2({
+            theme: 'bootstrap4',
+            placeholder: "-- Pilih --",
+            allowClear: true,
+            minimumInputLength: 0  // Set this to enable search after 1 character
+        });
+
         $('#simpan').on('click',function(){
             if($(this).text() === 'Simpan Perubahan'){
                 ubah();
@@ -342,11 +354,12 @@
             $("input[name='id']").val(null);
             $("input[name='kode']").val(null);
             $("#GetFile").val(null);
-            $("select[name='jenisbarang']").val(null);
-            $("select[name='satuan']").val(null);
-            $("select[name='merk']").val(null);
+            // $("select[name='jenisbarang']").val(null);
+            // $("select[name='satuan']").val(null);
+            // $("select[name='merk']").val(null);
+            $("select[name='jenisbarang'], select[name='satuan'], select[name='merk']").val(null).trigger('change'); // Reset Select2
             $("input[name='jumlah']").val(0);
-            $("input[name='harga']").val(null);
+            // $("input[name='harga']").val(null);
             $("#simpan").text("Simpan");
             id = new Date().getTime();
             $("input[name='kode']").val("BRG-"+id);
@@ -373,11 +386,14 @@
                 $("input[name='id']").val(data.id);
                 $("input[name='nama']").val(data.name);
                 $("input[name='kode']").val(data.code);
-                $("select[name='jenisbarang']").val(data.category_id);
-                $("select[name='satuan']").val(data.unit_id);
-                $("select[name='merk']").val(data.brand_id);
+                // $("select[name='jenisbarang']").val(data.category_id);
+                // $("select[name='satuan']").val(data.unit_id);
+                // $("select[name='merk']").val(data.brand_id);
+                $("select[name='jenisbarang']").val(data.category_id).trigger('change'); // Set nilai dan trigger
+                $("select[name='satuan']").val(data.unit_id).trigger('change'); // Set nilai dan trigger
+                $("select[name='merk']").val(data.brand_id).trigger('change'); // Set nilai dan trigger
                 $("input[name='jumlah']").val(data.quantity);
-                $("input[name='harga']").val(data.price);
+                // $("input[name='harga']").val(data.price);
             }
         });
 

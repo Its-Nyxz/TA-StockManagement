@@ -14,7 +14,7 @@ use App\Models\Role;
 class EmployeeController extends Controller
 {
     public function index(): View
-    {   $roles = Role::where('name','employee')->get();
+    {   $roles = Role::where('name','staff')->get();
         if(Auth::user()->role->name == 'super_admin'){
             $roles = Role::all();
         }
@@ -24,16 +24,20 @@ class EmployeeController extends Controller
     public function list(Request $request): JsonResponse
     {
         $staff = User::with('role')->whereHas('role',function(Builder $builder){
-            $builder = $builder -> where('name','employee');
+            $builder = $builder -> where('name','staff');
             if(Auth::user()->role->name != 'admin'){
                 $builder  ->
                 orWhere('name','admin')
                 -> orWhere('name','super_admin');
             }
         })->latest()->get();
-        if(Auth::user()->role->name == 'employee'){
-            $id_staff = Role::where('name','employee')->fisrt()->id;
+        if(Auth::user()->role->name == 'staff'){
+            $id_staff = Role::where('name','staff')->fisrt()->id;
             $staff = User::with('role')->where('role_id',$id_staff)->latest()->get();
+        }
+        if(Auth::user()->role->name == 'super_admin'){
+            // $id_staff = Role::where('name','super_admin')->fisrt()->id;
+            $staff = User::with('role')->where('id','!=',Auth::user()->id)->latest()->get();
         }
         if($request -> ajax()){
             return DataTables::of($staff)

@@ -21,9 +21,9 @@ class ItemController extends Controller
         $merk = Brand::all();
         return view('admin.master.barang.index',compact('jenisbarang','satuan','merk'));
     }
-    public function list(Request $request): JsonResponse
+    public function list(Request $request): JsonResponse 
     {
-        $items = Item::with('category','unit','brand')->latest()->get();
+        $items = Item::with('category','unit','brand','goodsIns','goodsOuts')->latest()->get();
         if($request -> ajax()){
             return DataTables::of($items)
             ->addColumn('img',function($data){
@@ -41,6 +41,23 @@ class ItemController extends Controller
             -> addColumn('brand_name',function($data){
                 return $data -> brand -> name;
             })
+            -> addColumn('brand_name',function($data){
+                return $data -> brand -> name;
+            })
+
+            ->addColumn("total", function ($data) {
+                $totalQuantityIn = $data->goodsIns->sum('quantity');
+                $totalQuantityOut = $data->goodsOuts->sum('quantity');
+                $item = Item::with("unit")->find($data -> id);
+                $result = $data->quantity + $totalQuantityIn - $totalQuantityOut ."/". $item -> unit -> name;
+                $result = max(0, $result);
+                if($result == 0){
+                    return $result;
+                }
+                return $result;
+            })
+            ->rawColumns(['total'])
+
             -> addColumn('tindakan',function($data){
                     $button = "<button class='ubah btn btn-success m-1' id='".$data->id."'><i class='fas fa-pen m-1'></i>".__("edit")."</button>";
                     $button .= "<button class='hapus btn btn-danger m-1' id='".$data->id."'><i class='fas fa-trash m-1'></i>".__("delete")."</button>";
@@ -57,7 +74,7 @@ class ItemController extends Controller
         $data = [
             'name'=>$request->name,
             'code'=>$request->code,
-            'price'=>$request->price,
+            // 'price'=>$request->price,
             'category_id'=>$request->category_id,
             'brand_id'=>$request->brand_id,
             'unit_id'=>$request->unit_id,
@@ -103,7 +120,7 @@ class ItemController extends Controller
         $data = [
             'name'=>$request->name,
             'code'=>$request->code,
-            'price'=>$request->price,
+            // 'price'=>$request->price,
             'quantity'=>$request->quantity,
             'category_id'=>$request->category_id,
             'brand_id'=>$request->brand_id,

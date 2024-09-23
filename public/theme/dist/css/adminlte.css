@@ -16341,7 +16341,7 @@ body.text-sm .control-sidebar {
 }
 
 .navbar-navy {
-  background-color: #001f3f;
+  background-color: ;
   color: #fff;
 }
 
@@ -53009,4 +53009,5 @@ a.text-muted:hover {
 .dark-mode .border-dark {
   border-color: #4b545c !important;
 }
+
 /*# sourceMappingURL=adminlte.css.map */
