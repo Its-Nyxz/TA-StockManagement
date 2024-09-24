@@ -14,7 +14,7 @@
       <a class="nav-link h5 dropdown" href="#" data-target="#lang" data-toggle="dropdown" role="button">
         <div class="d-flex gap-2 align-items-center">
           <span class="lang-icon lang-icon-{{ app()->getLocale() }}"></span>
-          <span class="ml-2">ID</span>
+          <span class="ml-2 text-uppercase">{{ app()->getLocale() }}</span>
         </div>
         <div class="dropdown-menu" id="lang">
             <ul id="lang-dropdown" class="d-flex flex-column gap-2" style="max-height: 12rem;overflow-y: scroll;"></ul>
