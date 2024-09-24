@@ -4,12 +4,13 @@
     pkgs.nodejs_20
     pkgs.php83
     pkgs.php83Packages.composer
+    pkgs.sqlite
   ];
 
-  services.mysql = {
-    enable = true;
-    package = pkgs.mariadb;
-  };
+  # services.mysql = {
+  #   enable = true;
+  #   package = pkgs.mariadb;
+  # };
   idx.extensions = [
     "svelte.svelte-vscode"
     "vue.volar"
