@@ -11,5 +11,3 @@ Untuk Tugas Akhir mengembangkan website Aplikasi Management Stock Barang dengan 
 - management employee
 - management supplier
 - management transaction GootOut and GoodIn
-- report 
-  
