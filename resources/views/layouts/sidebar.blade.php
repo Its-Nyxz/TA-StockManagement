@@ -97,6 +97,12 @@
                   <p>{{ __("outbound transaction") }}</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{route('transaksi.kembali')}}" class="nav-link text-white">
+                <i class="fas fa-circle"></i>
+                  <p>{{ __("return transaction") }}</p>
+                </a>
+              </li>
             </ul>
           </li>
           
@@ -120,6 +126,12 @@
                 <a href="{{route('laporan.keluar')}}" class="nav-link text-white">
                 <i class="fas fa-circle"></i>
                   <p>{{ __("outgoing goods report") }}</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('laporan.kembali')}}" class="nav-link text-white">
+                <i class="fas fa-circle"></i>
+                  <p>{{ __("returned goods report") }}</p>
                 </a>
               </li>
               @endif
