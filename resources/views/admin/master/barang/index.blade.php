@@ -231,15 +231,15 @@
                 imer: 1500
             });
         }
-        if(price.length == 0){
-            return Swal.fire({
-                position: "center",
-                icon: "warning",
-                title: "harga tidak boleh kosong !",
-                showConfirmButton: false,
-                imer: 1500
-            });
-        }
+        // if(price.length == 0){
+        //     return Swal.fire({
+        //         position: "center",
+        //         icon: "warning",
+        //         title: "harga tidak boleh kosong !",
+        //         showConfirmButton: false,
+        //         imer: 1500
+        //     });
+        // }
         $.ajax({
                 url:`{{route('barang.save')}}`,
                 type:"post",
@@ -281,7 +281,7 @@
         const category_id = $("select[name='jenisbarang']").val();
         const unit_id = $("select[name='satuan']").val();
         const brand_id = $("select[name='merk']").val();
-        const price = $("input[name='harga']").val();
+        // const price = $("input[name='harga']").val();
         const quantity = $("input[name='jumlah']").val();
         // return console.log({name,code,category_id,unit_id,brand_id,price,quantity});
         const Form = new FormData();
@@ -293,7 +293,7 @@
         Form.append('unit_id', unit_id);
         Form.append('brand_id', brand_id);
         Form.append('quantity',quantity);
-        Form.append('price', price);
+        // Form.append('price', price);
         $.ajax({
                 url:`{{route('barang.update')}}`,
                 type:"post",
@@ -318,7 +318,7 @@
                     $("select[name='satuan']").val(null);
                     $("select[name='merk']").val(null);
                     $("input[name='jumlah']").val(0);
-                    $("input[name='harga']").val(null);
+                    // $("input[name='harga']").val(null);
                     $('#data-tabel').DataTable().ajax.reload();
                 },
                 error:function(err){

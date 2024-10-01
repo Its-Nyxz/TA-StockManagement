@@ -74,7 +74,7 @@ class ItemController extends Controller
         $data = [
             'name'=>$request->name,
             'code'=>$request->code,
-            // 'price'=>$request->price,
+            'price'=>0,
             'category_id'=>$request->category_id,
             'brand_id'=>$request->brand_id,
             'unit_id'=>$request->unit_id,
