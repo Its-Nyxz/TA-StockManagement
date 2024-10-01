@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('good_back', function (Blueprint $table) {
+        Schema::create('goods_back', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('item_id');
             $table->foreign('item_id')->references('id')->on('items');
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->integer('quantity');
             $table->string('invoice_number');
-            $table->date('date_back');
+            $table->date('date_backs');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('good_back');
+        Schema::dropIfExists('goods_back');
     }
 };

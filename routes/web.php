@@ -11,6 +11,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\TransactionInController;
 use App\Http\Controllers\TransactionOutController;
+use App\Http\Controllers\TransactionBackController;
 use App\Http\Controllers\ReportGoodsInController;
 use App\Http\Controllers\ReportGoodsOutController;
 use App\Http\Controllers\ReportStockController;
@@ -130,6 +131,16 @@ Route::middleware(['auth', "localization"])-> group(function(){
         Route::post('/info','detail')->name('transaksi.keluar.detail');
         Route::put('/ubah','update')->name('transaksi.keluar.update');
         Route::delete('/hapus','delete')->name('transaksi.keluar.delete');
+    });
+
+    // Transaksi kembali
+    Route::controller(TransactionBackController::class)->prefix('/transaksi/kembali')->group(function(){
+        Route::get('/','index')->name('transaksi.kembali');
+        Route::get('/list','list')->name('transaksi.kembali.list');
+        Route::post('/simpan','save')->name('transaksi.kembali.save');
+        Route::post('/info','detail')->name('transaksi.kembali.detail');
+        Route::put('/ubah','update')->name('transaksi.kembali.update');
+        Route::delete('/hapus','delete')->name('transaksi.kembali.delete');
     });
 
     // laporan barang masuk
