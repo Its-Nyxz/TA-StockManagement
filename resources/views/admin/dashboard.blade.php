@@ -107,16 +107,16 @@
             <!-- <div class="col-lg-3 col-6"> -->
             <!-- small box -->
             <!-- <div class="small-box bg-purple">
-                  <div class="inner">
-                    <h3>{{ $customer }}</h3>
+                                  <div class="inner">
+                                    <h3>{{ $customer }}</h3>
 
-                    <p class="font-weight-bold">{{ __('customer') }}</p>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-android-person"></i>
-                  </div>
-                  <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
-                </div> -->
+                                    <p class="font-weight-bold">{{ __('customer') }}</p>
+                                  </div>
+                                  <div class="icon">
+                                    <i class="ion ion-android-person"></i>
+                                  </div>
+                                  <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
+                                </div> -->
             <!-- </div> -->
 
             <div class="col-lg-3 col-6">
@@ -178,15 +178,15 @@
             <!-- <div class="col-lg-3 col-6"> -->
             <!-- small box -->
             <!-- <div class="small-box bg-yellow" style="color:white !important;">
-                  <div class="inner">
-                    <h3 id="total-pendapatan-bulan-ini">Rp. 0</h3>
-                    <p class="font-weight-bold">{{ __('total income') }}</p>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-cash"></i>
-                  </div>
-                  <a href="" class="small-box-footer" style="color:white !important;">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
-                </div> -->
+                                  <div class="inner">
+                                    <h3 id="total-pendapatan-bulan-ini">Rp. 0</h3>
+                                    <p class="font-weight-bold">{{ __('total income') }}</p>
+                                  </div>
+                                  <div class="icon">
+                                    <i class="ion ion-cash"></i>
+                                  </div>
+                                  <a href="" class="small-box-footer" style="color:white !important;">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
+                                </div> -->
             <!-- </div> -->
 
         </div>
@@ -215,7 +215,7 @@
                         </div>
                         <div class="tab-content p-0">
                             <div class="chart tab-pane active" id="revenue-chart"
-                                style="position: relative; height: 19.5rem;">
+                                style="position: relative; height: 19.6rem;">
                                 <canvas id="stok-barang"></canvas>
                             </div>
                         </div>
@@ -239,31 +239,31 @@
             </div>
             <!-- <div class="col-sm-12 col-lg-6">
 
-          <div class="card">
-            <div class="card-header">
-                <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
-            </div>
-              <div class="card-body">
-                <div class="row  d-flex justify-content-start align-items-center">
-                  <div class="col-6">
-                    <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
-                    <div class="input-group mb-3">
-                      <div class="w-100 mb-3 d-flex align-items-center py-3">
-                        <input type="month" name="month-income" id="month-income" class="form-control w-50">
-                        <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="tab-content p-0">
-                  <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
-                    <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
-                  </div>
-                </div>
-              </div>
-            </div>
+                          <div class="card">
+                            <div class="card-header">
+                                <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
+                            </div>
+                              <div class="card-body">
+                                <div class="row  d-flex justify-content-start align-items-center">
+                                  <div class="col-6">
+                                    <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
+                                    <div class="input-group mb-3">
+                                      <div class="w-100 mb-3 d-flex align-items-center py-3">
+                                        <input type="month" name="month-income" id="month-income" class="form-control w-50">
+                                        <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="tab-content p-0">
+                                  <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
+                                    <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
 
-        </div> -->
+                        </div> -->
         </div>
     </div>
 
@@ -297,7 +297,7 @@
                         }
                         $("input[name='month']").val(data.month);
                         const chartstok_barang = document.getElementById('stok-barang').getContext(
-                        '2d');
+                            '2d');
                         const data_stok = {
                             labels: ['Barang Masuk', 'Barang Keluar', 'Barang Retur', 'Total Stok'],
                             datasets: [{
@@ -444,14 +444,25 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Function to fetch data from the server
+            // Function to get the current date in YYYY-MM-DD format
+            const getCurrentDate = () => {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+
+            // Function to fetch the data for today's transactions
             const fetchData = async () => {
+                const todayDate = getCurrentDate(); // Get today's date
                 try {
-                    const response = await fetch("{{ route('laporan.stok.goodsTransactionsToday') }}");
+                    const response = await fetch("{{ route('laporan.stok.pietoday') }}?date=" + todayDate);
                     const data = await response.json();
                     return data;
                 } catch (error) {
                     console.error("Error fetching data:", error);
+                    return null;
                 }
             };
 
@@ -459,7 +470,18 @@
             const renderChart = async () => {
                 const data = await fetchData();
 
-                if (!data) return;
+                const goodsInToday = data?.goods_in_today ?? 0;
+                const goodsOutToday = data?.goods_out_today ?? 0;
+                const goodsBackToday = data?.goods_back_today ?? 0;
+                const goodsTotalToday = data?.goods_total_today ?? 0;
+
+                console.log(data);
+
+                // Check if all values are 0
+                if (goodsInToday === 0 && goodsOutToday === 0 && goodsBackToday === 0 && goodsTotalToday ===
+                    0) {
+                    return false;
+                }
 
                 const ctx = document.getElementById('stok-barang-today').getContext('2d');
 
@@ -469,14 +491,14 @@
                         labels: ['Barang Masuk', 'Barang Keluar', 'Barang Retur', 'Total Stok'],
                         datasets: [{
                             label: 'Goods Transactions Today',
-                            data: [data.goods_in_today, data.goods_out_today, data
-                                .goods_back_today, data.goods_total_today
+                            data: [goodsInToday, goodsOutToday, goodsBackToday,
+                                goodsTotalToday
                             ],
                             backgroundColor: [
-                                'rgba(255, 99, 132, 0.6)',
-                                'rgba(54, 162, 235, 0.6)',
-                                'rgba(75, 192, 192, 0.6)',
-                                'rgba(255, 206, 86, 0.6)'
+                                'rgba(255, 99, 132, 0.6)', // Barang Masuk
+                                'rgba(54, 162, 235, 0.6)', // Barang Keluar
+                                'rgba(75, 192, 192, 0.6)', // Barang Retur
+                                'rgba(255, 206, 86, 0.6)' // Total Stok
                             ],
                             borderColor: [
                                 'rgba(255, 99, 132, 1)',

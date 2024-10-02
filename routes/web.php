@@ -56,9 +56,6 @@ Route::middleware(['auth', "localization"])->group(function () {
         });
     });
 
-
-
-
     // satuan barang
     Route::controller(UnitController::class)->prefix('/barang/satuan')->group(function () {
         Route::get('/', 'index')->name('barang.satuan');
@@ -70,8 +67,6 @@ Route::middleware(['auth', "localization"])->group(function () {
             Route::delete('/hapus', 'delete')->name('barang.satuan.delete');
         });
     });
-
-
 
     // merk barang
     Route::controller(BrandController::class)->prefix("/barang/merk")->group(function () {
@@ -167,7 +162,7 @@ Route::middleware(['auth', "localization"])->group(function () {
         Route::get('/', 'index')->name('laporan.stok');
         Route::get('/list', 'list')->name('laporan.stok.list');
         Route::get('/grafik', 'grafik')->name('laporan.stok.grafik');
-        Route::get('/goodsTransactionsToday', 'goodsTransactionsToday')->name('laporan.stok.goodsTransactionsToday');
+        Route::get('/pietoday', 'pietoday')->name('laporan.stok.pietoday');
     });
 
     // laporan penghasilan

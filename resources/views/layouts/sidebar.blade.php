@@ -36,25 +36,25 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="{{route('barang.jenis')}}" class="nav-link text-white">
-                <i class="fas fa-circle"></i>
+                {{-- <i class="fas fa-circle"></i> --}}
                   <p>{{ __("category") }}</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('barang.satuan')}}" class="nav-link text-white">
-                <i class="fas fa-circle"></i>
+                {{-- <i class="fas fa-circle"></i> --}}
                   <p>{{ __("unit") }}</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('barang.merk')}}" class="nav-link text-white">
-                <i class="fas fa-circle"></i>
+                {{-- <i class="fas fa-circle"></i> --}}
                   <p>{{ __("brand") }}</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('barang')}}" class="nav-link text-white">
-                <i class="fas fa-circle"></i>
+                {{-- <i class="fas fa-circle"></i> --}}
                   <p>{{ __("goods") }}</p>
                 </a>
               </li>
@@ -87,19 +87,19 @@
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="{{route('transaksi.masuk')}}" class="nav-link text-white">
-                <i class="fas fa-circle"></i>
+                {{-- <i class="fas fa-circle"></i> --}}
                   <p>{{ __("incoming transaction") }}</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('transaksi.keluar')}}" class="nav-link text-white">
-                <i class="fas fa-circle"></i>
+                {{-- <i class="fas fa-circle"></i> --}}
                   <p>{{ __("outbound transaction") }}</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('transaksi.kembali')}}" class="nav-link text-white">
-                <i class="fas fa-circle"></i>
+                {{-- <i class="fas fa-circle"></i> --}}
                   <p>{{ __("return transaction") }}</p>
                 </a>
               </li>
@@ -118,26 +118,26 @@
               @if(Auth::user()->role->name != 'staff')
               <li class="nav-item">
                 <a href="{{route('laporan.masuk')}}" class="nav-link text-white">
-                <i class="fas fa-circle"></i>
+                {{-- <i class="fas fa-circle"></i> --}}
                   <p>{{ __("incoming goods report") }}</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('laporan.keluar')}}" class="nav-link text-white">
-                <i class="fas fa-circle"></i>
+                {{-- <i class="fas fa-circle"></i> --}}
                   <p>{{ __("outgoing goods report") }}</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('laporan.kembali')}}" class="nav-link text-white">
-                <i class="fas fa-circle"></i>
+                {{-- <i class="fas fa-circle"></i> --}}
                   <p>{{ __("returned goods report") }}</p>
                 </a>
               </li>
               @endif
               <li class="nav-item">
                 <a href="{{route('laporan.stok')}}" class="nav-link text-white">
-                <i class="fas fa-circle"></i>
+                {{-- <i class="fas fa-circle"></i> --}}
                   <p>{{ __("stock report") }}</p>
                 </a>
               </li>
