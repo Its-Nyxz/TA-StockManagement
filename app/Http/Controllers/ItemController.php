@@ -26,11 +26,18 @@ class ItemController extends Controller
         $items = Item::with('category','unit','brand','goodsIns','goodsOuts')->latest()->get();
         if($request -> ajax()){
             return DataTables::of($items)
-            ->addColumn('img',function($data){
-                if(empty($data->image)){
-                    return "<img src='".asset('default.png')."' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
-                }
-                return "<img src='".asset('storage/barang/'.$data->image)."' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
+            // ->addColumn('img',function($data){
+            //     if(empty($data->image)){
+            //         return "<img src='".asset('default.png')."' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
+            //     }
+            //     return "<img src='".asset('storage/barang/'.$data->image)."' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
+            // })
+            ->addColumn('img', function($data) {
+                $imageUrl = empty($data->image) 
+                    ? asset('default.png') 
+                    : asset('storage/barang/'.$data->image);
+            
+                return "<img src='".$imageUrl."' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
             })
             -> addColumn('category_name',function($data){
                 return $data->category->name;
