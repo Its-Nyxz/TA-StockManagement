@@ -10,6 +10,7 @@ use App\Models\GoodsIn;
 use App\Models\GoodsOut;
 use App\Models\GoodsBack;
 use Yajra\DataTables\DataTables;
+use Carbon\Carbon;
 
 class ReportStockController extends Controller
 {
@@ -90,12 +91,32 @@ class ReportStockController extends Controller
         ->whereYear('date_received', $currentYear)->sum('quantity');
         $goodsOutThisMonth = GoodsOut::whereMonth('date_out', $currentMonth)
         ->whereYear('date_out', $currentYear)->sum('quantity');
-        $totalStockThisMonth = max(0,$goodsInThisMonth - $goodsOutThisMonth);
+        $goodsBackThisMonth = GoodsBack::whereMonth('date_backs', $currentMonth)
+        ->whereYear('date_backs', $currentYear)->sum('quantity');
+        $totalStockThisMonth = max(0,$goodsInThisMonth - $goodsOutThisMonth - $goodsBackThisMonth);
         return response()->json([
             'month'=>$currentYear.'-'.$currentMonth,
             'goods_in_this_month' => $goodsInThisMonth,
             'goods_out_this_month' => $goodsOutThisMonth,
+            'goods_back_this_month' => $goodsBackThisMonth,
             'total_stock_this_month' => $totalStockThisMonth,
         ]);
     }
+
+    public function goodsTransactionsToday(Request $request): JsonResponse
+{
+    $today = Carbon::today();  // Get today's date
+    
+    $goodsInToday = GoodsIn::whereDate('date_received', $today)->sum('quantity');
+    $goodsOutToday = GoodsOut::whereDate('date_out', $today)->sum('quantity');
+    $goodsBackToday = GoodsBack::whereDate('date_backs', $today)->sum('quantity');
+    $totalStockToday = max(0,$goodsInToday - $goodsOutToday - $goodsBackToday);
+    
+    return response()->json([
+        'goods_in_today' => $goodsInToday,
+        'goods_out_today' => $goodsOutToday,
+        'goods_back_today' => $goodsBackToday,
+        'goods_total_today' => $goodsBackToday,
+    ]);
+}
 }

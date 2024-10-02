@@ -167,6 +167,7 @@ Route::middleware(['auth', "localization"])->group(function () {
         Route::get('/', 'index')->name('laporan.stok');
         Route::get('/list', 'list')->name('laporan.stok.list');
         Route::get('/grafik', 'grafik')->name('laporan.stok.grafik');
+        Route::get('/goodsTransactionsToday', 'goodsTransactionsToday')->name('laporan.stok.goodsTransactionsToday');
     });
 
     // laporan penghasilan

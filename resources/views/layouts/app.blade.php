@@ -126,7 +126,7 @@
         $(document).ready(async () => {
             let languages = await (await fetch("{{ url(asset('localizations/languages.json')) }}")).json();
             languages = ['id', 'en'].reduce((obj, key) => (languages[key] && (obj[key] = languages[key]),
-            obj), {});
+                obj), {});
             for (let code in languages) {
                 let native = languages[code].nameNative;
                 let english = languages[code].nameEnglish;

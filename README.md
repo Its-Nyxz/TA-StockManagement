@@ -4,7 +4,7 @@ Untuk Tugas Akhir mengembangkan website Aplikasi Management Stock Barang dengan 
 Manajemen Peran Pengguna:
 Tiga peran pengguna dengan hak akses yang berbeda: super_admin, admin, dan staff.
 
-Manajemen Inventaris:
+Manajemen Inventaris atau Stok:
 Pencatatan Barang Masuk dan Barang Keluar untuk pengendalian stok yang efisien.
 
 Manajemen Karyawan dan Supplier:
