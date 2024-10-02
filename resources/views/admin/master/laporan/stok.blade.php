@@ -47,6 +47,7 @@
                                     <th class="border-bottom-0">{{__('first stock')}}</th>
                                     <th class="border-bottom-0">{{__('incoming amount')}}</th>
                                     <th class="border-bottom-0">{{__('outgoing amount')}}</th>
+                                    <th class="border-bottom-0">{{__('returned amount')}}</th>
                                     <th class="border-bottom-0">{{__('stock amount')}}</th>
                                 </tr>
                             </thead>
@@ -103,6 +104,10 @@
                {
                 data:"jumlah_keluar",
                 name:"jumlah_keluar"
+               },
+               {
+                data:"jumlah_retur",
+                name:"jumlah_retur"
                },
                {
                 data:"total",

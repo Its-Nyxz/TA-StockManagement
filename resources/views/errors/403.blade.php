@@ -85,7 +85,7 @@ a {
 <code><span>this_page</span>.<em>forbidden</em> = true;</code>
 <code><span>if</span> (<b>you_spelt_it_wrong</b>) {<span>try_again()</span>;}</code>
 <code><span>else if (<b>we_screwed_up</b>)</span> {<em>alert</em>(<i>"We're really sorry about that."</i>); <span>window</span>.<em>location</em> = home;}</code>
-<center><a href="/">HOME</a></center>
+<center><a href="/">Login</a></center>
 </body>
 <script>
   function type(n, t) {

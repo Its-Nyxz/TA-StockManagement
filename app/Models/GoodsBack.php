@@ -27,4 +27,9 @@ class GoodsBack extends Model
     {
         return $this -> belongsTo(User::class);
     }
+
+    public function supplier(): BelongsTo
+    {
+        return $this -> belongsTo(Supplier::class);
+    }
 }

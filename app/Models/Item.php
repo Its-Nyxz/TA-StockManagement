@@ -44,5 +44,9 @@ class Item extends Model
         return $this -> belongsTo(Brand::class);
     }
 
+    public function goodsBacks():HasMany
+    {
+        return $this -> hasMany(GoodsBack::class);
+    }
 
 }

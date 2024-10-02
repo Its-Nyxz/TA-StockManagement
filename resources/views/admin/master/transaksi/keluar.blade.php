@@ -73,7 +73,7 @@
                                             <th class="border-bottom-0">{{__('unit')}}</th>
                                             <th class="border-bottom-0">{{__('brand')}}</th>
                                             <th class="border-bottom-0">{{__('stock amount')}}</th>
-                                            <th class="border-bottom-0">{{__('price')}}</th>
+                                            {{-- <th class="border-bottom-0">{{__('price')}}</th> --}}
                                             <th class="border-bottom-0" width="1%">{{__('action')}}</th>
                                         </tr>
                                     </thead>
@@ -232,10 +232,10 @@
                     data:'total',
                     name:'total'
                 },
-                {
-                    data:'price',
-                    name:'price'
-                },
+                // {
+                //     data:'price',
+                //     name:'price'
+                // },
                 {
                     data:'tindakan',
                     render:function(data){
@@ -301,7 +301,8 @@
         const item_id =  $("input[name='id_barang']").val();
         const user_id = `{{Auth::user()->id}}`;
         const date_out = $("input[name='tanggal_keluar']").val();
-        const customer_id = $("select[name='customer']").val();
+        // const customer_id = $("select[name='customer']").val();
+        const customer_id = 1;
         const invoice_number = $("input[name='kode'").val();
         const quantity = $("input[name='jumlah'").val();
 
@@ -310,7 +311,7 @@
         Form.append('item_id',item_id);
         Form.append('date_out', date_out );
         Form.append('quantity', quantity );
-        // Form.append('customer_id', customer_id );
+        Form.append('customer_id', customer_id );
         Form.append('invoice_number', invoice_number );
         $.ajax({
             url:`{{route('transaksi.keluar.save')}}`,
@@ -476,10 +477,10 @@
             $('#TambahData').modal('show');
 
             id = new Date().getTime();
-            $("input[name='kode']").val("BRGMSK-"+id);
+            $("input[name='kode']").val("BRGTRX-"+id);
             $("input[name='id']").val(null);
             $("input[name='id_barang']").val(null);
-            // $("select[name='customer']").val('-- Pilih Customer --');
+            $("select[name='customer']").val('-- Pilih Customer --');
             $("input[name='nama_barang']").val(null);
             $("input[name='tanggal_keluar']").val(null);
             $("input[name='kode_barang']").val(null);

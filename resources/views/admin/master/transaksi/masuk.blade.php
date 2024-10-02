@@ -67,7 +67,6 @@
                                             <th class="border-bottom-0">{{__('unit')}}</th>
                                             <th class="border-bottom-0">{{__('brand')}}</th>
                                             <th class="border-bottom-0">{{__('stock amount')}}</th>
-                                            <th class="border-bottom-0">{{__('price')}}</th>
                                             <th class="border-bottom-0" width="1%">{{__('action')}}</th>
                                         </tr>
                                     </thead>
@@ -82,7 +81,7 @@
 
 
                 <!-- Modal -->
-                <div class="modal fade" id="TambahData" tabindex="-1" aria-labelledby="TambahDataModalLabel" aria-hidden="true">
+                <div class="modal fade" id="TambahData" aria-labelledby="TambahDataModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-centered">
                         <div class="modal-content">
                         <div class="modal-header">
@@ -106,7 +105,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="supplier" class="form-label">{{__('choose a supplier')}}<span class="text-danger">*</span></label>
-                                        <select name="supplier" class="form-control">
+                                        <select name="supplier" id="supplier" class="form-control">
                                             <option selected value="-- Pilih Supplier --">-- {{__('choose a supplier')}} --</option>
                                             @foreach( $suppliers as $supplier)
                                             <option value="{{$supplier->id}}">{{$supplier->name}}</option>
@@ -227,10 +226,6 @@
                 {
                     data:'total',
                     name:'total'
-                },
-                {
-                    data:'price',
-                    name:'price'
                 },
                 {
                     data:'tindakan',
@@ -377,6 +372,14 @@
     }
 
     $(document).ready(function(){
+
+        $('#supplier').select2({
+            theme: 'bootstrap4',
+            placeholder: "-- Pilih --",
+            allowClear: true,
+            minimumInputLength: 0  // Set this to enable search after 1 character
+        });
+        
         const tabel = $('#data-tabel').DataTable({
             lengthChange: true,
             processing:true,
@@ -445,7 +448,7 @@
 
         $("#modal-button").on("click",function(){
             id = new Date().getTime();
-            $("input[name='kode']").val("BRGMSK-"+id);
+            $("input[name='kode']").val("BRGTRX-"+id);
             $("input[name='id']").val(null);
             $("input[name='id_barang']").val(null);
             $("select[name='supplier'").val("-- {{__('choose a supplier')}} --");

@@ -8,6 +8,7 @@ use Illuminate\View\View;
 use App\Models\Item;
 use App\Models\GoodsIn;
 use App\Models\GoodsOut;
+use App\Models\GoodsBack;
 use Yajra\DataTables\DataTables;
 
 class ReportStockController extends Controller
@@ -21,12 +22,14 @@ class ReportStockController extends Controller
     {
         if($request->ajax()){
             if( empty($request->start_date) && empty($request->end_date)){
-                $data = Item::with('goodsOuts','goodsIns');
+                $data = Item::with('goodsOuts','goodsIns','goodsBacks');
             }else{
                 $data = Item::with(['goodsOuts' => function ($query) use ($request){
                     $query -> whereBetween('date_out',[$request->start_date,$request->end_date]);
                 },'goodsIns'  => function ($query) use ($request){
                     $query -> whereBetween('date_received',[$request->start_date,$request->end_date]);
+                },'goodsBacks'  => function ($query) use ($request){
+                    $query -> whereBetween('date_backs',[$request->start_date,$request->end_date]);
                 }]);
             }
             $data -> latest() -> get();
@@ -38,6 +41,11 @@ class ReportStockController extends Controller
             })
             ->addColumn("jumlah_keluar", function ($item) {
                 $totalQuantity = $item->goodsOuts->sum('quantity');
+                $data = Item::with("unit")->find($item -> id);
+                return $totalQuantity."/".$data -> unit -> name ;
+            })
+            ->addColumn("jumlah_retur", function ($item) {
+                $totalQuantity = $item->goodsBacks->sum('quantity');
                 $data = Item::with("unit")->find($item -> id);
                 return $totalQuantity."/".$data -> unit -> name ;
             })
@@ -54,8 +62,9 @@ class ReportStockController extends Controller
             ->addColumn("total", function ($item) {
                 $totalQuantityIn = $item->goodsIns->sum('quantity');
                 $totalQuantityOut = $item->goodsOuts->sum('quantity');
+                $totalQuantityRetur = $item->goodsBacks->sum('quantity');
                 $data = Item::with("unit")->find($item -> id);
-                $result = $item->quantity + $totalQuantityIn - $totalQuantityOut ."/". $data -> unit -> name;
+                $result = $item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur."/". $data -> unit -> name;
                 $result = max(0, $result);
                 if($result == 0){
                     return "<span class='text-red font-weight-bold'>".$result."</span>";
