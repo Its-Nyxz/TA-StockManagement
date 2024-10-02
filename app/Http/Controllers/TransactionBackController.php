@@ -74,6 +74,8 @@ class TransactionBackController extends Controller
             'user_id'=>$request->user_id,
             'date_backs'=>$request->date_retur,
             'quantity'=>$request->quantity,
+            'description'=>$request->description,
+            'supplier_id'=>$request->supplier_id,
             'invoice_number'=>$request->invoice_number,
             'item_id'=>$request->item_id
         ];
@@ -96,6 +98,8 @@ class TransactionBackController extends Controller
         $data['jenis_barang'] = $barang -> category -> name;
         $data['nama_barang'] = $barang  -> name;
         $data['user_id'] = $data -> user_id;
+        $data['description'] = $data -> description;
+        $data['supplier_id'] = $data -> supplier_id;
         $data['id_barang'] = $barang -> id;
         return response()->json(
             ["data"=>$data]
@@ -110,6 +114,8 @@ class TransactionBackController extends Controller
         $data -> date_retur = $request->date_retur;
         $data -> quantity = $request->quantity;
         $data -> item_id = $request->item_id;
+        $data -> description = $request->description;
+        $data -> supplier_id = $request->supplier_id;
         $status = $data -> save();
         if(!$status){
             return response()->json(

@@ -118,7 +118,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="tanggal_retur" class="form-label">{{__("description")}} <span class="text-danger">*</span></label>
-                                        <textarea name="description" class="form-control" rows="2"></textarea>
+                                        <textarea name="description" id="description" class="form-control" rows="2"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
@@ -299,6 +299,8 @@
         const date_retur = $("input[name='tanggal_retur']").val();
         const invoice_number = $("input[name='kode'").val();
         const quantity = $("input[name='jumlah'").val();
+        const description = $("textarea[name='description'").val();
+        const supplier_id = $("select[name='supplier'").val();
 
         const Form = new FormData();
         Form.append('user_id',user_id);
@@ -306,6 +308,9 @@
         Form.append('date_retur', date_retur );
         Form.append('quantity', quantity );
         Form.append('invoice_number', invoice_number );
+        Form.append('description', description );
+        Form.append('supplier_id', supplier_id );
+
         $.ajax({
             url:`{{route('transaksi.kembali.save')}}`,
             type:"post",
@@ -329,6 +334,8 @@
                     $("select[name='jenis_barang']").val(null);
                     $("select[name='satuan_barang']").val(null);
                     $("input[name='jumlah']").val(0);
+                    $("textarea[name='description']").val(null);
+                    $("select[name='supplier'").val(null);
                     $('#data-tabel').DataTable().ajax.reload();
             },
             statusCode:{
@@ -356,6 +363,10 @@
         const date_retur = $("input[name='tanggal_retur']").val();
         const invoice_number = $("input[name='kode']").val();
         const quantity = $("input[name='jumlah'").val();
+        const description = $("textarea[name='description'").val();
+        const supplier_id = $("select[name='supplier'").val();
+
+
         $.ajax({
             url:`{{route('transaksi.kembali.update')}}`,
             type:"put",
@@ -377,6 +388,8 @@
                     $("select[name='jenis_barang']").val(null);
                     $("select[name='satuan_barang']").val(null);
                     $("input[name='jumlah']").val(0);
+                    $("textarea[name='description']").val(null);
+                    $("select[name='supplier'").val(null);
                     $('#data-tabel').DataTable().ajax.reload();
                 },
                 error:function(err){
@@ -488,6 +501,8 @@
             $("input[name='jenis_barang']").val(null);
             $("input[name='satuan_barang']").val(null);
             $("input[name='jumlah']").val(null);
+            $("input[textarea='description']").val(null);
+            $("select[name='supplier'").val(null);
             $('#simpan').text("Simpan");
         });
 
@@ -520,6 +535,8 @@
                 $("input[name='jenis_barang']").val(data.jenis_barang);
                 $("input[name='satuan_barang']").val(data.satuan_barang);
                 $("input[name='jumlah']").val(data.quantity);
+                $("input[textarea='description']").val(data.description);
+                $("select[name='supplier'").val(null);
             }
         });
 

@@ -15,7 +15,9 @@ class GoodsBack extends Model
         'user_id',
         'quantity',
         'date_backs',
+        'description',
         'invoice_number',
+        'supplier_id',
     ];
 
     public function item(): BelongsTo
