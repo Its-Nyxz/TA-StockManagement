@@ -94,6 +94,9 @@ class EmployeeController extends Controller
         if($request->has('username')){
             $user -> username = $request -> username;
         }
+        if($request->has('role_id')){
+            $user -> role_id = $request -> role_id;
+        }
         $status = $user -> save();
         if(!$status){
             return response()->json(

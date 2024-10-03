@@ -8,13 +8,15 @@
             <div class="card w-100">
                 <div class="card-header row">
                     <div class="d-flex justify-content-end align-items-center w-100">
+                        @if (Auth::user()->role->id == '1')
                         <button class="btn btn-success" type="button"  data-toggle="modal" data-target="#TambahData" id="modal-button"><i class="fas fa-plus m-1"></i>{{ __("add data") }}</button>
+                        @endif
                     </div>
                 </div>
 
 
                 <!-- Modal -->
-                <div class="modal fade" id="TambahData" tabindex="-1" aria-labelledby="TambahDataModalLabel" aria-hidden="true">
+                <div class="modal fade" id="TambahData" tabindex="-1" aria-labelledby="TambahDataModalLabel" aria-hidden="true"> 
                     <div class="modal-dialog">
                         <div class="modal-content">
                         <div class="modal-header">
@@ -41,7 +43,7 @@
                                 <label for="role">{{ __("role") }}</label>
                                 <select class="form-control" id="role">
                                     <option selected value="-- {{ __('role') }} --">-- {{ __("role") }} --</option>
-                                    @foreach($roles->where('name','!=','super_admin') as $role)
+                                    @foreach($roles->where('id','!=','1') as $role)
                                         <option value="{{$role->id}}">{{$role->name}}</option>
                                     @endforeach
                                 </select>
@@ -152,7 +154,7 @@
                     name:$("#name").val(),
                     username:$("#username").val(),
                     password:$("#password").val(),
-                    role_id:$("#role").val("-- {{ __('role') }} --"),
+                    role_id:$("#role").val(),
                     "_token":"{{csrf_token()}}"
                 },
                 success:function(res){
@@ -167,7 +169,7 @@
                     $("#name").val(null);
                     $("#username").val(null);
                     $("#password").val(null);
-                    $("#role").val("-- {{ __('role') }} --");
+                    $("#role").val();
                     $('#data-tabel').DataTable().ajax.reload();
                     $('#simpan').text("{{__('save')}}");
                 },
@@ -193,7 +195,7 @@
             $("#name").val(null);
             $("#username").val(null);
             $("#password").val(null);
-            $("#role").val("-- {{ __('role') }} --");
+            $("#role").val(null);
             $("#simpan").text("{{__('save')}}");
             $("#TambahDataModalLabel").text("{{__('add data')}}");
         });
