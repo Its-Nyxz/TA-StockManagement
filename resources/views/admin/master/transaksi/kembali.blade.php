@@ -117,7 +117,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
-                                        <label for="tanggal_retur" class="form-label">{{__("description")}} <span class="text-danger">*</span></label>
+                                        <label for="description" class="form-label">{{__("description")}}</label>
                                         <textarea name="description" id="description" class="form-control" rows="2"></textarea>
                                     </div>
                                 </div>
@@ -301,6 +301,16 @@
         const quantity = $("input[name='jumlah'").val();
         const description = $("textarea[name='description'").val();
         const supplier_id = $("select[name='supplier'").val();
+
+        if (!item_id || !date_retur || !quantity || !supplier_id) {
+            Swal.fire({
+                icon: 'warning',
+                title: '{{ __("There is Empty Data !!") }}',
+                showConfirmButton: false,
+                imer: 1500
+            });
+            return; 
+        }
 
         const Form = new FormData();
         Form.append('user_id',user_id);

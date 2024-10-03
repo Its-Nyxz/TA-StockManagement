@@ -107,17 +107,37 @@
             <!-- <div class="col-lg-3 col-6"> -->
             <!-- small box -->
             <!-- <div class="small-box bg-purple">
-                                  <div class="inner">
-                                    <h3>{{ $customer }}</h3>
+                                      <div class="inner">
+                                        <h3>{{ $customer }}</h3>
 
-                                    <p class="font-weight-bold">{{ __('customer') }}</p>
-                                  </div>
-                                  <div class="icon">
-                                    <i class="ion ion-android-person"></i>
-                                  </div>
-                                  <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
-                                </div> -->
+                                        <p class="font-weight-bold">{{ __('customer') }}</p>
+                                      </div>
+                                      <div class="icon">
+                                        <i class="ion ion-android-person"></i>
+                                      </div>
+                                      <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
+                                    </div> -->
             <!-- </div> -->
+
+            {{-- @if (Auth::user()->role->name == 'staff') --}}
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <!-- style="color:white !important;" -->
+                        <div class="inner">
+                            <h3>{{ $total_stok }}</h3>
+
+                            <p class="font-weight-bold">{{ __('return transaction') }}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-arrow-swap"></i>
+                        </div>
+                        <a href="{{ route('transaksi.kembali') }}" class="small-box-footer"
+                            style="color:white !important;">{{ __('messages.more-info') }} <i
+                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            {{-- @endif --}}
 
             <div class="col-lg-3 col-6">
                 <!-- small box -->
@@ -138,9 +158,9 @@
             @if (Auth::user()->role->name != 'staff')
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
-                    <div class="small-box bg-info">
+                    <div class="small-box bg-indigo">
                         <!-- style="color:white !important;" -->
-                        <div class="inner">
+                        <div class="inner" style="color:white !important;">
                             <h3>{{ $staffCount }}</h3>
 
                             <p class="font-weight-bold">{{ __('employee') }}</p>
@@ -155,38 +175,20 @@
                 </div>
             @endif
 
-            @if (Auth::user()->role->name == 'staff')
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-info">
-                        <!-- style="color:white !important;" -->
-                        <div class="inner">
-                            <h3>{{ $total_stok }}</h3>
 
-                            <p class="font-weight-bold">{{ __('stock report') }}</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-solid fa-book"></i>
-                        </div>
-                        <a href="{{ route('laporan.stok') }}" class="small-box-footer"
-                            style="color:white !important;">{{ __('messages.more-info') }} <i
-                                class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-            @endif
 
             <!-- <div class="col-lg-3 col-6"> -->
             <!-- small box -->
             <!-- <div class="small-box bg-yellow" style="color:white !important;">
-                                  <div class="inner">
-                                    <h3 id="total-pendapatan-bulan-ini">Rp. 0</h3>
-                                    <p class="font-weight-bold">{{ __('total income') }}</p>
-                                  </div>
-                                  <div class="icon">
-                                    <i class="ion ion-cash"></i>
-                                  </div>
-                                  <a href="" class="small-box-footer" style="color:white !important;">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
-                                </div> -->
+                                      <div class="inner">
+                                        <h3 id="total-pendapatan-bulan-ini">Rp. 0</h3>
+                                        <p class="font-weight-bold">{{ __('total income') }}</p>
+                                      </div>
+                                      <div class="icon">
+                                        <i class="ion ion-cash"></i>
+                                      </div>
+                                      <a href="" class="small-box-footer" style="color:white !important;">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
+                                    </div> -->
             <!-- </div> -->
 
         </div>
@@ -239,31 +241,31 @@
             </div>
             <!-- <div class="col-sm-12 col-lg-6">
 
-                          <div class="card">
-                            <div class="card-header">
-                                <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
-                            </div>
-                              <div class="card-body">
-                                <div class="row  d-flex justify-content-start align-items-center">
-                                  <div class="col-6">
-                                    <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
-                                    <div class="input-group mb-3">
-                                      <div class="w-100 mb-3 d-flex align-items-center py-3">
-                                        <input type="month" name="month-income" id="month-income" class="form-control w-50">
-                                        <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
+                              <div class="card">
+                                <div class="card-header">
+                                    <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
+                                </div>
+                                  <div class="card-body">
+                                    <div class="row  d-flex justify-content-start align-items-center">
+                                      <div class="col-6">
+                                        <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
+                                        <div class="input-group mb-3">
+                                          <div class="w-100 mb-3 d-flex align-items-center py-3">
+                                            <input type="month" name="month-income" id="month-income" class="form-control w-50">
+                                            <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="tab-content p-0">
+                                      <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
+                                        <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
-                                <div class="tab-content p-0">
-                                  <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
-                                    <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
 
-                        </div> -->
+                            </div> -->
         </div>
     </div>
 
@@ -307,15 +309,15 @@
                                     .total_stock_this_month
                                 ],
                                 backgroundColor: [
+                                    'rgba(75, 192, 192, 0.2)',
                                     'rgba(255, 99, 132, 0.2)',
                                     'rgba(54, 162, 235, 0.2)',
-                                    'rgba(75, 192, 192, 0.2)',
                                     'rgba(255, 206, 86, 0.2)'
                                 ],
                                 borderColor: [
+                                    'rgba(75, 192, 192, 1)',
                                     'rgba(255, 99, 132, 1)',
                                     'rgba(54, 162, 235, 1)',
-                                    'rgba(75, 192, 192, 1)',
                                     'rgba(255, 206, 86, 1)'
                                 ],
                                 borderWidth: 1
@@ -495,15 +497,15 @@
                                 goodsTotalToday
                             ],
                             backgroundColor: [
-                                'rgba(255, 99, 132, 0.6)', // Barang Masuk
-                                'rgba(54, 162, 235, 0.6)', // Barang Keluar
-                                'rgba(75, 192, 192, 0.6)', // Barang Retur
+                                'rgba(75, 192, 192, 0.6)', // Barang Masuk
+                                'rgba(255, 99, 132, 0.6)', // Barang Keluar
+                                'rgba(54, 162, 235, 0.6)', // Barang Retur
                                 'rgba(255, 206, 86, 0.6)' // Total Stok
                             ],
                             borderColor: [
+                                'rgba(75, 192, 192, 1)',
                                 'rgba(255, 99, 132, 1)',
                                 'rgba(54, 162, 235, 1)',
-                                'rgba(75, 192, 192, 1)',
                                 'rgba(255, 206, 86, 1)'
                             ],
                             borderWidth: 1

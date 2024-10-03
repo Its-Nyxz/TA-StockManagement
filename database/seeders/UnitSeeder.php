@@ -17,7 +17,15 @@ class UnitSeeder extends Seeder
             'Unit',
             'Rim',
             'Psc',
-            'Lisensi'
+            'Kilogram (kg)',
+            'Meter (m)',
+            'Meter Persegi (m²)',
+            'Meter Kubik (m³)',
+            'Liter (L)',
+            'Sak',
+            'Lembar',
+            'Batang',
+            'Roll'
         ];
         foreach($units as $unit){
             Unit::create([

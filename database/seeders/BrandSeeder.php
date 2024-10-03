@@ -14,13 +14,15 @@ class BrandSeeder extends Seeder
     public function run(): void
     {
         $brands = [
-            'Informa',
-            'ASUS',
-            'Epson',
-            'Sinar Dunia',
-            'Faber-Castell',
-            'Gramedia',
-            'Microsoft'
+            'Dulux',
+            'Nippon Paint',
+            'KIA',
+            'Broco',
+            'Philips',
+            'Wavin',
+            'HWI (Hyundai Welding Indonesia)',
+            'Makita',
+            'Semen Gresik'
         ];
 
         foreach($brands as $brand){

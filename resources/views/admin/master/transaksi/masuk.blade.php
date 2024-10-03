@@ -296,6 +296,16 @@
         const invoice_number = $("input[name='kode'").val();
         const quantity = $("input[name='jumlah'").val();
 
+        if (!item_id || !date_received || !quantity || !supplier_id) {
+            Swal.fire({
+                icon: 'warning',
+                title: '{{ __("There is Empty Data !!") }}',
+                showConfirmButton: false,
+                imer: 1500
+            });
+            return; 
+        }
+
         const Form = new FormData();
         Form.append('user_id',user_id);
         Form.append('item_id',item_id);

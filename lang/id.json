@@ -114,5 +114,6 @@
   "choose a supplier":"pilih pemasok",
   "item name":"nama barang",
   "choose customers":"pilih pelanggan",
-  "select":"pilih"
+  "select":"pilih",
+  "There is Empty Data !!" : "Terdapat Data Kosong !!"
 }
