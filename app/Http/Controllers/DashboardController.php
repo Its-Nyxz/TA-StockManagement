@@ -13,6 +13,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\GoodsIn;
 use App\Models\GoodsOut;
+use App\Models\GoodsBack;
 use App\Models\Customer;
 
 
@@ -26,7 +27,8 @@ class DashboardController extends Controller
         $unit_count = Unit::count();
         $brand_count = Brand::count();
         $goodsin = GoodsIn::count();
-        $goodsout = GoodsIn::count();
+        $goodsout = GoodsOut::count();
+        $goodsback = GoodsBack::count();
         $customer = Customer::count();
         $supplier = Supplier::count();
         $item_in = GoodsIn::sum('quantity');
@@ -35,6 +37,6 @@ class DashboardController extends Controller
         $staffCount = User::where('role_id',2)->count();
         return view('admin.dashboard',compact('product_count',
         'category_count','unit_count',
-        'brand_count','goodsin','goodsout','customer','supplier','staffCount','total_stok'));
+        'brand_count','goodsin','goodsout','goodsback','customer','supplier','staffCount','total_stok'));
     }
 }

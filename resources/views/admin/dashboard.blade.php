@@ -125,7 +125,7 @@
                     <div class="small-box bg-info">
                         <!-- style="color:white !important;" -->
                         <div class="inner">
-                            <h3>{{ $total_stok }}</h3>
+                            <h3>{{ $goodsback }}</h3>
 
                             <p class="font-weight-bold">{{ __('return transaction') }}</p>
                         </div>
