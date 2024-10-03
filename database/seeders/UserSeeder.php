@@ -19,8 +19,8 @@ class UserSeeder extends Seeder
         $role_employee = Role::where('name','staff')->first();
         // dd($role_admin->id);
         User::create([
-            "name" => "ryugen",
-            "username" => "ryugen",
+            "name" => "user",
+            "username" => "user",
             "role_id" =>  $role_employee -> id,
             "password" => bcrypt('12345678')
         ]);
