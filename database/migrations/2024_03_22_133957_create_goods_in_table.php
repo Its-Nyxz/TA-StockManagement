@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->date('date_received');
             $table->string('invoice_number')->unique();
+            $table->integer('status');
             $table->timestamps();
         });
     }

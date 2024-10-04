@@ -18,6 +18,7 @@ class GoodsIn extends Model
         'date_received',
         'invoice_number',
         'supplier_id',
+        'status',
     ];
 
     public function item(): BelongsTo

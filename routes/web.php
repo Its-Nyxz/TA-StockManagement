@@ -35,10 +35,9 @@ Route::middleware(['auth', "localization"])->group(function () {
         Route::get('/', 'index')->name('barang');
         Route::post('/kode', 'detailByCode')->name('barang.code');
         Route::get('/daftar-barang', 'list')->name('barang.list');
-
-        Route::middleware(['employee.middleware'])->group(function () {
-            Route::post('/simpan', 'save')->name('barang.save');
-            Route::post('/info', 'detail')->name('barang.detail');
+        Route::post('/simpan', 'save')->name('barang.save');
+        Route::post('/info', 'detail')->name('barang.detail');
+        Route::middleware(['employee.middleware'])->group(function () {  
             Route::post('/ubah', 'update')->name('barang.update');
             Route::delete('/hapus', 'delete')->name('barang.delete');
         });

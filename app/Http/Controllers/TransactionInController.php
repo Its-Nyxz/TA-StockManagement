@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use App\Models\GoodsIn;
 use App\Models\Supplier;
@@ -18,7 +19,8 @@ class TransactionInController extends Controller
     {
         $suppliers = Supplier::all();
         $users = User::all();
-        return view('admin.master.transaksi.masuk',compact('suppliers','users'));
+        $approvals = GoodsIn::with('item','supplier')->where('status', 0)->get();
+        return view('admin.master.transaksi.masuk',compact('suppliers','users','approvals'));
     }
 
     public function list(Request $request):JsonResponse
@@ -35,6 +37,9 @@ class TransactionInController extends Controller
         }else{
             $goodsins = GoodsIn::with('item','user','supplier');
         }
+        if(Auth::user()->role->id > 2){
+            $goodsins -> where('user_id',Auth::user()->id);
+        };
         $goodsins -> latest() -> get();
         // $goodsins = GoodsIn::with('item','user','supplier')->latest()->get();
         if($request->ajax()){
@@ -43,7 +48,7 @@ class TransactionInController extends Controller
                 $item = Item::with("unit")->find($data -> item -> id);
                 return $data -> quantity ."/".$item -> unit -> name;
             })
-            ->addColumn("date_out",function($data){
+            ->addColumn("date_received",function($data){
                 return Carbon::parse($data->date_received)->format('d F Y');
             })
             ->addColumn("kode_barang",function($data){
@@ -55,13 +60,21 @@ class TransactionInController extends Controller
             ->addColumn("item_name",function($data){
                 return $data -> item -> name;
             })
+
+            ->addColumn("status",function($data){
+                if($data -> status == 0){
+                    return "<span class='badge badge-warning'>".__("pending")."</span>";
+                }else{
+                    return "<span class='badge badge-success'>".__("approved")."</span>";
+                }
+            })
             
             ->addColumn('tindakan',function($data){
                 $button = "<button class='ubah btn btn-success m-1' id='".$data->id."'><i class='fas fa-pen m-1'></i>".__("edit")."</button>";
                 $button .= "<button class='hapus btn btn-danger m-1' id='".$data->id."'><i class='fas fa-trash m-1'></i>".__("delete")."</button>";
                 return $button;
             })
-            ->rawColumns(['tindakan'])
+            ->rawColumns(['tindakan','status'])
             -> make(true);
         }
     }
@@ -74,7 +87,8 @@ class TransactionInController extends Controller
             'date_received'=>$request->date_received,
             'quantity'=>$request->quantity,
             'invoice_number'=>$request->invoice_number,
-            'item_id'=>$request->item_id
+            'item_id'=>$request->item_id,
+            'status'=>Auth::user()->role->id == 3 ? 0 : 1
         ];
         GoodsIn::create($data);
         $barang = Item::find($request->item_id);
@@ -110,6 +124,7 @@ class TransactionInController extends Controller
         $data -> date_received = $request->date_received;
         $data -> quantity = $request->quantity;
         $data -> item_id = $request->item_id;
+        $data -> status = $request->status;
         $status = $data -> save();
         if(!$status){
             return response()->json(
