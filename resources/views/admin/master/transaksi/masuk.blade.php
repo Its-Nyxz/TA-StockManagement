@@ -39,7 +39,7 @@
                                     <div class="text-end col-sm-3 pt-4">
                                         <div class = "d-flex justify-content-end">
                                             <button class="btn btn-info m-1 mt-1" type="button" data-toggle="modal"
-                                                data-target="#modal_approve" id="modal-button"><i
+                                                data-target="#modal_approve" id="modal-button-approve"><i
                                                     class="fas fa-list m-1"></i>
                                                 {{ __('approval') }} </button>
                                             <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
@@ -191,7 +191,7 @@
                         </div>
 
                         <!-- Modal Approve -->
-                        <div class="modal fade" id="modal_approve"aria-labelledby="ApproveDataModalLabel" tabindex="-1"
+                        <div class="modal fade" id="modal_approve" aria-labelledby="ApproveDataModalLabel" tabindex="-1"
                             aria-hidden="true">
                             <div class="modal-dialog  modal-xl modal-dialog-scrollable">
                                 <div class="modal-content">
