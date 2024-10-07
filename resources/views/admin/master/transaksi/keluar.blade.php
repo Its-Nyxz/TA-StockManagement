@@ -40,7 +40,8 @@
                                         <div class = "d-flex justify-content-end">
                                             <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
                                                     class="fas fa-filter m-1"></i>{{ __('filter') }}</button>
-                                            <button class="btn {{ $in_status != 0 ? 'btn-success' : 'btn-danger' }} m-1 mt-1"
+                                            <button
+                                                class="btn {{ $in_status != 0 ? 'btn-success' : 'btn-danger' }} m-1 mt-1"
                                                 type="button" data-toggle="modal"
                                                 {{ $in_status != 0 ? 'data-target="#TambahData"' : 'data-target="alert"' }}
                                                 id="modal-button"><i class="fas fa-plus m-1"></i>
@@ -51,9 +52,9 @@
                             </div>
                         </div>
                         <!-- <div class="d-flex justify-content-end align-items-center w-100">
-                            <button class="btn {{ $in_status != 0 ? 'btn-success' : 'btn-danger' }}" type="button"  data-toggle="modal" {{ $in_status != 0 ? 'data-target="#TambahData"' : 'data-target="alert"' }} id="modal-button"><i class="fas fa-plus m-1"></i> {{ __('add data') }}</button>
-                        </div>
-                    </div> -->
+                                        <button class="btn {{ $in_status != 0 ? 'btn-success' : 'btn-danger' }}" type="button"  data-toggle="modal" {{ $in_status != 0 ? 'data-target="#TambahData"' : 'data-target="alert"' }} id="modal-button"><i class="fas fa-plus m-1"></i> {{ __('add data') }}</button>
+                                    </div>
+                                </div> -->
 
 
 
@@ -125,17 +126,18 @@
                                                 <div class="form-group">
                                                     <label for="tanggal_keluar" class="form-label">{{ __('out date') }}
                                                         <span class="text-danger">*</span></label>
-                                                    <input type="date" id="tanggal_keluar" name="tanggal_keluar" class="form-control">
+                                                    <input type="date" id="tanggal_keluar" name="tanggal_keluar"
+                                                        class="form-control">
                                                 </div>
                                                 <!-- <div class="form-group">
-                                            <label for="customer" class="form-label">{{ __('choose customers') }}<span class="text-danger">*</span></label>
-                                            <select name="customer" class="form-control">
-                                                <option selected value="-- Pilih Customer --">-- {{ __('choose customers') }} --</option>
-                                                @foreach ($customers as $customer)
-                                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div> -->
+                                                        <label for="customer" class="form-label">{{ __('choose customers') }}<span class="text-danger">*</span></label>
+                                                        <select name="customer" class="form-control">
+                                                            <option selected value="-- Pilih Customer --">-- {{ __('choose customers') }} --</option>
+                                                            @foreach ($customers as $customer)
+    <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+    @endforeach
+                                                        </select>
+                                                    </div> -->
                                             </div>
                                             <div class="col-md-5">
                                                 <label for="kode_barang" class="form-label">{{ __('item code') }} <span
@@ -223,8 +225,6 @@
                 }
             });
 
-
-
             function load() {
                 $('#data-barang').DataTable({
                     lengthChange: true,
@@ -278,9 +278,6 @@
                     ]
                 }).buttons().container();
             }
-
-
-
 
             $(document).ready(function() {
                 load();
@@ -450,11 +447,11 @@
             }
 
             $(document).ready(function() {
-                $('#TambahData').on('show.bs.modal', function() {
-                    var today = new Date().toISOString().split('T')[0];
-                    $('#tanggal_keluar').val(today);
+                $('#TambahData').on('shown.bs.modal', function() {
+                    var today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+                    document.getElementById('tanggal_keluar').value = today; // Set the input value
                 });
-
+                
                 const tabel = $('#data-tabel').DataTable({
                     lengthChange: true,
                     processing: true,

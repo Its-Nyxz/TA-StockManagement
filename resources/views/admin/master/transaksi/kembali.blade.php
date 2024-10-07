@@ -118,8 +118,7 @@
                                                 <div class="form-group">
                                                     <label for="tanggal_retur" class="form-label">{{ __('return date') }}
                                                         <span class="text-danger">*</span></label>
-                                                    <input type="date" id="tanggal_retur" name="tanggal_retur"
-                                                        class="form-control">
+                                                    <input type="date" id="tanggal_retur" name="tanggal_retur" class="form-control">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="supplier"
@@ -455,9 +454,9 @@
             }
 
             $(document).ready(function() {
-                $('#TambahData').on('show.bs.modal', function() {
-                    var today = new Date().toISOString().split('T')[0];
-                    $('#tanggal_retur').val(today);
+                $('#TambahData').on('shown.bs.modal', function() {
+                    var today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+                    document.getElementById('tanggal_retur').value = today; // Set the input value
                 });
 
                 $('#supplier').select2({
