@@ -46,6 +46,7 @@
                                     <th class="border-bottom-0">{{__('supplier')}}</th>
                                     <th class="border-bottom-0">{{__('item')}}</th>
                                     <th class="border-bottom-0">{{__('incoming amount')}}</th>
+                                    <th class="border-bottom-0">{{__('status')}}</th>
                                 </tr>
                             </thead>
                         </table>
@@ -103,6 +104,10 @@
                {
                 data:"quantity",
                 name:"quantity"
+               },
+               {
+                data:"status",
+                name:"status"
                }
             ],
             buttons:[

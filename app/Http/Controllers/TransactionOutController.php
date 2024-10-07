@@ -38,6 +38,9 @@ class TransactionOutController extends Controller
         }else{
             $goodsouts = GoodsOut::with('item','user','customer');
         }
+        if(Auth::user()->role->id > 2){
+            $goodsouts -> where('user_id',Auth::user()->id);
+        };
         $goodsouts ->latest()->get();
         if($request->ajax()){
             return DataTables::of($goodsouts)

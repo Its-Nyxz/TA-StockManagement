@@ -121,5 +121,9 @@
   "approval":"persetujuan",
   "select transaction in":"pilih transasksi masuk",
   "are you sure?":"apakah anda yakin?",
-  "you want to approve this transaction?":"anda ingin approve transaksi ini?"
+  "you want to approve this transaction?":"anda ingin approve transaksi ini?",
+  "you want to cancel this transaction?":"anda ingin membatalkan transaksi ini?",
+  "Transaction approved successfully.":"Transaksi berhasil diapprove.",
+  "Transaction Cancel or Returned successfully.":"Transaksi dibatalkan atau dikembalikan berhasil.",
+  "Please enter a description.":"Silakan masukkan deskripsi."
 }

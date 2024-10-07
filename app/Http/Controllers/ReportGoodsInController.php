@@ -44,7 +44,19 @@ class ReportGoodsInController extends Controller
             ->addColumn("item_name",function($data){
                 return $data -> item -> name;
             })
+
+            ->addColumn("status", function ($data) {
+                if ($data->status == 0) {
+                    return "<span class='badge badge-warning'>" . __("pending") . "</span>";
+                } else if($data->status == 1) {
+                    return "<span class='badge badge-success'>" . __("approved") . "</span>";
+                } else {
+                    return "<span class='badge badge-danger'>" . __("retur") . "</span>";
+                }
+            })
+            ->rawColumns(['status'])
             -> make(true);
+            
         }
     }
 

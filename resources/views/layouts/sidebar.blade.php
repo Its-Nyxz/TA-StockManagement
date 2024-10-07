@@ -97,12 +97,14 @@
                   <p>{{ __("outbound transaction") }}</p>
                 </a>
               </li>
+              @if(Auth::user()->role->name != 'staff')
               <li class="nav-item">
                 <a href="{{route('transaksi.kembali')}}" class="nav-link text-white">
                 {{-- <i class="fas fa-circle"></i> --}}
                   <p>{{ __("return transaction") }}</p>
                 </a>
               </li>
+              @endif
             </ul>
           </li>
           

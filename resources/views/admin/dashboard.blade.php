@@ -139,6 +139,24 @@
                 </div>
             {{-- @endif --}}
 
+            @if (Auth::user()->role->name != 'staff')
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-yellow">
+                    <div class="inner" style="color:white !important;">
+                        <h3>{{ $approvals }}</h3>
+
+                        <p class="font-weight-bold">{{ __('approval') }}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <a href="{{ route('transaksi.masuk') }}" style="color:white !important;" class="small-box-footer">{{ __('messages.more-info') }} <i
+                        class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            @endif
+
             <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-gray">
@@ -158,7 +176,7 @@
             @if (Auth::user()->role->name != 'staff')
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
-                    <div class="small-box bg-indigo">
+                    <div class="small-box bg-maroon">
                         <!-- style="color:white !important;" -->
                         <div class="inner" style="color:white !important;">
                             <h3>{{ $staffCount }}</h3>

@@ -114,6 +114,8 @@ Route::middleware(['auth', "localization"])->group(function () {
         Route::put('/update', 'update')->name('transaksi.masuk.update');
         Route::delete('/delete', 'delete')->name('transaksi.masuk.delete');
         Route::get('/barang/list/in', 'listIn')->name('barang.list.in');
+        Route::post('/approve/{id}', 'approve')->name('transaksi.masuk.approve');
+        Route::post('/cancel/{id}', 'cancel')->name('transaksi.masuk.cancel');
     });
 
 
@@ -129,7 +131,7 @@ Route::middleware(['auth', "localization"])->group(function () {
     });
 
     // Transaksi kembali
-    Route::controller(TransactionBackController::class)->prefix('/transaksi/kembali')->group(function () {
+    Route::controller(TransactionBackController::class)->prefix('/transaksi/kembali')->middleware('employee.middleware')->group(function () {
         Route::get('/', 'index')->name('transaksi.kembali');
         Route::get('/list', 'list')->name('transaksi.kembali.list');
         Route::post('/simpan', 'save')->name('transaksi.kembali.save');

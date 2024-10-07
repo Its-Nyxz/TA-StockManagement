@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use App\Models\GoodsIn;
+use App\Models\GoodsBack;
 use App\Models\Supplier;
 use App\Models\User;
 use App\Models\Item;
@@ -15,171 +16,225 @@ use Carbon\Carbon;
 
 class TransactionInController extends Controller
 {
-    public function index():View
+    public function index(): View
     {
         $suppliers = Supplier::all();
         $users = User::all();
-        $approvals = GoodsIn::with('item','supplier')->where('status', 0)->get();
-        return view('admin.master.transaksi.masuk',compact('suppliers','users','approvals'));
+        $approvals = GoodsIn::with('item', 'supplier')->where('status', 0)->get();
+        return view('admin.master.transaksi.masuk', compact('suppliers', 'users', 'approvals'));
     }
 
-    public function list(Request $request):JsonResponse
+    public function list(Request $request): JsonResponse
     {
-        if( !empty($request->start_date) && !empty($request->end_date) ){
-            $goodsins = GoodsIn::with('item','user','supplier');
-            $goodsins -> whereBetween('date_received',[$request->start_date,$request->end_date]);
-            if($request->inputer){
-                $goodsins -> where('user_id',[$request->inputer]);
-            }
-        }else if(!empty($request->inputer)){
-            $goodsins = GoodsIn::with('item','user','supplier');
-            $goodsins -> where('user_id',[$request->inputer]);
-        }else{
-            $goodsins = GoodsIn::with('item','user','supplier');
-        }
-        if(Auth::user()->role->id > 2){
-            $goodsins -> where('user_id',Auth::user()->id);
-        };
-        $goodsins -> latest() -> get();
-        // $goodsins = GoodsIn::with('item','user','supplier')->latest()->get();
-        if($request->ajax()){
-            return DataTables::of($goodsins)
-            ->addColumn('quantity',function($data){
-                $item = Item::with("unit")->find($data -> item -> id);
-                return $data -> quantity ."/".$item -> unit -> name;
-            })
-            ->addColumn("date_received",function($data){
-                return Carbon::parse($data->date_received)->format('d F Y');
-            })
-            ->addColumn("kode_barang",function($data){
-                return $data -> item -> code;
-            })
-            ->addColumn("supplier_name",function($data){
-                return $data -> supplier -> name;
-            })
-            ->addColumn("item_name",function($data){
-                return $data -> item -> name;
-            })
+        $goodsins = GoodsIn::with('item', 'user', 'supplier');
 
-            ->addColumn("status",function($data){
-                if($data -> status == 0){
-                    return "<span class='badge badge-warning'>".__("pending")."</span>";
-                }else{
-                    return "<span class='badge badge-success'>".__("approved")."</span>";
-                }
-            })
-            
-            ->addColumn('tindakan',function($data){
-                $button = "<button class='ubah btn btn-success m-1' id='".$data->id."'><i class='fas fa-pen m-1'></i>".__("edit")."</button>";
-                $button .= "<button class='hapus btn btn-danger m-1' id='".$data->id."'><i class='fas fa-trash m-1'></i>".__("delete")."</button>";
-                return $button;
-            })
-            ->rawColumns(['tindakan','status'])
-            -> make(true);
+        if (!empty($request->start_date) && !empty($request->end_date)) {
+            $goodsins->whereBetween('date_received', [$request->start_date, $request->end_date]);
+        }
+
+        if (!empty($request->inputer)) {
+            $goodsins->where('user_id', $request->inputer);
+        }
+
+        if (isset($request->status)) {
+            $goodsins->where('status', $request->status);
+        }
+
+        if (Auth::user()->role->id > 2) {
+            $goodsins->where('user_id', Auth::user()->id);
+        };
+
+        $goodsins->where('status','!=','2');
+        $goodsins->latest()->get();
+        // $goodsins = GoodsIn::with('item','user','supplier')->latest()->get();
+        if ($request->ajax()) {
+            return DataTables::of($goodsins)
+                ->addColumn('quantity', function ($data) {
+                    $item = Item::with("unit")->find($data->item->id);
+                    return $data->quantity . "/" . $item->unit->name;
+                })
+                ->addColumn("date_received", function ($data) {
+                    return Carbon::parse($data->date_received)->format('d F Y');
+                })
+                ->addColumn("kode_barang", function ($data) {
+                    return $data->item->code;
+                })
+                ->addColumn("supplier_name", function ($data) {
+                    return $data->supplier->name;
+                })
+                ->addColumn("item_name", function ($data) {
+                    return $data->item->name;
+                })
+                ->addColumn("brand_name", function ($data) {
+                    return $data->item->brand->name;
+                })
+
+                ->addColumn("status", function ($data) {
+                    if ($data->status == 0) {
+                        return "<span class='badge badge-warning'>" . __("pending") . "</span>";
+                    } else {
+                        return "<span class='badge badge-success'>" . __("approved") . "</span>";
+                    }
+                })
+
+                ->addColumn('tindakan', function ($data) {
+                    $button = "<button class='ubah btn btn-success m-1' id='" . $data->id . "'><i class='fas fa-pen m-1'></i>" . __("edit") . "</button>";
+                    $button .= "<button class='hapus btn btn-danger m-1' id='" . $data->id . "'><i class='fas fa-trash m-1'></i>" . __("delete") . "</button>";
+                    return $button;
+                })
+                ->rawColumns(['tindakan', 'status'])
+                ->make(true);
         }
     }
 
-    public function save(Request $request):JsonResponse
+    public function save(Request $request): JsonResponse
     {
         $data = [
-            'user_id'=>$request->user_id,
-            'supplier_id'=>$request->supplier_id,
-            'date_received'=>$request->date_received,
-            'quantity'=>$request->quantity,
-            'invoice_number'=>$request->invoice_number,
-            'item_id'=>$request->item_id,
-            'status'=>Auth::user()->role->id == 3 ? 0 : 1
+            'user_id' => $request->user_id,
+            'supplier_id' => $request->supplier_id,
+            'date_received' => $request->date_received,
+            'quantity' => $request->quantity,
+            'invoice_number' => $request->invoice_number,
+            'item_id' => $request->item_id,
+            'status' => Auth::user()->role->id == 3 ? 0 : 1
         ];
         GoodsIn::create($data);
         $barang = Item::find($request->item_id);
-        $barang -> active = "true";
-        $barang -> save();
-        return response() -> json([
-            "message"=>__("saved successfully")
-        ]) -> setStatusCode(200);
+        $barang->active = "true";
+        $barang->save();
+        return response()->json([
+            "message" => __("saved successfully")
+        ])->setStatusCode(200);
     }
 
-    public function detail(Request $request):JsonResponse
+    public function detail(Request $request): JsonResponse
     {
-        $id = $request -> id;
-        $data = GoodsIn::with('supplier')->where('id',$id)->first();
-        $barang = Item::with('category','unit')->find($data -> item_id);
-        $data['kode_barang'] = $barang -> code;
-        $data['satuan_barang'] = $barang -> unit -> name;
-        $data['jenis_barang'] = $barang -> category -> name;
-        $data['nama_barang'] = $barang  -> name;
-        $data['supplier_id'] = $data -> supplier_id;
-        $data['id_barang'] = $barang -> id;
+        $id = $request->id;
+        $data = GoodsIn::with('supplier')->where('id', $id)->first();
+        $barang = Item::with('category', 'unit')->find($data->item_id);
+        $data['kode_barang'] = $barang->code;
+        $data['satuan_barang'] = $barang->unit->name;
+        $data['jenis_barang'] = $barang->category->name;
+        $data['nama_barang'] = $barang->name;
+        $data['supplier_id'] = $data->supplier_id;
+        $data['id_barang'] = $barang->id;
         return response()->json(
-            ["data"=>$data]
+            ["data" => $data]
         )->setStatusCode(200);
     }
 
-    public function update(Request $request):JsonResponse
+    public function update(Request $request): JsonResponse
     {
-        $id = $request -> id;
+        $id = $request->id;
         $data = GoodsIn::find($id);
-        $data -> user_id = $request->user_id;
-        $data -> supplier_id = $request->supplier_id;
-        $data -> date_received = $request->date_received;
-        $data -> quantity = $request->quantity;
-        $data -> item_id = $request->item_id;
-        $data -> status = $request->status;
-        $status = $data -> save();
-        if(!$status){
+        $data->user_id = $request->user_id;
+        $data->supplier_id = $request->supplier_id;
+        $data->date_received = $request->date_received;
+        $data->quantity = $request->quantity;
+        $data->item_id = $request->item_id;
+        $data->status = $request->status;
+        $status = $data->save();
+        if (!$status) {
             return response()->json(
-                ["message"=>__("data failed to change")]
-            )->setStatusCode(400);
-        }
-        return response() -> json([
-            "message"=>__("data changed successfully")
-        ]) -> setStatusCode(200);
-
-    }
-
-    public function delete(Request $request):JsonResponse
-    {
-        $id = $request -> id;
-        $data = GoodsIn::find($id);
-        $status = $data -> delete();
-        if(!$status){
-            return response()->json(
-                ["message"=>__("data failed to delete")]
+                ["message" => __("data failed to change")]
             )->setStatusCode(400);
         }
         return response()->json([
-            "message"=>__("data deleted successfully")
-        ]) -> setStatusCode(200);
+            "message" => __("data changed successfully")
+        ])->setStatusCode(200);
     }
 
-    public function listIn(Request $request):JsonResponse
+    public function delete(Request $request): JsonResponse
     {
-        $items = Item::with('category','unit','brand')->where('active','true')->latest()->get();
-        if($request -> ajax()){
-            return DataTables::of($items)
-            ->addColumn('img',function($data){
-                if(empty($data->image)){
-                    return "<img src='".asset('default.png')."' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
-                }
-                return "<img src='".asset('storage/barang/'.$data->image)."' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
-            })
-            -> addColumn('category_name',function($data){
-                return $data->category->name;
-            })
-            -> addColumn('unit_name',function($data){
-                return $data->unit->name;
-            })
-            -> addColumn('brand_name',function($data){
-                return $data -> brand -> name;
-            })
-            -> addColumn('tindakan',function($data){
-                    $button = "<button class='ubah btn btn-success m-1' id='".$data->id."'>".__("edit")."</button>";
-                    $button .= "<button class='hapus btn btn-danger m-1' id='".$data->id."'>".__("delete")."</button>";
-                    return $button;
-            })
-            ->rawColumns(['img','tindakan'])
-            -> make(true);
-
+        $id = $request->id;
+        $data = GoodsIn::find($id);
+        $status = $data->delete();
+        if (!$status) {
+            return response()->json(
+                ["message" => __("data failed to delete")]
+            )->setStatusCode(400);
         }
+        return response()->json([
+            "message" => __("data deleted successfully")
+        ])->setStatusCode(200);
+    }
+
+    public function listIn(Request $request): JsonResponse
+    {
+        $items = Item::with('category', 'unit', 'brand')->where('active', 'true')->latest()->get();
+        if ($request->ajax()) {
+            return DataTables::of($items)
+                ->addColumn('img', function ($data) {
+                    if (empty($data->image)) {
+                        return "<img src='" . asset('default.png') . "' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
+                    }
+                    return "<img src='" . asset('storage/barang/' . $data->image) . "' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
+                })
+                ->addColumn('category_name', function ($data) {
+                    return $data->category->name;
+                })
+                ->addColumn('unit_name', function ($data) {
+                    return $data->unit->name;
+                })
+                ->addColumn('brand_name', function ($data) {
+                    return $data->brand->name;
+                })
+                ->addColumn('tindakan', function ($data) {
+                    $button = "<button class='ubah btn btn-success m-1' id='" . $data->id . "'>" . __("edit") . "</button>";
+                    $button .= "<button class='hapus btn btn-danger m-1' id='" . $data->id . "'>" . __("delete") . "</button>";
+                    return $button;
+                })
+                ->rawColumns(['img', 'tindakan'])
+                ->make(true);
+        }
+    }
+
+    public function approve($id)
+    {
+        // Find the transaction by ID and update its status
+        $transaction = GoodsIn::find($id); // Ensure you have the correct model
+
+        if ($transaction) {
+            $transaction->status = '1';
+            $transaction->save();
+
+            return response()->json(['success' => true, 'message' => __('Transaction approved successfully.')]);
+        }
+
+        return response()->json(['success' => false, 'message' => __('Transaction not found.')]);
+    }
+
+    public function cancel(Request $request, $id)
+    {
+        $transaction = GoodsIn::find($id);
+
+        if ($transaction) {
+            $transaction->status = '2';
+            $transaction->save();
+            
+        $data = [
+            'user_id' => $request->user_id,
+            'date_backs' => $request->date_retur,
+            'quantity' => $request->quantity,
+            'description' => $request->description,
+            'supplier_id' => $request->supplier_id,
+            'invoice_number' => $request->invoice_number,
+            'item_id' => $request->item_id
+        ];
+
+        // Create the GoodsBack record
+        GoodsBack::create($data);
+
+        // Optionally update the item's active status
+        $item = Item::find($request->item_id);
+        if ($item) {
+            $item->active = "true"; // Set active status
+            $item->save();
+        }
+            
+            return response()->json(['success' => true, 'message' => __('Transaction Cancel or Returned successfully.')]);
+        }
+
+        return response()->json(['success' => false, 'message' => __('Transaction not found.')]);
     }
 }

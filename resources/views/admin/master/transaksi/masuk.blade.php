@@ -10,19 +10,29 @@
                         <div class="row w-100">
                             <div class="col-lg-12  w-100">
                                 <div class="row">
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <div class="form-group">
                                             <label for="date_start">{{ __('start date') }}: </label>
                                             <input type="date" name="start_date" class="form-control w-100">
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <div class="form-group">
                                             <label for="date_start">{{ __('end date') }}: </label>
                                             <input type="date" name="end_date" class="form-control w-100">
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label for="status">{{ __('status') }}: </label>
+                                            <select name="status" id="status" class="form-control w-100">
+                                                <option value="">-- {{ __('status') }} -- </option>
+                                                <option value="0">Pending</option>
+                                                <option value="1">Approved</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
                                         @if (Auth::user()->role->id <= 2)
                                             <div class="form-group">
                                                 <label for="date_start">{{ __('users') }}: </label>
@@ -36,14 +46,16 @@
                                             </div>
                                         @endif
                                     </div>
-                                    <div class="text-end col-sm-3 pt-4">
+                                    <div class="text-end col-sm-4 pt-4">
                                         <div class = "d-flex justify-content-end">
-                                            <button class="btn btn-info m-1 mt-1" type="button" data-toggle="modal"
-                                                data-target="#modal_approve" id="modal-button-approve"><i
-                                                    class="fas fa-list m-1"></i>
-                                                {{ __('approval') }} </button>
                                             <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
                                                     class="fas fa-filter m-1"></i>{{ __('filter') }}</button>
+                                            @if (Auth::user()->role->id <= 2)
+                                                <button class="btn btn-info m-1 mt-1" type="button" data-toggle="modal"
+                                                    data-target="#modal_approve" id="modal-button-approve"><i
+                                                        class="fas fa-list m-1"></i>
+                                                    {{ __('approval') }} </button>
+                                            @endif
                                             <button class="btn btn-success m-1 mt-1" type="button" data-toggle="modal"
                                                 data-target="#TambahData" id="modal-button"><i class="fas fa-plus m-1"></i>
                                                 {{ __('add data') }} </button>
@@ -92,8 +104,6 @@
                             </div>
                         </div>
 
-
-
                         <!-- Modal -->
                         <div class="modal fade" id="TambahData" aria-labelledby="TambahDataModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -109,7 +119,8 @@
                                         <div class="row">
                                             <div class="col-md-7">
                                                 <div class="form-group">
-                                                    <label for="kode" class="form-label">{{ __('incoming item code') }}
+                                                    <label for="kode"
+                                                        class="form-label">{{ __('incoming item code') }}
                                                         <span class="text-danger">*</span></label>
                                                     <input type="text" name="kode" readonly class="form-control">
                                                     <input type="hidden" name="id" />
@@ -119,7 +130,8 @@
                                                     <label for="tanggal_masuk"
                                                         class="form-label">{{ __('date of entry') }} <span
                                                             class="text-danger">*</span></label>
-                                                    <input type="date" name="tanggal_masuk" class="form-control">
+                                                    <input type="date" id="tanggal_masuk" name="tanggal_masuk"
+                                                        class="form-control">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="supplier"
@@ -191,12 +203,13 @@
                         </div>
 
                         <!-- Modal Approve -->
-                        <div class="modal fade" id="modal_approve" aria-labelledby="ApproveDataModalLabel" tabindex="-1"
+                        <div class="modal fade" id="modal_approve" aria-labelledby="ApproveDataModalLabel"
                             aria-hidden="true">
-                            <div class="modal-dialog  modal-xl modal-dialog-scrollable">
+                            <div class="modal-dialog modal-xl modal-dialog-scrollable">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">{{ __('select transaction in') }}
+                                        <h5 class="modal-title" id="staticBackdropLabel">
+                                            {{ __('select transaction in') }}
                                         </h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
@@ -209,12 +222,12 @@
                                                     class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
                                                     <thead>
                                                         <tr>
-                                                            <th class="border-bottom-0 text-center" width="8%">
-                                                                {{ __('no') }}</th>
                                                             <th class="border-bottom-0">{{ __('date of entry') }}</th>
-                                                            <th class="border-bottom-0">{{ __('incoming item code') }}</th>
+                                                            <th class="border-bottom-0">{{ __('incoming item code') }}
+                                                            </th>
                                                             <th class="border-bottom-0">{{ __('item code') }}</th>
                                                             <th class="border-bottom-0">{{ __('supplier') }}</th>
+                                                            <th class="border-bottom-0">{{ __('brand') }}</th>
                                                             <th class="border-bottom-0">{{ __('item') }}</th>
                                                             <th class="border-bottom-0">{{ __('incoming amount') }}</th>
                                                             <th class="border-bottom-0" width="1%">
@@ -224,9 +237,6 @@
                                                     <tbody>
                                                         @foreach ($approvals as $item)
                                                             <tr>
-                                                                <td class="border-bottom-0 text-center" width="8%">
-                                                                    {{ $loop->iteration }}
-                                                                </td>
                                                                 <td>
                                                                     {{ $item->date_received }}
                                                                 </td>
@@ -240,42 +250,153 @@
                                                                     {{ $item->supplier->name }}
                                                                 </td>
                                                                 <td>
+                                                                    {{ $item->item->brand->name }}
+                                                                </td>
+                                                                <td>
                                                                     {{ $item->item->name }}
                                                                 </td>
                                                                 <td>
                                                                     {{ $item->quantity }} / {{ $item->item->unit->name }}
-                                                               </td>
+                                                                </td>
                                                                 <td>
-                                                                    <button type="button" class="btn btn-success btn-sm" id="approve_{{ $item->id }}">
+                                                                    <button type="button" class="btn btn-success btn-sm"
+                                                                        id="approve_{{ $item->id }}">
                                                                         {{ __('Approve') }}
+                                                                    </button>
+                                                                    <button type="button" class="btn btn-danger btn-sm"
+                                                                        id="cancel_{{ $item->id }}"
+                                                                        data-user-id="{{ Auth()->id() }}"
+                                                                        data-return-date="{{ \Carbon\Carbon::now()->toDateString() }}"
+                                                                        data-quantity="{{ $item->quantity }}"
+                                                                        data-supplier-id="{{ $item->supplier->id }}"
+                                                                        data-invoice-number="{{ $item->invoice_number }}"
+                                                                        data-item-id="{{ $item->item->id }}">
+                                                                        {{ __('Cancel') }}
                                                                     </button>
                                                                     <script>
                                                                         // sweetalertconfirm
-                                                                        
+
                                                                         $('#approve_{{ $item->id }}').on('click', function() {
                                                                             Swal.fire({
-                                                                                    title: "{{ __('are you sure?') }}",
-                                                                                    text: "{{ __('you want to approve this transaction?') }}",
-                                                                                    icon: "warning",
-                                                                                    showCancelButton: true,
-                                                                                    confirmButtonColor: "#3085d6",
-                                                                                    cancelButtonColor: "#d33",
-                                                                                    confirmButtonText: "{{ __('save') }}",
-                                                                                    cancelButtonText: "{{ __('cancel') }}"
-                                                                                }).then((result) => {
-                                                                                    if (result.isConfirmed) { 
-                                                                                    }})
-                                                                                });
+                                                                                title: "{{ __('are you sure?') }}",
+                                                                                text: "{{ __('you want to approve this transaction?') }}",
+                                                                                icon: "warning",
+                                                                                showCancelButton: true,
+                                                                                confirmButtonColor: "#3085d6",
+                                                                                cancelButtonColor: "#d33",
+                                                                                confirmButtonText: "{{ __('save') }}",
+                                                                                cancelButtonText: "{{ __('cancel') }}"
+                                                                            }).then((result) => {
+                                                                                if (result.isConfirmed) {
+                                                                                    $.ajax({
+                                                                                        url: "{{ route('transaksi.masuk.approve', $item->id) }}", // Use the route defined earlier
+                                                                                        type: 'POST',
+                                                                                        data: {
+                                                                                            _token: '{{ csrf_token() }}' // Include CSRF token for security
+                                                                                        },
+                                                                                        success: function(response) {
+                                                                                            if (response.success) {
+                                                                                                Swal.fire(
+                                                                                                    '{{ __('Approved!') }}',
+                                                                                                    response.message,
+                                                                                                    'success'
+                                                                                                ).then(() => {
+                                                                                                    location.reload();
+                                                                                                });
+
+                                                                                            } else {
+                                                                                                Swal.fire(
+                                                                                                    '{{ __('Error!') }}',
+                                                                                                    response.message,
+                                                                                                    'error'
+                                                                                                );
+                                                                                            }
+                                                                                        },
+                                                                                        error: function() {
+                                                                                            Swal.fire(
+                                                                                                '{{ __('Error!') }}',
+                                                                                                '{{ __('There was a problem approving the transaction.') }}',
+                                                                                                'error'
+                                                                                            );
+                                                                                        }
+                                                                                    });
+                                                                                };
+                                                                            });
+                                                                        });
+
+                                                                        $('#cancel_{{ $item->id }}').on('click', function() {
+                                                                            const button = $(this);
+                                                                            const userId = button.data('user-id');
+                                                                            const returnDate = button.data('return-date');
+                                                                            const quantity = button.data('quantity');
+                                                                            const supplierId = button.data('supplier-id');
+                                                                            const invoiceNumber = button.data('invoice-number');
+                                                                            const itemId = button.data('item-id');
+                                                                            Swal.fire({
+                                                                                title: "{{ __('are you sure?') }}",
+                                                                                text: "{{ __('you want to cancel this transaction?') }}",
+                                                                                icon: "warning",
+                                                                                input: 'textarea',
+                                                                                showCancelButton: true,
+                                                                                confirmButtonColor: "#3085d6",
+                                                                                cancelButtonColor: "#d33",
+                                                                                confirmButtonText: "{{ __('save') }}",
+                                                                                cancelButtonText: "{{ __('cancel') }}",
+                                                                                preConfirm: (description) => {
+                                                                                    if (!description) {
+                                                                                        Swal.showValidationMessage(
+                                                                                            '{{ __('Please enter a description.') }}'
+                                                                                        );
+                                                                                    }
+                                                                                    return description; // Return the description
+                                                                                }
+                                                                            }).then((result) => {
+                                                                                if (result.isConfirmed) {
+                                                                                    const description = result.value; // Get the description value
+
+                                                                                    $.ajax({
+                                                                                        url: "{{ route('transaksi.masuk.cancel', $item->id) }}", // Use the route defined earlier
+                                                                                        type: 'POST',
+                                                                                        data: {
+                                                                                            _token: '{{ csrf_token() }}', // Include CSRF token for security
+                                                                                            user_id: userId,
+                                                                                            date_retur: returnDate,
+                                                                                            quantity: quantity,
+                                                                                            description: description,
+                                                                                            supplier_id: supplierId,
+                                                                                            invoice_number: invoiceNumber,
+                                                                                            item_id: itemId
+                                                                                        },
+                                                                                        success: function(response) {
+                                                                                            if (response.success) {
+                                                                                                Swal.fire(
+                                                                                                    '{{ __('success!') }}',
+                                                                                                    response.message,
+                                                                                                    'success'
+                                                                                                ).then(() => {
+                                                                                                    location.reload();
+                                                                                                });
+
+                                                                                            } else {
+                                                                                                Swal.fire(
+                                                                                                    '{{ __('Error!') }}',
+                                                                                                    response.message,
+                                                                                                    'error'
+                                                                                                );
+                                                                                            }
+                                                                                        },
+                                                                                        error: function() {
+                                                                                            Swal.fire(
+                                                                                                '{{ __('Error!') }}',
+                                                                                                '{{ __('There was a problem approving the transaction.') }}',
+                                                                                                'error'
+                                                                                            );
+                                                                                        }
+                                                                                    });
+                                                                                }
+                                                                            })
+                                                                        });
                                                                     </script>
-                                                                    @if ($item->status == 'Pending')
-                                                                        <button type="button"
-                                                                            class="btn btn-danger btn-sm"
-                                                                            data-toggle="modal"
-                                                                            data-target="#modal_reject"
-                                                                            data-id="{{ $item->id }}">
-                                                                            {{ __('reject') }}
-                                                                        </button>
-                                                                    @endif
                                                                 </td>
                                                                 </td>
                                                             </tr>
@@ -300,6 +421,7 @@
                                             <th class="border-bottom-0">{{ __('incoming item code') }}</th>
                                             <th class="border-bottom-0">{{ __('item code') }}</th>
                                             <th class="border-bottom-0">{{ __('supplier') }}</th>
+                                            <th class="border-bottom-0">{{ __('brand') }}</th>
                                             <th class="border-bottom-0">{{ __('item') }}</th>
                                             <th class="border-bottom-0">{{ __('incoming amount') }}</th>
                                             <th class="border-bottom-0">{{ __('status') }}</th>
@@ -529,6 +651,10 @@
             }
 
             $(document).ready(function() {
+                $('#TambahData').on('show.bs.modal', function() {
+                    var today = new Date().toISOString().split('T')[0];
+                    $('#tanggal_masuk').val(today);
+                });
 
                 $('#supplier').select2({
                     theme: 'bootstrap4',
@@ -539,30 +665,30 @@
 
                 $('#data-approve').DataTable({
                     language: {
-                    decimal: "",
-                    searchPlaceholder: "Cari Data",
-                    emptyTable: "Tabel kosong",
-                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-                    infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
-                    infoFiltered: "(filtered from MAX total entries)",
-                    infoPostFix: "",
-                    thousands: ",",
-                    lengthMenu: "Tampilkan _MENU_ data",
-                    loadingRecords: "Loading...",
-                    processing: "",
-                    search: "Cari:",
-                    zeroRecords: "Data tidak ditemukan",
-                    paginate: {
-                        first: "<<",
-                        last: ">>",
-                        next: ">",
-                        previous: "<",
+                        decimal: "",
+                        searchPlaceholder: "Cari Data",
+                        emptyTable: "Tabel kosong",
+                        info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                        infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
+                        infoFiltered: "(filtered from MAX total entries)",
+                        infoPostFix: "",
+                        thousands: ",",
+                        lengthMenu: "Tampilkan _MENU_ data",
+                        loadingRecords: "Loading...",
+                        processing: "",
+                        search: "Cari:",
+                        zeroRecords: "Data tidak ditemukan",
+                        paginate: {
+                            first: "<<",
+                            last: ">>",
+                            next: ">",
+                            previous: "<",
+                        },
+                        aria: {
+                            orderable: "Order by this column",
+                            orderableReverse: "Reverse order this column",
+                        },
                     },
-                    aria: {
-                        orderable: "Order by this column",
-                        orderableReverse: "Reverse order this column",
-                    },
-                },
                 });
 
                 const tabel = $('#data-tabel').DataTable({
@@ -575,6 +701,7 @@
                             d.start_date = $("input[name='start_date']").val();
                             d.end_date = $("input[name='end_date']").val();
                             d.inputer = $("#inputer").val();
+                            d.status = $("#status").val();
                         }
                     },
                     columns: [{
@@ -598,9 +725,14 @@
                         {
                             data: "supplier_name",
                             name: "supplier_name"
-                        }, {
+                        },
+                        {
                             data: "item_name",
                             name: "item_name"
+                        },
+                        {
+                            data: "brand_name",
+                            name: "brand_name"
                         },
                         {
                             data: "quantity",

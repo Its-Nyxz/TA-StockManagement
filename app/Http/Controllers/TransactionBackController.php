@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\GoodsBack;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Item;
@@ -28,20 +29,23 @@ class TransactionBackController extends Controller
     public function list(Request $request):JsonResponse
     {
         if( !empty($request->start_date) && !empty($request->end_date) ){
-            $goodsins = GoodsBack::with('item','user');
-            $goodsins -> whereBetween('date_retur',[$request->start_date,$request->end_date]);
+            $goodsbacks = GoodsBack::with('item','user');
+            $goodsbacks -> whereBetween('date_retur',[$request->start_date,$request->end_date]);
             if($request->inputer){
-                $goodsins -> where('user_id',[$request->inputer]);
+                $goodsbacks -> where('user_id',[$request->inputer]);
             }
         }else if(!empty($request->inputer)){
-            $goodsins = GoodsBack::with('item','user');
-            $goodsins -> where('user_id',[$request->inputer]);
+            $goodsbacks = GoodsBack::with('item','user');
+            $goodsbacks -> where('user_id',[$request->inputer]);
         }else{
-            $goodsins = GoodsBack::with('item','user');
+            $goodsbacks = GoodsBack::with('item','user');
         }
-        $goodsins -> latest() -> get();
+        if(Auth::user()->role->id > 2){
+            $goodsbacks -> where('user_id',Auth::user()->id);
+        };
+        $goodsbacks -> latest() -> get();
         if($request->ajax()){
-            return DataTables::of($goodsins)
+            return DataTables::of($goodsbacks)
             ->addColumn('quantity',function($data){
                 $item = Item::with("unit")->find($data -> item -> id);
                 return $data -> quantity ."/".$item -> unit -> name;
