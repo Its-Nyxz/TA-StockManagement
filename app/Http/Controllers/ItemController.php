@@ -23,7 +23,7 @@ class ItemController extends Controller
     }
     public function list(Request $request): JsonResponse 
     {
-        $items = Item::with('category','unit','brand','goodsIns','goodsOuts')->latest()->get();
+        $items = Item::with('category','unit','brand','goodsIns','goodsOuts','goodsBacks')->latest()->get();
         if($request -> ajax()){
             return DataTables::of($items)
             // ->addColumn('img',function($data){
@@ -55,8 +55,9 @@ class ItemController extends Controller
             ->addColumn("total", function ($data) {
                 $totalQuantityIn = $data->goodsIns->sum('quantity');
                 $totalQuantityOut = $data->goodsOuts->sum('quantity');
+                $totalQuantityRetur = $data->goodsBacks->sum('quantity');
                 $item = Item::with("unit")->find($data -> id);
-                $result = $data->quantity + $totalQuantityIn - $totalQuantityOut ."/". $item -> unit -> name;
+                $result = $data->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur ."/". $item -> unit -> name;
                 $result = max(0, $result);
                 if($result == 0){
                     return $result;

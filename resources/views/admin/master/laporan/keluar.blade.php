@@ -43,7 +43,7 @@
                                     <th class="border-bottom-0">{{ __("date") }}</th>
                                     <th class="border-bottom-0">{{ __("code") }}</th>
                                     <th class="border-bottom-0">{{ __("code of goods") }}</th>
-                                    <th class="border-bottom-0">{{ __("customer") }}</th>
+                                    {{-- <th class="border-bottom-0">{{ __("customer") }}</th> --}}
                                     <th class="border-bottom-0">{{ __("goods") }}</th>
                                     <th class="border-bottom-0">{{ __("amount") }}</th>
                                 </tr>
@@ -93,10 +93,11 @@
                 data:"kode_barang",
                 name:"kode_barang"
                },
+            //    {
+            //     data:"customer_name",
+            //     name:"customer_name"
+            //    },
                {
-                data:"customer_name",
-                name:"customer_name"
-               },{
                 data:"item_name",
                 name:"item_name"
                },

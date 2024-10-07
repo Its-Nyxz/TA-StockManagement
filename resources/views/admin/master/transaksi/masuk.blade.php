@@ -54,7 +54,8 @@
                                                 <button class="btn btn-info m-1 mt-1" type="button" data-toggle="modal"
                                                     data-target="#modal_approve" id="modal-button-approve"><i
                                                         class="fas fa-list m-1"></i>
-                                                    {{ __('approval') }} </button>
+                                                    {{ __('approval') }} <span
+                                                        class="badge badge-danger">{{ count($approvals) }}</span></button>
                                             @endif
                                             <button class="btn btn-success m-1 mt-1" type="button" data-toggle="modal"
                                                 data-target="#TambahData" id="modal-button"><i class="fas fa-plus m-1"></i>
@@ -602,7 +603,9 @@
                     error: function(err) {
                         console.log(err);
                     },
-                })
+                }).then(() => {
+                    location.reload();
+                });
             }
 
             function ubah() {

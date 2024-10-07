@@ -65,10 +65,11 @@ class ReportStockController extends Controller
                     $totalQuantityOut = $item->goodsOuts->sum('quantity');
                     $totalQuantityRetur = $item->goodsBacks->sum('quantity');
                     $data = Item::with("unit")->find($item->id);
-                    $result = $item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur . "/" . $data->unit->name;
+                    $count = $item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur ;
+                    $result = $count. "/" . $data->unit->name;
                     $result = max(0, $result);
-                    if ($result == 0) {
-                        return "<span class='text-red font-weight-bold'>" . $result . "</span>";
+                    if ($count <= 5) {
+                        return "<span class='text-red font-weight-bold'>" . $result . "</span>" . ' ' . "<span class='badge badge-danger'>" . __("Stock Running Low") . "</span>";;
                     }
                     return  "<span class='text-success font-weight-bold'>" . $result . "</span>";
                 })

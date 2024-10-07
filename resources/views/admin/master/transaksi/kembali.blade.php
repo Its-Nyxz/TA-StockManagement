@@ -422,8 +422,9 @@
                         item_id,
                         user_id,
                         date_retur,
-                        customer_id,
+                        description,
                         invoice_number,
+                        supplier_id,
                         quantity
                     },
                     success: function(res) {
@@ -560,7 +561,7 @@
                     $("input[name='jenis_barang']").val(null);
                     $("input[name='satuan_barang']").val(null);
                     $("input[name='jumlah']").val(null);
-                    $("input[textarea='description']").val(null);
+                    $("textarea[name='description']").val(null);
                     $("select[name='supplier'").val(null);
                     $('#simpan').text("Simpan");
                 });
@@ -596,8 +597,8 @@
                         $("input[name='jenis_barang']").val(data.jenis_barang);
                         $("input[name='satuan_barang']").val(data.satuan_barang);
                         $("input[name='jumlah']").val(data.quantity);
-                        $("input[textarea='description']").val(data.description);
-                        $("select[name='supplier'").val(null);
+                        $("textarea[name='description']").val(data.description);
+                        $("select[name='supplier']").val(null);
                     }
                 });
 

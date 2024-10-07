@@ -96,7 +96,8 @@ class TransactionInController extends Controller
             'quantity' => $request->quantity,
             'invoice_number' => $request->invoice_number,
             'item_id' => $request->item_id,
-            'status' => Auth::user()->role->id == 3 ? 0 : 1
+            // 'status' => Auth::user()->role->id == 3 ? 0 : 1
+            'status' => 0
         ];
         GoodsIn::create($data);
         $barang = Item::find($request->item_id);
