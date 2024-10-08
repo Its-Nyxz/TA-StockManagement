@@ -40,8 +40,7 @@
                     @endif
                 </a>
                 <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
-                    <span class="dropdown-header">{{ App\Models\GoodsIn::where('status', 0)->count() }} Approval
-                        Notifications</span>
+                    <span class="dropdown-header">{{ App\Models\GoodsIn::where('status', 0)->count() }} {{ __('Approval Notifications') }} </span>
                     <div class="dropdown-divider"></div>
                     @foreach (App\Models\GoodsIn::where('status', 0)->get() as $approval)
                         <a href="#" class="dropdown-item d-flex justify-content-between mb-2">
@@ -52,7 +51,7 @@
                         </a>
                         <div class="dropdown-divider"></div>
                     @endforeach
-                    <a href="{{ route('transaksi.masuk') }}" class="dropdown-item dropdown-footer">See All Approvals</a>
+                    <a href="{{ route('transaksi.masuk') }}" class="dropdown-item dropdown-footer">{{ __('See All Approvals') }}</a>
                 </div>
             </li>
         @endif

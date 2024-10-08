@@ -126,5 +126,7 @@
   "Transaction approved successfully.":"Transaksi berhasil diapprove.",
   "Transaction Cancel or Returned successfully.":"Transaksi dibatalkan atau dikembalikan berhasil.",
   "Please enter a description.":"Silakan masukkan deskripsi.",
-  "Stock Running Low": "Stock menipis"
+  "Stock Running Low": "Stock menipis",
+  "Approval Notifications": "Notifikasi Persetujuan",
+  "See All Approvals": "Lihat Semua Persetujuan"
 }
