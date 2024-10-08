@@ -215,7 +215,6 @@
                             </div>
                         </div>
 
-
                         <!-- Modal Approve -->
                         <div class="modal fade" id="modal_approve" aria-labelledby="ApproveDataModalLabel"
                             aria-hidden="true">
