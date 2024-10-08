@@ -48,8 +48,8 @@ class TransactionOutController extends Controller
                 $item = Item::with("unit")->find($data -> item -> id);
                 return $data -> quantity ."/".$item -> unit -> name;
             })
-            ->addColumn("date_received",function($data){
-                return Carbon::parse($data->date_received)->format('d F Y');
+            ->addColumn("date_out",function($data){
+                return Carbon::parse($data->date_out)->format('d F Y');
             })
             ->addColumn("kode_barang",function($data){
                 return $data -> item -> code;
@@ -57,6 +57,10 @@ class TransactionOutController extends Controller
             // ->addColumn("customer_name",function($data){
             //     return $data -> customer -> name;
             // })
+            ->addColumn("brand_name",function($data){
+                return $data -> item -> brand -> name;
+            })
+
             ->addColumn("item_name",function($data){
                 return $data -> item -> name;
             })

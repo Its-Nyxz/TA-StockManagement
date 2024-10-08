@@ -28,9 +28,9 @@
                             </div>
                         </div>
                         <div class="col-lg-6  w-100 d-flex justify-content-end align-items-center">
-                                <button class="btn btn-outline-primary font-weight-bold m-1" id="print"><i class="fas fa-print m-1"></i>{{ __("print") }}</button>
-                                <button class="btn btn-outline-danger font-weight-bold m-1" id="export-pdf"><i class="fas fa-file-pdf m-1"></i>{{ __("messages.export-to", ["file" => "pdf"]) }}</button>
-                                <button class="btn btn-outline-success font-weight-bold m-1" id="export-excel"><i class="fas fa-file-excel m-1"></i>{{ __("messages.export-to", ["file" => "excel"]) }}</button>
+                                <button class="btn btn-outline-primary font-weight-bold m-1" id="print"><i class="fas fa-print m-1"></i><span class="d-none d-lg-block d-xl-inline">{{ __("print") }}</span></button>
+                                <button class="btn btn-outline-danger font-weight-bold m-1" id="export-pdf"><i class="fas fa-file-pdf m-1"></i><span class="d-none d-lg-block d-xl-inline">{{ __("messages.export-to", ["file" => "pdf"]) }}</span></button>
+                                <button class="btn btn-outline-success font-weight-bold m-1" id="export-excel"><i class="fas fa-file-excel m-1"></i><span class="d-none d-lg-block d-xl-inline">{{ __("messages.export-to", ["file" => "excel"]) }}</span></button>
                         </div>
                     </div>
                 </div>
@@ -45,6 +45,7 @@
                                     <th class="border-bottom-0">{{ __("code of goods") }}</th>
                                     {{-- <th class="border-bottom-0">{{ __("customer") }}</th> --}}
                                     <th class="border-bottom-0">{{ __("goods") }}</th>
+                                    <th class="border-bottom-0">{{ __("brand") }}</th>
                                     <th class="border-bottom-0">{{ __("amount") }}</th>
                                 </tr>
                             </thead>
@@ -68,6 +69,7 @@
             lengthChange: true,
             processing:true,
             serverSide:true,
+            responsive:true,
             ajax:{
                 url:`{{route('laporan.keluar.list')}}`,
                 data:function(d){
@@ -100,6 +102,10 @@
                {
                 data:"item_name",
                 name:"item_name"
+               },
+               {
+                data:"brand_name",
+                name:"brand_name"
                },
                {
                 data:"quantity",

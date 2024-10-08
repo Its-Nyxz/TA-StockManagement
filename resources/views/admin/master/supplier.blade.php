@@ -90,6 +90,7 @@
                 lengthChange: true,
                 autoWidth: false,
                 processing: true,
+                responsive: true,
                 serverSide: true,
                 ajax: `{{ route('supplier.list') }}`,
                 columns: [{

@@ -29,16 +29,16 @@
                         </div>
                         @if(Auth::user()->role->name != 'staff')
                         <div class="col-lg-6  w-100 d-flex justify-content-end align-items-center">
-                                <button class="btn btn-outline-primary font-weight-bold m-1" id="print"><i class="fas fa-print m-1"></i>{{ __("print") }}</button>
-                                <button class="btn btn-outline-danger font-weight-bold m-1" id="export-pdf"><i class="fas fa-file-pdf m-1"></i>{{ __("messages.export-to", ["file" => "pdf"]) }}</button>
-                                <button class="btn btn-outline-success font-weight-bold m-1" id="export-excel"><i class="fas fa-file-excel m-1"></i>{{ __("messages.export-to", ["file" => "excel"]) }}</button>
+                                <button class="btn btn-outline-primary font-weight-bold m-1" id="print"><i class="fas fa-print m-1"></i><span class="d-none d-lg-block d-xl-inline">{{ __("print") }}</span></button>
+                                <button class="btn btn-outline-danger font-weight-bold m-1" id="export-pdf"><i class="fas fa-file-pdf m-1"></i><span class="d-none d-lg-block d-xl-inline">{{ __("messages.export-to", ["file" => "pdf"]) }}</span></button>
+                                <button class="btn btn-outline-success font-weight-bold m-1" id="export-excel"><i class="fas fa-file-excel m-1"></i><span class="d-none d-lg-block d-xl-inline">{{ __("messages.export-to", ["file" => "excel"]) }}</span></button>
                         </div>
                         @endif
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="data-tabel" width="100%"  class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
+                        <table id="data-tabel" width="100%" class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
                             <thead>
                                 <tr>
                                     <th class="border-bottom-0" width="8%">{{ __("no") }}</th>
@@ -71,6 +71,7 @@
             lengthChange: true,
             processing:true,
             serverSide:true,
+            responsive:true,
             ajax:{
                 url:`{{route('laporan.stok.list')}}`,
                 data:function(d){

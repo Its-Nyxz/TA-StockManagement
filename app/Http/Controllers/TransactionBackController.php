@@ -51,7 +51,7 @@ class TransactionBackController extends Controller
                 return $data -> quantity ."/".$item -> unit -> name;
             })
             ->addColumn("date_backs",function($data){
-                return Carbon::parse($data->date_retur)->format('d F Y');
+                return Carbon::parse($data->date_backs)->format('d F Y');
             })
             ->addColumn("kode_barang",function($data){
                 return $data -> item -> code;
@@ -115,7 +115,7 @@ class TransactionBackController extends Controller
         $id = $request -> id;
         $data = GoodsBack::find($id);
         $data -> user_id = $request->user_id;
-        $data -> date_retur = $request->date_retur;
+        $data -> date_backs = $request->date_retur;
         $data -> quantity = $request->quantity;
         $data -> item_id = $request->item_id;
         $data -> description = $request->description;

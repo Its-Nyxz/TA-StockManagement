@@ -129,7 +129,7 @@ Route::middleware(['auth', "localization"])->group(function () {
         Route::put('/ubah', 'update')->name('transaksi.keluar.update');
         Route::delete('/hapus', 'delete')->name('transaksi.keluar.delete');
     });
-
+    
     // Transaksi kembali
     Route::controller(TransactionBackController::class)->prefix('/transaksi/kembali')->middleware('employee.middleware')->group(function () {
         Route::get('/', 'index')->name('transaksi.kembali');

@@ -39,24 +39,19 @@
                                     <div class="text-end col-sm-3 pt-4">
                                         <div class = "d-flex justify-content-end">
                                             <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
-                                                    class="fas fa-filter m-1"></i>{{ __('filter') }}</button>
+                                                    class="fas fa-filter m-1"></i><span class="d-none d-lg-block d-xl-inline">{{ __('filter') }}</span></button>
                                             <button
                                                 class="btn {{ $in_status != 0 ? 'btn-success' : 'btn-danger' }} m-1 mt-1"
                                                 type="button" data-toggle="modal"
                                                 {{ $in_status != 0 ? 'data-target="#TambahData"' : 'data-target="alert"' }}
-                                                id="modal-button"><i class="fas fa-plus m-1"></i>
-                                                {{ __('add data') }}</button>
+                                                id="modal-button"><i class="fas fa-plus m-1"></i><span class="d-none d-lg-block d-xl-inline">
+                                                {{ __('add data') }}</span></button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- <div class="d-flex justify-content-end align-items-center w-100">
-                                        <button class="btn {{ $in_status != 0 ? 'btn-success' : 'btn-danger' }}" type="button"  data-toggle="modal" {{ $in_status != 0 ? 'data-target="#TambahData"' : 'data-target="alert"' }} id="modal-button"><i class="fas fa-plus m-1"></i> {{ __('add data') }}</button>
-                                    </div>
-                                </div> -->
-
-
+                    </div>
 
                         <!-- Modal Barang -->
                         <div class="modal fade" id="modal-barang" data-backdrop="static" data-keyboard="false"
@@ -98,8 +93,6 @@
                             </div>
                         </div>
 
-
-
                         <!-- Modal -->
                         <div class="modal fade" id="TambahData" tabindex="-1" aria-labelledby="TambahDataModalLabel"
                             aria-hidden="true">
@@ -129,15 +122,6 @@
                                                     <input type="date" id="tanggal_keluar" name="tanggal_keluar"
                                                         class="form-control">
                                                 </div>
-                                                <!-- <div class="form-group">
-                                                        <label for="customer" class="form-label">{{ __('choose customers') }}<span class="text-danger">*</span></label>
-                                                        <select name="customer" class="form-control">
-                                                            <option selected value="-- Pilih Customer --">-- {{ __('choose customers') }} --</option>
-                                                            @foreach ($customers as $customer)
-    <option value="{{ $customer->id }}">{{ $customer->name }}</option>
-    @endforeach
-                                                        </select>
-                                                    </div> -->
                                             </div>
                                             <div class="col-md-5">
                                                 <label for="kode_barang" class="form-label">{{ __('item code') }} <span
@@ -204,7 +188,6 @@
                                             <th class="border-bottom-0">{{ __('date') }}</th>
                                             <th class="border-bottom-0">{{ __('outgoing item code') }}</th>
                                             <th class="border-bottom-0">{{ __('item code') }}</th>
-                                            <!-- <th class="border-bottom-0">{{ __('customer') }}</th> -->
                                             <th class="border-bottom-0">{{ __('item') }}</th>
                                             <th class="border-bottom-0">{{ __('outgoing amount') }}</th>
                                             <th class="border-bottom-0" width="1%">{{ __('action') }}</th>
@@ -263,10 +246,6 @@
                             data: 'total',
                             name: 'total'
                         },
-                        // {
-                        //     data:'price',
-                        //     name:'price'
-                        // },
                         {
                             data: 'tindakan',
                             render: function(data) {
@@ -456,6 +435,7 @@
                     lengthChange: true,
                     processing: true,
                     serverSide: true,
+                    responsive: true,
                     ajax: {
                         url: `{{ route('transaksi.keluar.list') }}`,
                         data: function(d) {
@@ -482,10 +462,6 @@
                             data: "kode_barang",
                             name: "kode_barang"
                         },
-                        //    {
-                        //     data:"customer_name",
-                        //     name:"customer_name"
-                        //    },
                         {
                             data: "item_name",
                             name: "item_name"

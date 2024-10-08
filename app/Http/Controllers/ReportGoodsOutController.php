@@ -38,8 +38,8 @@ class ReportGoodsOutController extends Controller
             ->addColumn("kode_barang",function($data){
                 return $data -> item -> code;
             })
-            ->addColumn("customer_name",function($data){
-                return $data -> customer -> name;
+            ->addColumn("brand_name",function($data){
+                return $data -> item -> brand -> name;
             })
             ->addColumn("item_name",function($data){
                 return $data -> item -> name;
