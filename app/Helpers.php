@@ -32,7 +32,7 @@ class Helpers
             $item_name = $items->get($productId);
     
             // Memeriksa apakah total stok kurang dari 5
-            if ($totalStock < 5) {
+            if ($totalStock <= 5) {
                 $lowStockData[] = (object) [
                     'item_id' => $productId,
                     'total_stock' => $totalStock,
