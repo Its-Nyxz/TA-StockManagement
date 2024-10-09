@@ -144,7 +144,7 @@
                 <!-- small box -->
                 <div class="small-box bg-yellow">
                     <div class="inner" style="color:white !important;">
-                        <h3>{{ $approvals }}</h3>
+                        <h3>{{ count($approvals) }}</h3>
 
                         <p class="font-weight-bold">{{ __('approval') }}</p>
                     </div>

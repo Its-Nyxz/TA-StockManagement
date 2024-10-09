@@ -28,6 +28,42 @@
             </a>
         </li>
 
+        @php
+            $lowStockCount = getLowStockNotifCount();
+            $helper = new Helpers(); // Create an instance of the Helpers class
+            $lowStockItems = $helper->getLowStockNotifGet();
+            // $getlowStock = Helpers::getLowStockNotifGet();
+        @endphp
+        @if (Auth::user()->role->id <= 2)
+            <li class="nav-item dropdown d-flex justify-content-center align-items-center">
+                <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown"
+                    role="button">
+                    <i class="fas fa-solid fa-envelope"></i>
+                    @if (count($lowStockCount) > 0)
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ count($lowStockCount) }}
+                        </span>
+                    @endif
+                </a>
+                <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
+                    <span class="dropdown-header">{{ count($lowStockCount) }} {{ __('Low Stock Notifications') }}</span>
+                    <div class="dropdown-divider"></div>
+                    @foreach ($lowStockItems as $stoks)
+                    <a href="#" class="dropdown-item d-flex justify-content-between mb-2">
+                        {{ Str::limit($stoks->item_code, 15, '...') }}
+                        {{ $stoks->item_name}}
+                        <span class="text-danger text-md">{{ $stoks->total_stock }}</span>
+                        <span
+                            class="float-right text-muted text-sm">{{ $stoks->created_at->diffForHumans() }}</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                @endforeach
+                    <a href="{{ route('laporan.stok') }}"
+                        class="dropdown-item dropdown-footer">{{ __('See Report Stok') }}</a>
+                </div>
+            </li>
+        @endif
+
         @if (Auth::user()->role->id <= 2)
             <li class="nav-item dropdown d-flex justify-content-center align-items-center">
                 <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown"
@@ -40,7 +76,8 @@
                     @endif
                 </a>
                 <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
-                    <span class="dropdown-header">{{ App\Models\GoodsIn::where('status', 0)->count() }} {{ __('Approval Notifications') }} </span>
+                    <span class="dropdown-header">{{ App\Models\GoodsIn::where('status', 0)->count() }}
+                        {{ __('Approval Notifications') }} </span>
                     <div class="dropdown-divider"></div>
                     @foreach (App\Models\GoodsIn::where('status', 0)->get() as $approval)
                         <a href="#" class="dropdown-item d-flex justify-content-between mb-2">
@@ -51,7 +88,8 @@
                         </a>
                         <div class="dropdown-divider"></div>
                     @endforeach
-                    <a href="{{ route('transaksi.masuk') }}" class="dropdown-item dropdown-footer">{{ __('See All Approvals') }}</a>
+                    <a href="{{ route('transaksi.masuk') }}"
+                        class="dropdown-item dropdown-footer">{{ __('See All Approvals') }}</a>
                 </div>
             </li>
         @endif

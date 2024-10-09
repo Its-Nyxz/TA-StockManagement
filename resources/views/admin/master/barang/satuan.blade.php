@@ -90,7 +90,9 @@
                         if(data == null){
                             return "<span class='font-weight-bold'>-</span>";
                         }
-                        return data;
+                        const formattedText = capitalizeAfterPeriod(data);
+                        return `<span class="capitalize-first-after-period">${formattedText}</span>`;
+                        // return data;
                     }
                 },
                 @if(Auth::user()->role->name != 'staff')

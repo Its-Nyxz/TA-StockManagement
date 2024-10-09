@@ -133,7 +133,6 @@ class TransactionInController extends Controller
         $data->date_received = $request->date_received;
         $data->quantity = $request->quantity;
         $data->item_id = $request->item_id;
-        $data->status = $request->status;
         $status = $data->save();
         if (!$status) {
             return response()->json(

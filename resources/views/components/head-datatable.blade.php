@@ -11,4 +11,9 @@
       rel="stylesheet"
       href="{{asset('theme/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}"
     />
+
+    <link
+      rel="stylesheet"
+      href="{{asset('theme/dist/css/desc.css')}}"
+    />
 </div>

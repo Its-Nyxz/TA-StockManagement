@@ -112,6 +112,7 @@
     <script src="{{ asset('theme/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('theme/dist/js/adminlte.js') }}"></script>
+    <script src="{{ asset('theme/dist/js/capitalize.js') }}"></script>
     <!-- Include Bootstrap JS -->
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script> -->
     <!-- Include Select2 JS -->

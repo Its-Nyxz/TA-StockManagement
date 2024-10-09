@@ -145,7 +145,7 @@
                                                                 class="text-danger">*</span>
                                                         </label>
                                                         <select name="supplier" id="supplier" class="form-control">
-                                                            <option selected value="-- Pilih Supplier --">--
+                                                            <option selected value="">--
                                                                 {{ __('choose a supplier') }} --</option>
                                                             @foreach ($suppliers as $supplier)
                                                                 <option value="{{ $supplier->id }}">{{ $supplier->name }}
@@ -672,7 +672,13 @@
 
             $('#supplier').select2({
                 theme: 'bootstrap4',
-                placeholder: "-- Pilih --",
+                placeholder: "-- Pilih Pemasok--",
+                allowClear: true,
+                minimumInputLength: 0 // Set this to enable search after 1 character
+            });
+
+            $('#inputer').select2({
+                theme: 'bootstrap4',
                 allowClear: true,
                 minimumInputLength: 0 // Set this to enable search after 1 character
             });
@@ -824,7 +830,7 @@
                     $("input[name='id']").val(data.id);
                     $("input[name='kode']").val(data.invoice_number);
                     $("input[name='id_barang']").val(data.id_barang);
-                    $("select[name='supplier'").val(data.supplier_id);
+                    $("select[name='supplier'").val(data.supplier_id).trigger('change');;
                     $("input[name='nama_barang']").val(data.nama_barang);
                     $("input[name='tanggal_masuk']").val(data.date_received);
                     $("input[name='kode_barang']").val(data.kode_barang);
