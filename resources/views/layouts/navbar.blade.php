@@ -48,7 +48,7 @@
                     <span class="dropdown-header">{{ count($lowStockCount) }} {{ __('Low Stock Notifications') }}</span>
                     <div class="dropdown-divider"></div>
                     @foreach ($lowStockItems as $stoks)
-                        <a href="#" class="dropdown-item d-flex justify-content-between mb-2">
+                        <div class="dropdown-item d-flex justify-content-between mb-2">
                             <div>
                                 <strong>{{ $stoks->item_code }}</strong><br>
                                 <small>{{ $stoks->item_name }}</small><br>
@@ -57,7 +57,7 @@
                             <span class="text-danger text-md">{{ $stoks->total_stock }}</span>
                             {{-- <span
                             class="float-right text-muted text-sm">{{ $stoks->created_at->diffForHumans() }}</span> --}}
-                        </a>
+                        </div>
                         <div class="dropdown-divider"></div>
                     @endforeach
                     <a href="{{ route('laporan.stok') }}"
@@ -82,14 +82,14 @@
                         {{ __('Approval Notifications') }} </span>
                     <div class="dropdown-divider"></div>
                     @foreach (App\Models\GoodsIn::where('status', 0)->get() as $approval)
-                        <a href="#" class="dropdown-item d-flex justify-content-between mb-2">
+                        <div class="dropdown-item d-flex justify-content-between mb-2">
                             <div>
                                 <strong>{{ $approval->invoice_number }}</strong><br>
                                 <small> {{ Str::limit($approval->item->name, 15, '...') }}</small><br>
                             </div>
                             <span
                                 class="float-right text-muted text-sm">{{ $approval->created_at->diffForHumans() }}</span>
-                        </a>
+                        </div>
                         <div class="dropdown-divider"></div>
                     @endforeach
                     <a href="{{ route('transaksi.masuk') }}"
