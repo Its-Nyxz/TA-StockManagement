@@ -147,10 +147,10 @@
     </script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <!-- <script src="{{ asset('theme/dist/js/pages/dashboard.js') }}"></script> -->
-    <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+    {{-- <script src="//cdn.jsdelivr.net/npm/eruda"></script>
     <script>
         eruda.init();
-    </script>
+    </script> --}}
 </body>
 
 </html>
