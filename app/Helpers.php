@@ -66,7 +66,7 @@ function getLowStockNotifCount()
                 - GoodsBack::where('item_id', $productId)->sum('quantity');
 
             // Memeriksa apakah total stok kurang dari 5
-            if ($totalStock < 5) {
+            if ($totalStock <= 5) {
                 $lowStockIds[] = $productId;
                 $data = [
                     'item_id' => $productId,
