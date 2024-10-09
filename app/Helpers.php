@@ -38,7 +38,8 @@ class Helpers
                     'total_stock' => $totalStock,
                     'item_name' => $item_name ? $item_name->name : 'Unknown',
                     'item_code' => $item_name ? $item_name->code : ' ',
-                    'created_at' => GoodsIn::where('item_id', $productId)->first()? GoodsIn::where('item_id', $productId)->first()->created_at : null,
+                    'merk' => $item_name ? $item_name->brand->name : '',
+                    // 'created_at' => GoodsIn::where('item_id', $productId)->first()? GoodsIn::where('item_id', $productId)->first()->created_at : null,
                 ];
             }
         }

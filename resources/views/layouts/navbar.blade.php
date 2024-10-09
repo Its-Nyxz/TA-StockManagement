@@ -45,19 +45,22 @@
                         </span>
                     @endif
                 </a>
-                <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     <span class="dropdown-header">{{ count($lowStockCount) }} {{ __('Low Stock Notifications') }}</span>
                     <div class="dropdown-divider"></div>
                     @foreach ($lowStockItems as $stoks)
-                    <a href="#" class="dropdown-item d-flex justify-content-between mb-2">
-                        {{ Str::limit($stoks->item_code, 15, '...') }}
-                        {{ $stoks->item_name}}
-                        <span class="text-danger text-md">{{ $stoks->total_stock }}</span>
-                        <span
-                            class="float-right text-muted text-sm">{{ $stoks->created_at->diffForHumans() }}</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                @endforeach
+                        <a href="#" class="dropdown-item d-flex justify-content-between mb-2">
+                            <div>
+                                <strong>{{ $stoks->item_code }}</strong><br>
+                                <small>{{ $stoks->item_name }}</small><br>
+                                <small>{{ $stoks->merk }}</small>
+                            </div>
+                            <span class="text-danger text-md">{{ $stoks->total_stock }}</span>
+                            {{-- <span
+                            class="float-right text-muted text-sm">{{ $stoks->created_at->diffForHumans() }}</span> --}}
+                        </a>
+                        <div class="dropdown-divider"></div>
+                    @endforeach
                     <a href="{{ route('laporan.stok') }}"
                         class="dropdown-item dropdown-footer">{{ __('See Report Stok') }}</a>
                 </div>
@@ -81,8 +84,10 @@
                     <div class="dropdown-divider"></div>
                     @foreach (App\Models\GoodsIn::where('status', 0)->get() as $approval)
                         <a href="#" class="dropdown-item d-flex justify-content-between mb-2">
-                            {{ Str::limit($approval->invoice_number, 15, '...') }}
-                            {{ Str::limit($approval->item->name, 5, '...') }}
+                            <div>
+                                <strong>{{ $approval->invoice_number }}</strong><br>
+                                <small> {{ Str::limit($approval->item->name, 15, '...') }}</small><br>
+                            </div>
                             <span
                                 class="float-right text-muted text-sm">{{ $approval->created_at->diffForHumans() }}</span>
                         </a>
