@@ -32,7 +32,6 @@
             $lowStockCount = getLowStockNotifCount();
             $helper = new Helpers(); // Create an instance of the Helpers class
             $lowStockItems = $helper->getLowStockNotifGet();
-            // $getlowStock = Helpers::getLowStockNotifGet();
         @endphp
         @if (Auth::user()->role->id <= 2)
             <li class="nav-item dropdown d-flex justify-content-center align-items-center">
