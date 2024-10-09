@@ -95,7 +95,7 @@
                         <table id="data-tabel" width="100%"  class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
                             <thead>
                                 <tr>
-                                    <th class="border-bottom-0" width="8%">{{ __("no") }}</th>
+                                    <th class="border-bottom-0" width="4%">{{ __("no") }}</th>
                                     <th class="border-bottom-0">{{ __("photo") }}</th>
                                     <th class="border-bottom-0">{{ __("code") }}</th>
                                     <th class="border-bottom-0">{{ __("name") }}</th>
