@@ -85,7 +85,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" id="kembali">{{ __("back") }}</button>
-                            <button type="button" class="btn btn-success" id="simpan">{{ __("save") }}</button>
+                            <button type="button" class="btn btn-success" id="simpan" data-action="simpan">{{ __("save") }}</button>
                         </div>
                         </div>
                     </div>
@@ -133,22 +133,22 @@
 
 
     function formatIDR(angka) {
-    // Ubah angka menjadi string dan hapus simbol yang tidak diperlukan
-    var strAngka = angka.toString().replace(/[^0-9]/g, '');
+        // Ubah angka menjadi string dan hapus simbol yang tidak diperlukan
+        var strAngka = angka.toString().replace(/[^0-9]/g, '');
 
-    // Jika tidak ada angka yang tersisa, kembalikan string kosong
-    if (!strAngka) return '';
+        // Jika tidak ada angka yang tersisa, kembalikan string kosong
+        if (!strAngka) return '';
 
-    // Pisahkan angka menjadi bagian yang sesuai dengan ribuan
-    var parts = strAngka.split('.');
-    var intPart = parts[0];
-    var decPart = parts.length > 1 ? '.' + parts[1] : '';
+        // Pisahkan angka menjadi bagian yang sesuai dengan ribuan
+        var parts = strAngka.split('.');
+        var intPart = parts[0];
+        var decPart = parts.length > 1 ? '.' + parts[1] : '';
 
-    // Tambahkan pemisah ribuan
-    intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        // Tambahkan pemisah ribuan
+        intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-    // Tambahkan simbol IDR
-    return 'RP.' + intPart + decPart;
+        // Tambahkan simbol IDR
+        return 'RP.' + intPart + decPart;
     }
 
     function isi(){
@@ -340,11 +340,12 @@
         });
 
         $('#simpan').on('click',function(){
-            if($(this).text() === 'Simpan Perubahan'){
-                ubah();
-            }else{
-                simpan();
-            }
+            var action = $(this).data('action');
+                if (action === 'ubah') {
+                    ubah(); 
+                } else {
+                    simpan(); 
+                }
         });
 
         $("#modal-button").on("click",function(){
@@ -359,7 +360,7 @@
             $("select[name='jenisbarang'], select[name='satuan'], select[name='merk']").val(null).trigger('change'); // Reset Select2
             $("input[name='jumlah']").val(0);
             // $("input[name='harga']").val(null);
-            $("#simpan").text("Simpan");
+            $("#simpan").data('action', 'simpan');
             id = new Date().getTime();
             $("input[name='kode']").val("BRG-"+id);
         });
@@ -373,7 +374,7 @@
         let id = $(this).attr('id');
         $("#modal-button").click();
         $("#item-count").show();
-        $("#simpan").text("Simpan Perubahan");
+        $("#simpan").data('action', 'ubah'); 
         $.ajax({
             url:"{{route('barang.detail')}}",
             type:"post",

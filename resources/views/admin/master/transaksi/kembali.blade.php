@@ -183,8 +183,8 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal"
                                         id="kembali">{{ __('cancel') }}</button>
-                                    <button type="button" class="btn btn-success"
-                                        id="simpan">{{ __('save') }}</button>
+                                    <button type="button" class="btn btn-success" id="simpan"
+                                        data-action="simpan">{{ __('save') }}</button>
                                 </div>
                             </div>
                         </div>
@@ -415,7 +415,11 @@
                     }
                 }
 
-            })
+            }).then(() => {
+                setTimeout(function() {
+                    location.reload(); // Reloads the page after 1500ms
+                }, 1500);
+            });
         }
 
 
@@ -467,7 +471,11 @@
                 error: function(err) {
                     console.log(err);
                 },
-            })
+            }).then(() => {
+                setTimeout(function() {
+                    location.reload(); // Reloads the page after 1500ms
+                }, 1500);
+            });
         }
 
         $(document).ready(function() {
@@ -575,7 +583,8 @@
             $("#cari-barang").on("click", detail);
 
             $('#simpan').on('click', function() {
-                if ($(this).text() === 'Simpan Perubahan') {
+                var action = $(this).data('action');
+                if (action === 'ubah') {
                     ubah();
                 } else {
                     simpan();
@@ -608,7 +617,7 @@
                 $("input[name='jumlah']").val(null);
                 $("textarea[name='description']").val(null);
                 $("select[name='supplier'").val(null);
-                $('#simpan').text("Simpan");
+                $("#simpan").data('action', 'simpan');
             });
 
             $("#filter").on('click', function() {
@@ -619,7 +628,7 @@
 
         $(document).on("click", ".ubah", function() {
             $("#modal-button").click();
-            $("#simpan").text("Simpan Perubahan");
+            $("#simpan").data('action', 'ubah');
             let id = $(this).attr('id');
             $.ajax({
                 url: "{{ route('transaksi.kembali.detail') }}",

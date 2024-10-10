@@ -49,402 +49,401 @@
                                     <div class="text-end col-sm-4 pt-4">
                                         <div class = "d-flex justify-content-end">
                                             <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
-                                                    class="fas fa-filter m-1"></i><span class="d-none d-lg-block d-xl-inline">{{ __('filter') }}</span></button>
+                                                    class="fas fa-filter m-1"></i><span
+                                                    class="d-none d-lg-block d-xl-inline">{{ __('filter') }}</span></button>
                                             @if (Auth::user()->role->id <= 2)
                                                 <button class="btn btn-info m-1 mt-1 position-relative" type="button"
                                                     data-toggle="modal" data-target="#modal_approve"
-                                                    id="modal-button-approve"><i class="fas fa-list m-1"></i><span class="d-none d-lg-block d-xl-inline">
-                                                    {{ __('approval') }}</span> <span
+                                                    id="modal-button-approve"><i class="fas fa-list m-1"></i><span
+                                                        class="d-none d-lg-block d-xl-inline">
+                                                        {{ __('approval') }}</span> <span
                                                         class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ count($approvals) }}</span></button>
                                             @endif
                                             <button class="btn btn-success m-1 mt-1" type="button" data-toggle="modal"
-                                                data-target="#TambahData" id="modal-button"><i class="fas fa-plus m-1"></i><span class="d-none d-lg-block d-xl-inline">
-                                                {{ __('add data') }}</span> </button>
+                                                data-target="#TambahData" id="modal-button"><i
+                                                    class="fas fa-plus m-1"></i><span class="d-none d-lg-block d-xl-inline">
+                                                    {{ __('add data') }}</span> </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                        <!-- Modal Barang -->
-                        <div class="modal fade" id="modal-barang" data-backdrop="static" data-keyboard="false"
-                            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">{{ __('select items') }}</h5>
-                                        <button type="button" class="close" id="close-modal-barang">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table id="data-barang" width="100%"
-                                                    class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
-                                                    <thead>
-                                                        <tr>
-                                                            <th class="border-bottom-0" width="8%">{{ __('no') }}
-                                                            </th>
-                                                            <th class="border-bottom-0">{{ __('photo') }}</th>
-                                                            <th class="border-bottom-0">{{ __('item code') }}</th>
-                                                            <th class="border-bottom-0">{{ __('name') }}</th>
-                                                            <th class="border-bottom-0">{{ __('type') }}</th>
-                                                            <th class="border-bottom-0">{{ __('unit') }}</th>
-                                                            <th class="border-bottom-0">{{ __('brand') }}</th>
-                                                            <th class="border-bottom-0">{{ __('stock amount') }}</th>
-                                                            <th class="border-bottom-0" width="1%">{{ __('action') }}
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                </table>
-                                            </div>
+                    <!-- Modal Barang -->
+                    <div class="modal fade" id="modal-barang" data-backdrop="static" data-keyboard="false" tabindex="-1"
+                        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">{{ __('select items') }}</h5>
+                                    <button type="button" class="close" id="close-modal-barang">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table id="data-barang" width="100%"
+                                                class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="border-bottom-0" width="4%">{{ __('no') }}
+                                                        </th>
+                                                        <th class="border-bottom-0">{{ __('photo') }}</th>
+                                                        <th class="border-bottom-0">{{ __('item code') }}</th>
+                                                        <th class="border-bottom-0">{{ __('name') }}</th>
+                                                        <th class="border-bottom-0">{{ __('type') }}</th>
+                                                        <th class="border-bottom-0">{{ __('unit') }}</th>
+                                                        <th class="border-bottom-0">{{ __('brand') }}</th>
+                                                        <th class="border-bottom-0">{{ __('stock amount') }}</th>
+                                                        <th class="border-bottom-0" width="1%">{{ __('action') }}
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="TambahData" aria-labelledby="TambahDataModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="TambahDataModalLabel">
-                                            {{ __('create incoming transactions') }}
-                                        </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="container-fluid"> <!-- Use container-fluid for better spacing -->
-                                            <div class="row">
-                                                <div class="col-md-7 col-12">
-                                                    <!-- Adjust column size for mobile and larger screens -->
-                                                    <div class="form-group">
-                                                        <label for="kode" class="form-label">
-                                                            {{ __('incoming item code') }} <span
-                                                                class="text-danger">*</span>
-                                                        </label>
-                                                        <input type="text" name="kode" readonly
-                                                            class="form-control">
-                                                        <input type="hidden" name="id" />
-                                                        <input type="hidden" name="id_barang" />
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="tanggal_masuk" class="form-label">
-                                                            {{ __('date of entry') }} <span class="text-danger">*</span>
-                                                        </label>
-                                                        <input type="date" id="tanggal_masuk" name="tanggal_masuk"
-                                                            class="form-control">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="supplier" class="form-label">
-                                                            {{ __('choose a supplier') }} <span
-                                                                class="text-danger">*</span>
-                                                        </label>
-                                                        <select name="supplier" id="supplier" class="form-control">
-                                                            <option selected value="">--
-                                                                {{ __('choose a supplier') }} --</option>
-                                                            @foreach ($suppliers as $supplier)
-                                                                <option value="{{ $supplier->id }}">{{ $supplier->name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
+                    <!-- Modal -->
+                    <div class="modal fade" id="TambahData" aria-labelledby="TambahDataModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="TambahDataModalLabel">
+                                        {{ __('create incoming transactions') }}
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container-fluid"> <!-- Use container-fluid for better spacing -->
+                                        <div class="row">
+                                            <div class="col-md-7 col-12">
+                                                <!-- Adjust column size for mobile and larger screens -->
+                                                <div class="form-group">
+                                                    <label for="kode" class="form-label">
+                                                        {{ __('incoming item code') }} <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="text" name="kode" readonly class="form-control">
+                                                    <input type="hidden" name="id" />
+                                                    <input type="hidden" name="id_barang" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="tanggal_masuk" class="form-label">
+                                                        {{ __('date of entry') }} <span class="text-danger">*</span>
+                                                    </label>
+                                                    <input type="date" id="tanggal_masuk" name="tanggal_masuk"
+                                                        class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="supplier" class="form-label">
+                                                        {{ __('choose a supplier') }} <span class="text-danger">*</span>
+                                                    </label>
+                                                    <select name="supplier" id="supplier" class="form-control">
+                                                        <option selected value="">--
+                                                            {{ __('choose a supplier') }} --</option>
+                                                        @foreach ($suppliers as $supplier)
+                                                            <option value="{{ $supplier->id }}">{{ $supplier->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5 col-12">
+                                                <!-- Adjust column size for mobile and larger screens -->
+                                                <div class="form-group">
+                                                    <label for="kode_barang" class="form-label">{{ __('item code') }}
+                                                        <span class="text-danger">*</span></label>
+                                                    <div class="input-group">
+                                                        <input type="text" name="kode_barang" class="form-control">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-outline-primary" type="button"
+                                                                id="cari-barang"><i class="fas fa-search"></i></button>
+                                                            <button class="btn btn-success" type="button"
+                                                                id="barang"><i class="fas fa-box"></i></button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-5 col-12">
-                                                    <!-- Adjust column size for mobile and larger screens -->
-                                                    <div class="form-group">
-                                                        <label for="kode_barang" class="form-label">{{ __('item code') }}
-                                                            <span class="text-danger">*</span></label>
-                                                        <div class="input-group">
-                                                            <input type="text" name="kode_barang"
+                                                <div class="form-group">
+                                                    <label for="nama_barang"
+                                                        class="form-label">{{ __('item name') }}</label>
+                                                    <input type="text" name="nama_barang" id="nama_barang" readonly
+                                                        class="form-control">
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-12"> <!-- Adjusted for responsiveness -->
+                                                        <div class="form-group">
+                                                            <label for="satuan_barang"
+                                                                class="form-label">{{ __('unit') }}</label>
+                                                            <input type="text" name="satuan_barang" readonly
                                                                 class="form-control">
-                                                            <div class="input-group-append">
-                                                                <button class="btn btn-outline-primary" type="button"
-                                                                    id="cari-barang"><i
-                                                                        class="fas fa-search"></i></button>
-                                                                <button class="btn btn-success" type="button"
-                                                                    id="barang"><i class="fas fa-box"></i></button>
-                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="nama_barang"
-                                                            class="form-label">{{ __('item name') }}</label>
-                                                        <input type="text" name="nama_barang" id="nama_barang"
-                                                            readonly class="form-control">
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-sm-6 col-12"> <!-- Adjusted for responsiveness -->
-                                                            <div class="form-group">
-                                                                <label for="satuan_barang"
-                                                                    class="form-label">{{ __('unit') }}</label>
-                                                                <input type="text" name="satuan_barang" readonly
-                                                                    class="form-control">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6 col-12"> <!-- Adjusted for responsiveness -->
-                                                            <div class="form-group">
-                                                                <label for="jenis_barang"
-                                                                    class="form-label">{{ __('type') }}</label>
-                                                                <input type="text" name="jenis_barang" readonly
-                                                                    class="form-control">
-                                                            </div>
+                                                    <div class="col-sm-6 col-12"> <!-- Adjusted for responsiveness -->
+                                                        <div class="form-group">
+                                                            <label for="jenis_barang"
+                                                                class="form-label">{{ __('type') }}</label>
+                                                            <input type="text" name="jenis_barang" readonly
+                                                                class="form-control">
                                                         </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="jumlah"
-                                                            class="form-label">{{ __('incoming amount') }}<span
-                                                                class="text-danger">*</span></label>
-                                                        <input type="number" name="jumlah" class="form-control">
-                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="jumlah"
+                                                        class="form-label">{{ __('incoming amount') }}<span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="number" name="jumlah" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                                            id="kembali">{{ __('cancel') }}</button>
-                                        <button type="button" class="btn btn-success"
-                                            id="simpan">{{ __('simpan') }}</button>
-                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                        id="kembali">{{ __('cancel') }}</button>
+                                    <button type="button" class="btn btn-success" id="simpan"
+                                        data-action="simpan">{{ __('save') }}</button>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Modal Approve -->
-                        <div class="modal fade" id="modal_approve" aria-labelledby="ApproveDataModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">
-                                            {{ __('select transaction in') }}
-                                        </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table id="data-approve" width="100%"
-                                                    class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
-                                                    <thead>
+                    <!-- Modal Approve -->
+                    <div class="modal fade" id="modal_approve" aria-labelledby="ApproveDataModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">
+                                        {{ __('select transaction in') }}
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table id="data-approve" width="100%"
+                                                class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="border-bottom-0">{{ __('date of entry') }}</th>
+                                                        <th class="border-bottom-0">{{ __('incoming item code') }}
+                                                        </th>
+                                                        <th class="border-bottom-0">{{ __('item code') }}</th>
+                                                        <th class="border-bottom-0">{{ __('supplier') }}</th>
+                                                        <th class="border-bottom-0">{{ __('brand') }}</th>
+                                                        <th class="border-bottom-0">{{ __('item') }}</th>
+                                                        <th class="border-bottom-0">{{ __('incoming amount') }}</th>
+                                                        <th class="border-bottom-0" width="1%">
+                                                            {{ __('action') }}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($approvals as $item)
                                                         <tr>
-                                                            <th class="border-bottom-0">{{ __('date of entry') }}</th>
-                                                            <th class="border-bottom-0">{{ __('incoming item code') }}
-                                                            </th>
-                                                            <th class="border-bottom-0">{{ __('item code') }}</th>
-                                                            <th class="border-bottom-0">{{ __('supplier') }}</th>
-                                                            <th class="border-bottom-0">{{ __('brand') }}</th>
-                                                            <th class="border-bottom-0">{{ __('item') }}</th>
-                                                            <th class="border-bottom-0">{{ __('incoming amount') }}</th>
-                                                            <th class="border-bottom-0" width="1%">
-                                                                {{ __('action') }}</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($approvals as $item)
-                                                            <tr>
-                                                                <td>
-                                                                    {{ $item->date_received }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $item->invoice_number }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $item->item->code }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $item->supplier->name }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $item->item->brand->name }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $item->item->name }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $item->quantity }} / {{ $item->item->unit->name }}
-                                                                </td>
-                                                                <td>
-                                                                    <button type="button" class="btn btn-success btn-sm"
-                                                                        id="approve_{{ $item->id }}">
-                                                                        {{ __('Approve') }}
-                                                                    </button>
-                                                                    <button type="button" class="btn btn-danger btn-sm"
-                                                                        id="cancel_{{ $item->id }}"
-                                                                        data-user-id="{{ Auth()->id() }}"
-                                                                        data-return-date="{{ \Carbon\Carbon::now()->toDateString() }}"
-                                                                        data-quantity="{{ $item->quantity }}"
-                                                                        data-supplier-id="{{ $item->supplier->id }}"
-                                                                        data-invoice-number="{{ $item->invoice_number }}"
-                                                                        data-item-id="{{ $item->item->id }}">
-                                                                        {{ __('Cancel') }}
-                                                                    </button>
-                                                                    <script>
-                                                                        // sweetalertconfirm
+                                                            <td>
+                                                                {{ $item->date_received }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->invoice_number }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->item->code }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->supplier->name }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->item->brand->name }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->item->name }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->quantity }} / {{ $item->item->unit->name }}
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-success btn-sm"
+                                                                    id="approve_{{ $item->id }}">
+                                                                    {{ __('Approve') }}
+                                                                </button>
+                                                                <button type="button" class="btn btn-danger btn-sm"
+                                                                    id="cancel_{{ $item->id }}"
+                                                                    data-user-id="{{ Auth()->id() }}"
+                                                                    data-return-date="{{ \Carbon\Carbon::now()->toDateString() }}"
+                                                                    data-quantity="{{ $item->quantity }}"
+                                                                    data-supplier-id="{{ $item->supplier->id }}"
+                                                                    data-invoice-number="{{ $item->invoice_number }}"
+                                                                    data-item-id="{{ $item->item->id }}">
+                                                                    {{ __('Cancel') }}
+                                                                </button>
+                                                                <script>
+                                                                    // sweetalertconfirm
 
-                                                                        $('#approve_{{ $item->id }}').on('click', function() {
-                                                                            Swal.fire({
-                                                                                title: "{{ __('are you sure?') }}",
-                                                                                text: "{{ __('you want to approve this transaction?') }}",
-                                                                                icon: "warning",
-                                                                                showCancelButton: true,
-                                                                                confirmButtonColor: "#3085d6",
-                                                                                cancelButtonColor: "#d33",
-                                                                                confirmButtonText: "{{ __('save') }}",
-                                                                                cancelButtonText: "{{ __('cancel') }}"
-                                                                            }).then((result) => {
-                                                                                if (result.isConfirmed) {
-                                                                                    $.ajax({
-                                                                                        url: "{{ route('transaksi.masuk.approve', $item->id) }}", // Use the route defined earlier
-                                                                                        type: 'POST',
-                                                                                        data: {
-                                                                                            _token: '{{ csrf_token() }}' // Include CSRF token for security
-                                                                                        },
-                                                                                        success: function(response) {
-                                                                                            if (response.success) {
-                                                                                                Swal.fire(
-                                                                                                    '{{ __('Approved!') }}',
-                                                                                                    response.message,
-                                                                                                    'success'
-                                                                                                ).then(() => {
-                                                                                                    location.reload();
-                                                                                                });
+                                                                    $('#approve_{{ $item->id }}').on('click', function() {
+                                                                        Swal.fire({
+                                                                            title: "{{ __('are you sure?') }}",
+                                                                            text: "{{ __('you want to approve this transaction?') }}",
+                                                                            icon: "warning",
+                                                                            showCancelButton: true,
+                                                                            confirmButtonColor: "#3085d6",
+                                                                            cancelButtonColor: "#d33",
+                                                                            confirmButtonText: "{{ __('save') }}",
+                                                                            cancelButtonText: "{{ __('cancel') }}"
+                                                                        }).then((result) => {
+                                                                            if (result.isConfirmed) {
+                                                                                $.ajax({
+                                                                                    url: "{{ route('transaksi.masuk.approve', $item->id) }}", // Use the route defined earlier
+                                                                                    type: 'POST',
+                                                                                    data: {
+                                                                                        _token: '{{ csrf_token() }}' // Include CSRF token for security
+                                                                                    },
+                                                                                    success: function(response) {
+                                                                                        if (response.success) {
+                                                                                            Swal.fire(
+                                                                                                '{{ __('Approved!') }}',
+                                                                                                response.message,
+                                                                                                'success'
+                                                                                            ).then(() => {
+                                                                                                location.reload();
+                                                                                            });
 
-                                                                                            } else {
-                                                                                                Swal.fire(
-                                                                                                    '{{ __('Error!') }}',
-                                                                                                    response.message,
-                                                                                                    'error'
-                                                                                                );
-                                                                                            }
-                                                                                        },
-                                                                                        error: function() {
+                                                                                        } else {
                                                                                             Swal.fire(
                                                                                                 '{{ __('Error!') }}',
-                                                                                                '{{ __('There was a problem approving the transaction.') }}',
+                                                                                                response.message,
                                                                                                 'error'
                                                                                             );
                                                                                         }
-                                                                                    });
-                                                                                };
-                                                                            });
-                                                                        });
-
-                                                                        $('#cancel_{{ $item->id }}').on('click', function() {
-                                                                            const button = $(this);
-                                                                            const userId = button.data('user-id');
-                                                                            const returnDate = button.data('return-date');
-                                                                            const quantity = button.data('quantity');
-                                                                            const supplierId = button.data('supplier-id');
-                                                                            const invoiceNumber = button.data('invoice-number');
-                                                                            const itemId = button.data('item-id');
-                                                                            Swal.fire({
-                                                                                title: "{{ __('are you sure?') }}",
-                                                                                text: "{{ __('you want to cancel this transaction?') }}",
-                                                                                icon: "warning",
-                                                                                input: 'textarea',
-                                                                                showCancelButton: true,
-                                                                                confirmButtonColor: "#3085d6",
-                                                                                cancelButtonColor: "#d33",
-                                                                                confirmButtonText: "{{ __('save') }}",
-                                                                                cancelButtonText: "{{ __('cancel') }}",
-                                                                                preConfirm: (description) => {
-                                                                                    if (!description) {
-                                                                                        Swal.showValidationMessage(
-                                                                                            '{{ __('Please enter a description.') }}'
+                                                                                    },
+                                                                                    error: function() {
+                                                                                        Swal.fire(
+                                                                                            '{{ __('Error!') }}',
+                                                                                            '{{ __('There was a problem approving the transaction.') }}',
+                                                                                            'error'
                                                                                         );
                                                                                     }
-                                                                                    return description; // Return the description
+                                                                                });
+                                                                            };
+                                                                        });
+                                                                    });
+
+                                                                    $('#cancel_{{ $item->id }}').on('click', function() {
+                                                                        const button = $(this);
+                                                                        const userId = button.data('user-id');
+                                                                        const returnDate = button.data('return-date');
+                                                                        const quantity = button.data('quantity');
+                                                                        const supplierId = button.data('supplier-id');
+                                                                        const invoiceNumber = button.data('invoice-number');
+                                                                        const itemId = button.data('item-id');
+                                                                        Swal.fire({
+                                                                            title: "{{ __('are you sure?') }}",
+                                                                            text: "{{ __('you want to cancel this transaction?') }}",
+                                                                            icon: "warning",
+                                                                            input: 'textarea',
+                                                                            showCancelButton: true,
+                                                                            confirmButtonColor: "#3085d6",
+                                                                            cancelButtonColor: "#d33",
+                                                                            confirmButtonText: "{{ __('save') }}",
+                                                                            cancelButtonText: "{{ __('cancel') }}",
+                                                                            preConfirm: (description) => {
+                                                                                if (!description) {
+                                                                                    Swal.showValidationMessage(
+                                                                                        '{{ __('Please enter a description.') }}'
+                                                                                    );
                                                                                 }
-                                                                            }).then((result) => {
-                                                                                if (result.isConfirmed) {
-                                                                                    const description = result.value; // Get the description value
+                                                                                return description; // Return the description
+                                                                            }
+                                                                        }).then((result) => {
+                                                                            if (result.isConfirmed) {
+                                                                                const description = result.value; // Get the description value
 
-                                                                                    $.ajax({
-                                                                                        url: "{{ route('transaksi.masuk.cancel', $item->id) }}", // Use the route defined earlier
-                                                                                        type: 'POST',
-                                                                                        data: {
-                                                                                            _token: '{{ csrf_token() }}', // Include CSRF token for security
-                                                                                            user_id: userId,
-                                                                                            date_retur: returnDate,
-                                                                                            quantity: quantity,
-                                                                                            description: description,
-                                                                                            supplier_id: supplierId,
-                                                                                            invoice_number: invoiceNumber,
-                                                                                            item_id: itemId
-                                                                                        },
-                                                                                        success: function(response) {
-                                                                                            if (response.success) {
-                                                                                                Swal.fire(
-                                                                                                    '{{ __('success!') }}',
-                                                                                                    response.message,
-                                                                                                    'success'
-                                                                                                ).then(() => {
-                                                                                                    location.reload();
-                                                                                                });
+                                                                                $.ajax({
+                                                                                    url: "{{ route('transaksi.masuk.cancel', $item->id) }}", // Use the route defined earlier
+                                                                                    type: 'POST',
+                                                                                    data: {
+                                                                                        _token: '{{ csrf_token() }}', // Include CSRF token for security
+                                                                                        user_id: userId,
+                                                                                        date_retur: returnDate,
+                                                                                        quantity: quantity,
+                                                                                        description: description,
+                                                                                        supplier_id: supplierId,
+                                                                                        invoice_number: invoiceNumber,
+                                                                                        item_id: itemId
+                                                                                    },
+                                                                                    success: function(response) {
+                                                                                        if (response.success) {
+                                                                                            Swal.fire(
+                                                                                                '{{ __('success!') }}',
+                                                                                                response.message,
+                                                                                                'success'
+                                                                                            ).then(() => {
+                                                                                                location.reload();
+                                                                                            });
 
-                                                                                            } else {
-                                                                                                Swal.fire(
-                                                                                                    '{{ __('Error!') }}',
-                                                                                                    response.message,
-                                                                                                    'error'
-                                                                                                );
-                                                                                            }
-                                                                                        },
-                                                                                        error: function() {
+                                                                                        } else {
                                                                                             Swal.fire(
                                                                                                 '{{ __('Error!') }}',
-                                                                                                '{{ __('There was a problem approving the transaction.') }}',
+                                                                                                response.message,
                                                                                                 'error'
                                                                                             );
                                                                                         }
-                                                                                    });
-                                                                                }
-                                                                            })
-                                                                        });
-                                                                    </script>
-                                                                </td>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                                                    },
+                                                                                    error: function() {
+                                                                                        Swal.fire(
+                                                                                            '{{ __('Error!') }}',
+                                                                                            '{{ __('There was a problem approving the transaction.') }}',
+                                                                                            'error'
+                                                                                        );
+                                                                                    }
+                                                                                });
+                                                                            }
+                                                                        })
+                                                                    });
+                                                                </script>
+                                                            </td>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    
+                    </div>
 
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="data-tabel" width="100%" class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
-                                    <thead>
-                                        <tr>
-                                            <th class="border-bottom-0" width="4%">{{ __('no') }}</th>
-                                            <th class="border-bottom-0">{{ __('date of entry') }}</th>
-                                            <th class="border-bottom-0">{{ __('incoming item code') }}</th>
-                                            <th class="border-bottom-0">{{ __('item code') }}</th>
-                                            <th class="border-bottom-0">{{ __('supplier') }}</th>
-                                            <th class="border-bottom-0">{{ __('brand') }}</th>
-                                            <th class="border-bottom-0">{{ __('item') }}</th>
-                                            <th class="border-bottom-0">{{ __('incoming amount') }}</th>
-                                            <th class="border-bottom-0">{{ __('status') }}</th>
-                                            <th class="border-bottom-0" width="1%">{{ __('action') }}</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="data-tabel" width="100%"
+                                class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
+                                <thead>
+                                    <tr>
+                                        <th class="border-bottom-0" width="4%">{{ __('no') }}</th>
+                                        <th class="border-bottom-0">{{ __('date of entry') }}</th>
+                                        <th class="border-bottom-0">{{ __('incoming item code') }}</th>
+                                        <th class="border-bottom-0">{{ __('item code') }}</th>
+                                        <th class="border-bottom-0">{{ __('supplier') }}</th>
+                                        <th class="border-bottom-0">{{ __('brand') }}</th>
+                                        <th class="border-bottom-0">{{ __('item') }}</th>
+                                        <th class="border-bottom-0">{{ __('incoming amount') }}</th>
+                                        <th class="border-bottom-0">{{ __('status') }}</th>
+                                        <th class="border-bottom-0" width="1%">{{ __('action') }}</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
-                    
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -457,8 +456,7 @@
             }
         });
 
-        function pilih() {
-        }
+        function pilih() {}
 
         function load() {
             $('#data-barang').DataTable({
@@ -615,7 +613,9 @@
                     console.log(err);
                 },
             }).then(() => {
-                location.reload();
+                setTimeout(function() {
+                    location.reload(); // Reloads the page after 1500ms
+                }, 1500);
             });
         }
 
@@ -661,7 +661,11 @@
                 error: function(err) {
                     console.log(err);
                 },
-            })
+            }).then(() => {
+                setTimeout(function() {
+                    location.reload(); // Reloads the page after 1500ms
+                }, 1500);
+            });
         }
 
         $(document).ready(function() {
@@ -783,7 +787,8 @@
             $("#cari-barang").on("click", detail);
 
             $('#simpan').on('click', function() {
-                if ($(this).text() === "Simpan Perubahan") {
+                var action = $(this).data('action');
+                if (action === 'ubah') {
                     ubah();
                 } else {
                     simpan();
@@ -803,7 +808,7 @@
                 $("input[name='jenis_barang']").val(null);
                 $("input[name='satuan_barang']").val(null);
                 $("input[name='jumlah']").val(null);
-                $('#simpan').text("{{ __('save') }}");
+                $("#simpan").data('action', 'simpan');
             });
 
             $("#filter").on('click', function() {
@@ -816,7 +821,7 @@
 
         $(document).on("click", ".ubah", function() {
             $("#modal-button").click();
-            $("#simpan").text("Simpan Perubahan");
+            $("#simpan").data('action', 'ubah');
             let id = $(this).attr('id');
             $.ajax({
                 url: "{{ route('transaksi.masuk.detail') }}",

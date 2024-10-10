@@ -48,10 +48,6 @@ class ItemController extends Controller
             -> addColumn('brand_name',function($data){
                 return $data -> brand -> name;
             })
-            -> addColumn('brand_name',function($data){
-                return $data -> brand -> name;
-            })
-
             ->addColumn("total", function ($data) {
                 $totalQuantityIn = $data->goodsIns->sum('quantity');
                 $totalQuantityOut = $data->goodsOuts->sum('quantity');
