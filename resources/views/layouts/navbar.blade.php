@@ -28,26 +28,21 @@
             </a>
         </li>
 
-        @php
-            $lowStockCount = getLowStockNotifCount();
-            $helper = new Helpers(); // Create an instance of the Helpers class
-            $lowStockItems = $helper->getLowStockNotifGet();
-        @endphp
         @if (Auth::user()->role->id <= 2)
             <li class="nav-item dropdown d-flex justify-content-center align-items-center">
-                <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown"
+            <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown"
                     role="button">
                     <i class="fas fa-solid fa-envelope"></i>
-                    @if (count($lowStockCount) > 0)
+                    @if ( count(getLowStockNotifCount()) > 0)
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            {{ count($lowStockCount) }}
+                            {{  count(getLowStockNotifCount()) }}
                         </span>
                     @endif
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <span class="dropdown-header">{{ count($lowStockCount) }} {{ __('Low Stock Notifications') }}</span>
+                    <span class="dropdown-header">{{  count(getLowStockNotifCount()) }} {{ __('Low Stock Notifications') }}</span>
                     <div class="dropdown-divider"></div>
-                    @foreach ($lowStockItems as $stoks)
+                    @foreach (Notification::getLowStockNotifGet() as $stoks)
                         <div class="dropdown-item d-flex justify-content-between mb-2">
                             <div>
                                 <strong>{{ $stoks->item_code }}</strong><br>
@@ -71,17 +66,17 @@
                 <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown"
                     role="button">
                     <i class="fas fa-solid fa-inbox"></i>
-                    @if (App\Models\GoodsIn::where('status', 0)->count() > 0)
+                    @if ( getGoodsInApproval()->count() > 0)
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            {{ App\Models\GoodsIn::where('status', 0)->count() }}
+                            {{ getGoodsInApproval()->count() }}
                         </span>
                     @endif
                 </a>
                 <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
-                    <span class="dropdown-header">{{ App\Models\GoodsIn::where('status', 0)->count() }}
+                    <span class="dropdown-header">{{ getGoodsInApproval()->count() }}
                         {{ __('Approval Notifications') }} </span>
                     <div class="dropdown-divider"></div>
-                    @foreach (App\Models\GoodsIn::where('status', 0)->get() as $approval)
+                    @foreach (getGoodsInApproval() as $approval)
                         <div class="dropdown-item d-flex justify-content-between mb-2">
                             <div>
                                 <strong>{{ $approval->invoice_number }}</strong><br>
