@@ -72,7 +72,7 @@
                     <!-- Modal Barang -->
                     <div class="modal fade" id="modal-barang" data-backdrop="static" data-keyboard="false" tabindex="-1"
                         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                        <div class="modal-dialog  modal-xl modal-dialog-scrollable">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="staticBackdropLabel">{{ __('select items') }}</h5>
@@ -87,7 +87,7 @@
                                                 class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
                                                 <thead>
                                                     <tr>
-                                                        <th class="border-bottom-0" width="4%">{{ __('no') }}
+                                                        <th class="border-bottom-0" width="8%">{{ __('no') }}
                                                         </th>
                                                         <th class="border-bottom-0">{{ __('photo') }}</th>
                                                         <th class="border-bottom-0">{{ __('item code') }}</th>
@@ -96,6 +96,7 @@
                                                         <th class="border-bottom-0">{{ __('unit') }}</th>
                                                         <th class="border-bottom-0">{{ __('brand') }}</th>
                                                         <th class="border-bottom-0">{{ __('stock amount') }}</th>
+                                                        {{-- <th class="border-bottom-0">{{__('price')}}</th> --}}
                                                         <th class="border-bottom-0" width="1%">{{ __('action') }}
                                                         </th>
                                                     </tr>
@@ -462,8 +463,6 @@
             $('#data-barang').DataTable({
                 lengthChange: true,
                 processing: true,
-                responsive: true,
-                scrollX: true,
                 serverSide: true,
                 ajax: `{{ route('barang.list') }}`,
                 columns: [{
@@ -503,7 +502,7 @@
                         render: function(data) {
                             const pattern = /id='(\d+)'/;
                             const matches = data.match(pattern);
-                            return `<button class='pilih-data-barang btn btn-success' data-id='${matches[1]}'>Pilih</button>`;
+                            return `<button class='pilih-data-barang btn btn-success' data-id='${matches[1]}'>{{ __('select') }}</button>`;
                         }
                     }
                 ]
