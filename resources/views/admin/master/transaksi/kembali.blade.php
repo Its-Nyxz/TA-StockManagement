@@ -415,11 +415,12 @@
                     }
                 }
 
-            }).then(() => {
-                setTimeout(function() {
-                    location.reload(); // Reloads the page after 1500ms
-                }, 1500);
-            });
+            })
+            // .then(() => {
+            //     setTimeout(function() {
+            //         location.reload(); // Reloads the page after 1500ms
+            //     }, 1500);
+            // });
         }
 
 
@@ -471,11 +472,12 @@
                 error: function(err) {
                     console.log(err);
                 },
-            }).then(() => {
-                setTimeout(function() {
-                    location.reload(); // Reloads the page after 1500ms
-                }, 1500);
-            }); 
+            })
+            // .then(() => {
+            //     setTimeout(function() {
+            //         location.reload(); // Reloads the page after 1500ms
+            //     }, 1500);
+            // });
         }
 
         $(document).ready(function() {
@@ -543,18 +545,35 @@
                     {
                         data: "description",
                         name: "description",
+                        //     render: function(data, type, row) {
+                        //         const formattedText = capitalizeAfterPeriod(data);
+                        //         const maxLength = 35;
+                        //         if (data.length > maxLength) {
+                        //             const truncated = formattedText.substr(0, maxLength) + '...';
+                        //             return `
+                    //     <span class="capitalize-first-after-period">${truncated}</span>
+                    //     <button class="btn btn-link show-more" style="padding: 0;" data-full-text="${data}">Show More</button>
+                    // `;
+                        //         }
+                        //         return `<span class="capitalize-first-after-period">${formattedText}</span>`;
+                        //     }
                         render: function(data, type, row) {
                             const formattedText = capitalizeAfterPeriod(data);
-                            const maxLength = 50;
+                            const maxLength = 35;
+                            const containerClass =
+                                "description-container"; // Add a class for styling
+
                             if (data.length > maxLength) {
                                 const truncated = formattedText.substr(0, maxLength) + '...';
                                 return `
-                        <span class="capitalize-first-after-period">${truncated}</span>
-                        <button class="btn btn-link show-more" style="padding: 0;" data-full-text="${data}">Show More</button>
-                    `;
+                                <div class="${containerClass}">
+                                    <span class="capitalize-first-after-period">${truncated}</span>
+                                    <button class="btn btn-link show-more" style="padding: 0;" data-full-text="${data}">Show More</button>
+                                </div>
+                            `;
                             }
                             return `<span class="capitalize-first-after-period">${formattedText}</span>`;
-                        }
+                        },
                     },
                     {
                         data: "tindakan",
@@ -563,14 +582,36 @@
                 ]
             });
 
-            $(document).on('click', '.show-more', function(e) {
-                e.preventDefault();
+            // $(document).on('click', '.show-mre', function(e) {
+            //     e.preventDefault();
 
-                const fullDescription = $(this).data('full-text');
+            //     const fullDescription = $(this).data('full-text');
 
-                $('#descriptionModal .modal-body').text(fullDescription);
-                $('#descriptionModal').modal('show');
+            //     $('#descriptionModal .modal-body').text(fullDescription);
+            //     $('#descriptionModal').modal('show');
+            // });
+
+            $(document).on('click', '.show-more', function() {
+                const button = $(this);
+                const fullText = button.attr('data-full-text');
+                const span = button.prev('span');
+                const container = span.parent();
+                const isExpanded = button.data('expanded');
+
+                if (isExpanded) {
+                    
+                    span.text(fullText.substr(0, 35) + '...');
+                    button.text('Show More');
+                    container.css('max-height', '50px');
+                } else {
+                    span.text(fullText);
+                    button.text('Show Less');
+                    container.css('max-height', 'none'); 
+                }
+
+                button.data('expanded', !isExpanded); 
             });
+
 
             $("#barang").on("click", function() {
                 $('#modal-barang').modal('show');
