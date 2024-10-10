@@ -687,7 +687,6 @@
             });
 
             $('#data-approve').DataTable({
-                responsive: true,
                 lengthChange: true,
                 autoWidth: false,
                 language: {
