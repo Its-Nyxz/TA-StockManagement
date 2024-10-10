@@ -248,7 +248,7 @@
             $('#data-barang').DataTable({
                 lengthChange: true,
                 processing: true,
-                responsive: true,
+                // responsive: true,
                 serverSide: true,
                 ajax: `{{ route('barang.list') }}`,
                 columns: [{
