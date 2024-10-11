@@ -31,9 +31,11 @@ class DashboardController extends Controller
         $goodsback = GoodsBack::count();
         $customer = Customer::count();
         $supplier = Supplier::count();
+        $item = Item::sum('quantity');
         $item_in = GoodsIn::sum('quantity');
         $item_out = GoodsOut::sum('quantity');
-        $total_stok = $item_in - $item_out;
+        $item_back = GoodsBack::sum('quantity');
+        $total_stok = $item + $item_in - $item_out - $item_back;
         $staffCount = User::where('role_id',3)->count();
         $approvals = GoodsIn::with('item', 'supplier')->where('status', 0)->get();
         return view('admin.dashboard',compact('product_count',

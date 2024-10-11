@@ -39,6 +39,7 @@
                                 <label for="password">{{ __("password") }}</label>
                                 <input type="password" class="form-control" id="password"></textarea>
                             </div>
+                            @if (Auth::user()->role->id == '1')
                             <div class="form-group mb-3">
                                 <label for="role">{{ __("role") }}</label>
                                 <select class="form-control" id="role">
@@ -48,6 +49,7 @@
                                     @endforeach
                                 </select>
                             </div>
+                            @endif
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" id="kembali">{{ __("back") }}</button>
@@ -208,6 +210,7 @@
     $(document).on("click",".ubah",function(){
         let id = $(this).attr('id');
         $("#modal-button").click();
+        $("#TambahData").modal('show'); 
         $("#simpan").text("{{__('update')}}");
         $("#TambahDataModalLabel").text("Ubah Profile Staff");
         $.ajax({
