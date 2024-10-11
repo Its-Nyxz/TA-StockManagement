@@ -27,7 +27,7 @@
                                             <label for="date_start">{{ __('users') }}: </label>
                                             <select name="inputer" id="inputer" class="form-control w-100">
                                                 <option value="">-- {{ __('select user responsible') }} --</option>
-                                                @foreach ($users as $user)
+                                                @foreach ($users->where('role_id','<=','2') as $user)
                                                     <option value="{{ $user->id }}">{{ $user->name }}</option>
                                                 @endforeach
                                             </select>

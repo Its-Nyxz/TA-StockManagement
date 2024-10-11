@@ -375,7 +375,8 @@
                     }
                 }
 
-            }).then(() => {
+            })
+            .then(() => {
                 setTimeout(function() {
                     location.reload(); // Reloads the page after 1500ms
                 }, 1500);
