@@ -222,7 +222,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 col-lg-6">
+            <div class="col-sm-12 col-lg-6" id="monthly-transactions-card">
                 <div class="card">
                     <div class="card-header">
                         <h1 class="card-title text-lg font-weight-bold text-uppercase">
@@ -250,7 +250,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12 col-lg-6">
+            <div class="col-sm-12 col-lg-6" id="daily-transactions-card">
                 <div class="card">
                     <div class="card-header">
                         <h1 class="card-title text-lg font-weight-bold text-uppercase">
@@ -322,7 +322,8 @@
                     success: function(data) {
                         if (data.goods_in_this_month + data.goods_out_this_month + data
                             .goods_back_this_month + data.total_stock_this_month === 0) {
-                            return false;
+                            // return false; 
+                            document.getElementById('monthly-transactions-card').style.display = 'none';
                         }
                         $("input[name='month']").val(data.month);
                         const chartstok_barang = document.getElementById('stok-barang').getContext(
@@ -513,7 +514,8 @@
                 // Check if all values are 0
                 if (goodsInToday === 0 && goodsOutToday === 0 && goodsBackToday === 0 && goodsTotalToday ===
                     0) {
-                    return false;
+                    // return false;
+                    document.getElementById('daily-transactions-card').style.display = 'none';
                 }
 
                 const ctx = document.getElementById('stok-barang-today').getContext('2d');
