@@ -131,7 +131,7 @@
   "See All Approvals": "Lihat Semua Persetujuan",
   "Close": "Tutup",
   "returned item code": "Kode Barang Retur",
-  "Low Stock Notifications": "Pemberitahuan Stok Mulai Menipis",
+  "Low or Empty Stock Notifications": "Pemberitahuan Stok Menipis atau Kosong",
   "See Report Stok": "Melihat Laporan Stok",
   "Stock Empty": "Stok Kosong"
 }

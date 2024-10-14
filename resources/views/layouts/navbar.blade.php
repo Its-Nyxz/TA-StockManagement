@@ -40,7 +40,7 @@
                     @endif
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <span class="dropdown-header">{{  count(getLowStockNotifCount()) }} {{ __('Low Stock Notifications') }}</span>
+                    <span class="dropdown-header">{{  count(getLowStockNotifCount()) }} {{ __('Low or Empty Stock Notifications') }}</span>
                     <div class="dropdown-divider"></div>
                     @foreach (Notification::getLowStockNotifGet() as $stoks)
                         <div class="dropdown-item d-flex justify-content-between mb-2">
