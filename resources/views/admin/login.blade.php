@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="icon" href="{{asset('icon.png')}}" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('icon.png') }}" type="image/x-icon" />
     <title>{{ config('app.name') }} | Log in </title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -103,23 +103,44 @@
         function changeLanguage(lang) {
             let url = new URL(window.location.href);
 
+            if (!url.searchParams.has("lang")) {
+                lang = 'id';
+            }
+
             url.searchParams.set("lang", lang);
             window.location.href = url.toString();
         }
         $(document).ready(async () => {
+            // Fetch the available languages
             let languages = await (await fetch("{{ url(asset('localizations/languages.json')) }}")).json();
+
+            // Filter to only 'id' and 'en' languages
             languages = ['id', 'en'].reduce((obj, key) => (languages[key] && (obj[key] = languages[key]),
-                obj), {});
+            obj), {});
+
+            // Get the current locale from the backend or default to 'id'
+            let currentLocale = "{{ app()->getLocale() }}" || 'id';
+
+            // Iterate over the languages and populate the dropdown
             for (let code in languages) {
                 let native = languages[code].nameNative;
                 let english = languages[code].nameEnglish;
 
+                // Check if this language is the active one
+                let activeClass = (code === currentLocale) ? 'active' : '';
+
+                // Add the language option to the dropdown
                 $("#lang-dropdown").append(`
-        <li onclick="changeLanguage('${ code }')" class="d-flex align-items-center justify-content-start gap-2 px-2">
-          <div class="lang-icon lang-icon-${ code }"></div>
-          <span class="ml-2 text-uppercase" style="font-size: .8rem" data-text="${ english }">${ code }</span>
-        </li>
-      `);
+                    <li onclick="changeLanguage('${ code }')" class="d-flex align-items-center justify-content-start gap-2 px-2 ${activeClass}">
+                        <div class="lang-icon lang-icon-${ code }"></div>
+                        <span class="ml-2 text-uppercase" style="font-size: .8rem" data-text="${ english }">${ code }</span>
+                    </li>
+                `);
+            }
+
+            // Force the default language to 'id' if no language is set
+            if (!window.location.search.includes("lang")) {
+                changeLanguage('id');
             }
         });
     </script>
