@@ -133,5 +133,8 @@
   "returned item code": "Kode Barang Retur",
   "Low or Empty Stock Notifications": "Pemberitahuan Stok Menipis atau Kosong",
   "See Report Stok": "Melihat Laporan Stok",
-  "Stock Empty": "Stok Kosong"
+  "Stock Empty": "Stok Kosong",
+  "Username Can't Empty": "Username Tidak Boleh Kosong",
+  "Password Can't Empty": "Password Tidak Boleh Kosong",
+  "Login Failed !": "Login Gagal !"
 }

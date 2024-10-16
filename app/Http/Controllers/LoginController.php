@@ -20,6 +20,7 @@ class LoginController extends Controller
     {
         $username = $request -> username;
         $password = $request -> password;
+        dd($username);
         if(!Auth::guard('web')->attempt(['username'=>$username,'password'=>$password])){
             return response()->json([
                 "success"=>false,
@@ -27,12 +28,13 @@ class LoginController extends Controller
             ])
             ->setStatusCode(401);
         }
-        return response()->json([
-            "route"=>route('dashboard'),
-            "success"=>true,
-            "message"=>__("login successful")." !"
-        ])
-        ->setStatusCode(200);
+        // return response()->json([
+        //     "route"=>route('dashboard'),
+        //     "success"=>true,
+        //     "message"=>__("login successful")." !"
+        // ])
+        // ->setStatusCode(200);
+        // dd('kimak');
     }
 
     public function logout(Request $request): RedirectResponse

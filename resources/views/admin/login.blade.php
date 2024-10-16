@@ -59,10 +59,17 @@
             </div>
             <div class="card-body">
                 <!-- <p class="alert alert-danger mb-3 text-center font-weight-bold">username atau password salah.</p> -->
-                <form action="" method="post" id="form-login">
-
+                <form action="{{ route('store') }}" method="post" id="form-login">
+                    @csrf
+                    @method('post')
+                    @if ($errors->any())
+                    <div class="alert alert-danger" role="alert">
+                        {{ $errors->first() }}
+                      </div>
+                    @endif
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Username" id="user">
+                        <input type="text" class="form-control" placeholder="Username" id="user"
+                            name="username">
                         <div class="input-group-append">
                             <div class="input-group-text" style="max-width:40px !important;">
                                 <span class="fas fa-user"></span>
@@ -70,7 +77,8 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password" id="pw">
+                        <input type="password" class="form-control" placeholder="Password" id="pw"
+                            name="password">
                         <div class="input-group-append">
                             <div class="input-group-text" style="max-width:40px !important;">
                                 <!-- nah disini w kasi id -->
@@ -81,6 +89,7 @@
                     <div class="social-auth-links text-center mt-2 mb-3">
                         <button type="submit"
                             class="btn btn-primary btn-block font-weight-bold">{{ __('messages.login') }}</button>
+                        <input type="hidden" name="lang" id="locale" value="{{ request()->lang }}">
                     </div>
                 </form>
 
@@ -116,7 +125,7 @@
 
             // Filter to only 'id' and 'en' languages
             languages = ['id', 'en'].reduce((obj, key) => (languages[key] && (obj[key] = languages[key]),
-            obj), {});
+                obj), {});
 
             // Get the current locale from the backend or default to 'id'
             let currentLocale = "{{ app()->getLocale() }}" || 'id';
@@ -144,7 +153,7 @@
             }
         });
     </script>
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             $("#form-login").submit(function(e) {
                 e.preventDefault();
@@ -222,7 +231,7 @@
                 }
             });
         });
-    </script>
+    </script> --}}
     <!-- yahhooo heheheh -->
     <script>
         $(document).ready(function() {
