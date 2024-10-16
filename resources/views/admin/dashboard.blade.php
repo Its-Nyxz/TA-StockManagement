@@ -107,16 +107,16 @@
             <!-- <div class="col-lg-3 col-6"> -->
             <!-- small box -->
             <!-- <div class="small-box bg-purple">
-                                                  <div class="inner">
-                                                    <h3>{{ $customer }}</h3>
+                                                      <div class="inner">
+                                                        <h3>{{ $customer }}</h3>
 
-                                                    <p class="font-weight-bold">{{ __('customer') }}</p>
-                                                  </div>
-                                                  <div class="icon">
-                                                    <i class="ion ion-android-person"></i>
-                                                  </div>
-                                                  <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
-                                                </div> -->
+                                                        <p class="font-weight-bold">{{ __('customer') }}</p>
+                                                      </div>
+                                                      <div class="icon">
+                                                        <i class="ion ion-android-person"></i>
+                                                      </div>
+                                                      <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
+                                                    </div> -->
             <!-- </div> -->
 
             @if (Auth::user()->role->name != 'staff')
@@ -222,11 +222,11 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 col-lg-6" id="monthly-transactions-card">
+            <div class="col-sm-12 col-lg-6">
                 <div class="card">
                     <div class="card-header">
                         <h1 class="card-title text-lg font-weight-bold text-uppercase">
-                            {{ __('goods transactions on this month') }}</h1>
+                            {{ __('monthly goods transaction') }}</h1>
                     </div>
                     <div class="card-body">
                         <div class="row  d-flex justify-content-start align-items-center">
@@ -245,6 +245,9 @@
                             <div class="chart tab-pane active" id="revenue-chart"
                                 style="position: relative; height: 19.6rem;">
                                 <canvas id="stok-barang"></canvas>
+                                <p id="empty-message" class="text-center text-muted" style="display: none;">
+                                   {{ __('no transactions this month !') }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -267,31 +270,31 @@
             </div>
             <!-- <div class="col-sm-12 col-lg-6">
 
-                                          <div class="card">
-                                            <div class="card-header">
-                                                <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
-                                            </div>
-                                              <div class="card-body">
-                                                <div class="row  d-flex justify-content-start align-items-center">
-                                                  <div class="col-6">
-                                                    <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
-                                                    <div class="input-group mb-3">
-                                                      <div class="w-100 mb-3 d-flex align-items-center py-3">
-                                                        <input type="month" name="month-income" id="month-income" class="form-control w-50">
-                                                        <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
+                                              <div class="card">
+                                                <div class="card-header">
+                                                    <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
+                                                </div>
+                                                  <div class="card-body">
+                                                    <div class="row  d-flex justify-content-start align-items-center">
+                                                      <div class="col-6">
+                                                        <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
+                                                        <div class="input-group mb-3">
+                                                          <div class="w-100 mb-3 d-flex align-items-center py-3">
+                                                            <input type="month" name="month-income" id="month-income" class="form-control w-50">
+                                                            <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <div class="tab-content p-0">
+                                                      <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
+                                                        <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
                                                       </div>
                                                     </div>
                                                   </div>
                                                 </div>
-                                                <div class="tab-content p-0">
-                                                  <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
-                                                    <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
 
-                                        </div> -->
+                                            </div> -->
         </div>
     </div>
 
@@ -320,10 +323,21 @@
                     },
                     dataType: 'json',
                     success: function(data) {
+                        const emptyMessage = document.getElementById('empty-message');
+                        // if (data.goods_in_this_month + data.goods_out_this_month + data
+                        // .goods_back_this_month + data.total_stock_this_month === 0) {
+                        // return false; 
+                        // document.getElementById('monthly-transactions-card').style.display = 'none';
+                        // }
                         if (data.goods_in_this_month + data.goods_out_this_month + data
                             .goods_back_this_month + data.total_stock_this_month === 0) {
-                            // return false; 
-                            document.getElementById('monthly-transactions-card').style.display = 'none';
+                            emptyMessage.style.display = 'block';
+                            if (ChartStokBarang) {
+                                ChartStokBarang.destroy();
+                            }
+                            return;
+                        } else {
+                            emptyMessage.style.display = 'none';
                         }
                         $("input[name='month']").val(data.month);
                         const chartstok_barang = document.getElementById('stok-barang').getContext(
@@ -379,7 +393,7 @@
                         }
 
                         if (ChartStokBarang) {
-                            ChartStokBarang.destroy(); 
+                            ChartStokBarang.destroy();
                         }
 
                         ChartStokBarang = new Chart(chartstok_barang, {

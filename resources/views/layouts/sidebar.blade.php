@@ -30,7 +30,7 @@
               <i class="nav-icon fas fa-box"></i>
               <p>
               {{ __("master of goods") }}
-                <i class="right fas fa-angle-left"></i>
+                <i class="right fas fa-angle-down"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
@@ -81,7 +81,7 @@
               <i class="nav-icon fas fa-exchange-alt"></i>
               <p>
               {{ __("transaction") }}
-                <i class="right fas fa-angle-left"></i>
+                <i class="right fas fa-angle-down"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
@@ -113,7 +113,7 @@
               <i class="nav-icon fas fa-print"></i>
               <p>
               {{ __("report") }}
-                <i class="right fas fa-angle-left"></i>
+                <i class="right fas fa-angle-down"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
@@ -152,7 +152,7 @@
               <i class="nav-icon fas fa-cog"></i>
               <p>
               {{ __("setting") }}
-                <i class="right fas fa-angle-left"></i>
+                <i class="right fas fa-angle-down"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">

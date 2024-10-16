@@ -171,8 +171,8 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal"
                                         id="kembali">{{ __('cancel') }}</button>
-                                    <button type="button" class="btn btn-success"
-                                        id="simpan" data-action="simpan">{{ __('save') }}</button>
+                                    <button type="button" class="btn btn-success" id="simpan"
+                                        data-action="simpan">{{ __('save') }}</button>
                                 </div>
                             </div>
                         </div>
@@ -209,10 +209,67 @@
         });
 
         function load() {
+            // Define language settings
+            const langID = {
+                decimal: "",
+                searchPlaceholder: "Cari Data",
+                emptyTable: "Tabel kosong",
+                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
+                infoFiltered: "(difilter dari _MAX_ total data)",
+                infoPostFix: "",
+                thousands: ".",
+                lengthMenu: "Tampilkan _MENU_ data",
+                loadingRecords: "Memuat...",
+                processing: "Sedang memproses...",
+                search: "Cari:",
+                zeroRecords: "Data tidak ditemukan",
+                paginate: {
+                    first: "<<",
+                    last: ">>",
+                    next: ">",
+                    previous: "<",
+                },
+                aria: {
+                    orderable: "Urutkan kolom ini",
+                    orderableReverse: "Urutkan kolom ini terbalik",
+                },
+            };
+
+            const langEN = {
+                decimal: "",
+                searchPlaceholder: "Search Data",
+                emptyTable: "No data available",
+                info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                infoEmpty: "Showing 0 to 0 of 0 entries",
+                infoFiltered: "(filtered from _MAX_ total entries)",
+                infoPostFix: "",
+                thousands: ",",
+                lengthMenu: "Show _MENU_ entries",
+                loadingRecords: "Loading...",
+                processing: "Processing...",
+                search: "Search:",
+                zeroRecords: "No matching records found",
+                paginate: {
+                    first: "<<",
+                    last: ">>",
+                    next: ">",
+                    previous: "<",
+                },
+                aria: {
+                    orderable: "Order by this column",
+                    orderableReverse: "Reverse order this column",
+                },
+            };
+
+            const currentLang = $('html').attr('lang');
+            const languageSettings = currentLang === 'id' ? langID : langEN;
+
             $('#data-barang').DataTable({
                 lengthChange: true,
                 processing: true,
                 serverSide: true,
+                language: languageSettings,
                 ajax: `{{ route('barang.list') }}`,
                 columns: [{
                         "data": null,
@@ -334,53 +391,53 @@
             Form.append('customer_id', customer_id);
             Form.append('invoice_number', invoice_number);
             $.ajax({
-                url: `{{ route('transaksi.keluar.save') }}`,
-                type: "post",
-                processData: false,
-                contentType: false,
-                dataType: 'json',
-                data: Form,
-                success: function(res) {
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: res.message,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    $('#kembali').click();
-                    $("input[name='id_barang']").val(null);
-                    $("input[name='tanggal_keluar']").val(null);
-                    $("select[name='customer']").val('-- Pilih Customer --');
-                    $("input[name='nama_barang']").val(null);
-                    $("input[name='kode_barang']").val(null);
-                    $("select[name='jenis_barang']").val(null);
-                    $("select[name='satuan_barang']").val(null);
-                    $("input[name='jumlah']").val(0);
-                    $('#data-tabel').DataTable().ajax.reload();
-                },
-                statusCode: {
-                    400: function(res) {
-                        const {
-                            message
-                        } = res.responseJSON;
+                    url: `{{ route('transaksi.keluar.save') }}`,
+                    type: "post",
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    data: Form,
+                    success: function(res) {
                         Swal.fire({
                             position: "center",
-                            icon: "warning",
-                            title: "Oops...",
-                            text: message,
+                            icon: "success",
+                            title: res.message,
                             showConfirmButton: false,
-                            timer: 1900
+                            timer: 1500
                         });
+                        $('#kembali').click();
+                        $("input[name='id_barang']").val(null);
+                        $("input[name='tanggal_keluar']").val(null);
+                        $("select[name='customer']").val('-- Pilih Customer --');
+                        $("input[name='nama_barang']").val(null);
+                        $("input[name='kode_barang']").val(null);
+                        $("select[name='jenis_barang']").val(null);
+                        $("select[name='satuan_barang']").val(null);
+                        $("input[name='jumlah']").val(0);
+                        $('#data-tabel').DataTable().ajax.reload();
+                    },
+                    statusCode: {
+                        400: function(res) {
+                            const {
+                                message
+                            } = res.responseJSON;
+                            Swal.fire({
+                                position: "center",
+                                icon: "warning",
+                                title: "Oops...",
+                                text: message,
+                                showConfirmButton: false,
+                                timer: 1900
+                            });
+                        }
                     }
-                }
 
-            })
-            .then(() => {
-                setTimeout(function() {
-                    location.reload(); // Reloads the page after 1500ms
-                }, 1500);
-            });
+                })
+                .then(() => {
+                    setTimeout(function() {
+                        location.reload(); // Reloads the page after 1500ms
+                    }, 1500);
+                });
         }
 
 
@@ -446,11 +503,68 @@
                 minimumInputLength: 0 // Set this to enable search after 1 character
             });
 
+            // Define language settings
+            const langID = {
+                decimal: "",
+                searchPlaceholder: "Cari Data",
+                emptyTable: "Tabel kosong",
+                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
+                infoFiltered: "(difilter dari _MAX_ total data)",
+                infoPostFix: "",
+                thousands: ".",
+                lengthMenu: "Tampilkan _MENU_ data",
+                loadingRecords: "Memuat...",
+                processing: "Sedang memproses...",
+                search: "Cari:",
+                zeroRecords: "Data tidak ditemukan",
+                paginate: {
+                    first: "<<",
+                    last: ">>",
+                    next: ">",
+                    previous: "<",
+                },
+                aria: {
+                    orderable: "Urutkan kolom ini",
+                    orderableReverse: "Urutkan kolom ini terbalik",
+                },
+            };
+
+            const langEN = {
+                decimal: "",
+                searchPlaceholder: "Search Data",
+                emptyTable: "No data available",
+                info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                infoEmpty: "Showing 0 to 0 of 0 entries",
+                infoFiltered: "(filtered from _MAX_ total entries)",
+                infoPostFix: "",
+                thousands: ",",
+                lengthMenu: "Show _MENU_ entries",
+                loadingRecords: "Loading...",
+                processing: "Processing...",
+                search: "Search:",
+                zeroRecords: "No matching records found",
+                paginate: {
+                    first: "<<",
+                    last: ">>",
+                    next: ">",
+                    previous: "<",
+                },
+                aria: {
+                    orderable: "Order by this column",
+                    orderableReverse: "Reverse order this column",
+                },
+            };
+
+            const currentLang = $('html').attr('lang');
+            const languageSettings = currentLang === 'id' ? langID : langEN;
+
             const tabel = $('#data-tabel').DataTable({
                 lengthChange: true,
                 processing: true,
                 serverSide: true,
                 responsive: true,
+                language:languageSettings,
                 ajax: {
                     url: `{{ route('transaksi.keluar.list') }}`,
                     data: function(d) {

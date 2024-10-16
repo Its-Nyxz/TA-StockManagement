@@ -686,34 +686,91 @@
                 minimumInputLength: 0 // Set this to enable search after 1 character
             });
 
+            // Define language settings
+            const langID = {
+                decimal: "",
+                searchPlaceholder: "Cari Data",
+                emptyTable: "Tabel kosong",
+                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
+                infoFiltered: "(difilter dari _MAX_ total data)",
+                infoPostFix: "",
+                thousands: ".",
+                lengthMenu: "Tampilkan _MENU_ data",
+                loadingRecords: "Memuat...",
+                processing: "Sedang memproses...",
+                search: "Cari:",
+                zeroRecords: "Data tidak ditemukan",
+                paginate: {
+                    first: "<<",
+                    last: ">>",
+                    next: ">",
+                    previous: "<",
+                },
+                aria: {
+                    orderable: "Urutkan kolom ini",
+                    orderableReverse: "Urutkan kolom ini terbalik",
+                },
+            };
+
+            const langEN = {
+                decimal: "",
+                searchPlaceholder: "Search Data",
+                emptyTable: "No data available",
+                info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                infoEmpty: "Showing 0 to 0 of 0 entries",
+                infoFiltered: "(filtered from _MAX_ total entries)",
+                infoPostFix: "",
+                thousands: ",",
+                lengthMenu: "Show _MENU_ entries",
+                loadingRecords: "Loading...",
+                processing: "Processing...",
+                search: "Search:",
+                zeroRecords: "No matching records found",
+                paginate: {
+                    first: "<<",
+                    last: ">>",
+                    next: ">",
+                    previous: "<",
+                },
+                aria: {
+                    orderable: "Order by this column",
+                    orderableReverse: "Reverse order this column",
+                },
+            };
+
+            const currentLang = $('html').attr('lang');
+            const languageSettings = currentLang === 'id' ? langID : langEN;
+
             $('#data-approve').DataTable({
                 lengthChange: true,
                 autoWidth: false,
-                language: {
-                    decimal: "",
-                    searchPlaceholder: "Cari Data",
-                    emptyTable: "Tabel kosong",
-                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-                    infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
-                    infoFiltered: "(filtered from MAX total entries)",
-                    infoPostFix: "",
-                    thousands: ",",
-                    lengthMenu: "Tampilkan _MENU_ data",
-                    loadingRecords: "Loading...",
-                    processing: "",
-                    search: "Cari:",
-                    zeroRecords: "Data tidak ditemukan",
-                    paginate: {
-                        first: "<<",
-                        last: ">>",
-                        next: ">",
-                        previous: "<",
-                    },
-                    aria: {
-                        orderable: "Order by this column",
-                        orderableReverse: "Reverse order this column",
-                    },
-                },
+                language: languageSettings,
+                // language: {
+                //     decimal: "",
+                //     searchPlaceholder: "Cari Data",
+                //     emptyTable: "Tabel kosong",
+                //     info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                //     infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
+                //     infoFiltered: "(filtered from MAX total entries)",
+                //     infoPostFix: "",
+                //     thousands: ",",
+                //     lengthMenu: "Tampilkan _MENU_ data",
+                //     loadingRecords: "Loading...",
+                //     processing: "",
+                //     search: "Cari:",
+                //     zeroRecords: "Data tidak ditemukan",
+                //     paginate: {
+                //         first: "<<",
+                //         last: ">>",
+                //         next: ">",
+                //         previous: "<",
+                //     },
+                //     aria: {
+                //         orderable: "Order by this column",
+                //         orderableReverse: "Reverse order this column",
+                //     },
+                // },
             });
 
             const tabel = $('#data-tabel').DataTable({
@@ -721,6 +778,7 @@
                 processing: true,
                 serverSide: true,
                 responsive: true,
+                language: languageSettings,
                 ajax: {
                     url: `{{ route('transaksi.masuk.list') }}`,
                     data: function(d) {

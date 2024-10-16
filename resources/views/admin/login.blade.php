@@ -112,9 +112,9 @@
         function changeLanguage(lang) {
             let url = new URL(window.location.href);
 
-            if (!url.searchParams.has("lang")) {
-                lang = 'id';
-            }
+            // if (!url.searchParams.has("lang")) {
+            //     lang = lang;
+            // }
 
             url.searchParams.set("lang", lang);
             window.location.href = url.toString();
@@ -148,9 +148,9 @@
             }
 
             // Force the default language to 'id' if no language is set
-            if (!window.location.search.includes("lang")) {
-                changeLanguage('id');
-            }
+            // if (!window.location.search.includes("lang")) {
+            //     changeLanguage('id');
+            // }
         });
     </script>
     {{-- <script>

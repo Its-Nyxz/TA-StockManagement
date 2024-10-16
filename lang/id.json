@@ -52,7 +52,7 @@
   "add type of goods": "Tambah jenis barang",
   "add brand of goods": "Tambah merk barang",
   "add unit of goods": "Tambah satuan barang",
-  "goods transactions on this month": "transaksi barang bulan ini",
+  "monthly goods transaction": "transaksi barang bulanan",
   "incomes and expenses on this month": "pendapatan dan pengeluaran bulan ini",
   "goods transactions on this day": "transaksi barang hari ini",
   "incoming transaction": "Transaksi Masuk",
@@ -136,5 +136,6 @@
   "Stock Empty": "Stok Kosong",
   "Username Can't Empty": "Username Tidak Boleh Kosong",
   "Password Can't Empty": "Password Tidak Boleh Kosong",
-  "Login Failed !": "Login Gagal !"
+  "Login Failed !": "Login Gagal !",
+  "no transactions this month !" : "tidak ada transaksi pada bulan ini !"
 }
