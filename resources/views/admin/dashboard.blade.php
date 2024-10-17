@@ -222,7 +222,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-6 col-lg-6">
+            <div class="col-sm-12 col-lg-6">
                 <div class="row">
                     <div class="card col-12">
                         <div class="card-header">
@@ -242,13 +242,15 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-sm-12">
+                                <span id="empty-message" class="text-center text-muted" style="display: none;">
+                                    {{ __('no transactions this month !') }}
+                                </span>
+                            </div>
                             <div class="tab-content p-0">
                                 <div class="chart tab-pane active" id="revenue-chart"
                                     style="position: relative; height: 10rem;">
                                     <canvas id="stok-barang"></canvas>
-                                    <p id="empty-message" class="text-center text-muted" style="display: none;">
-                                        {{ __('no transactions this month !') }}
-                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -290,7 +292,7 @@
                                                             {{ $item->code }}
                                                         </td>
                                                         <td class="text-danger font-weight-bold">
-                                                            {{ $item->goodsIns->sum('quantity') - $item->goodsOuts->sum('quantity') - $item->goodsBacks->sum('quantity') }}
+                                                            {{ $item->quantity + $item->goodsIns->sum('quantity') - $item->goodsOuts->sum('quantity') - $item->goodsBacks->sum('quantity') }}
                                                         </td>
                                                         <td>
                                                             {{ $item->name }}
@@ -324,13 +326,13 @@
                     <div class="card-body">
                         <div class="tab-content p-0">
                             <div class="chart tab-pane active" id="pie-chart"
-                                style="position: relative; height: 31.3rem;">
+                                style="position: relative; height: 32.1rem;">
                                 <canvas id="stok-barang-today"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>4
             <!-- <div class="col-sm-12 col-lg-6">
 
                                                           <div class="card">
