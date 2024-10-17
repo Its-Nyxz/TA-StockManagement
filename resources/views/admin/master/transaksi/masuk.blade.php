@@ -235,15 +235,13 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="border-bottom-0">{{ __('date of entry') }}</th>
-                                                        <th class="border-bottom-0">{{ __('incoming item code') }}
-                                                        </th>
+                                                        <th class="border-bottom-0">{{ __('incoming item code') }}</th>
                                                         <th class="border-bottom-0">{{ __('item code') }}</th>
                                                         <th class="border-bottom-0">{{ __('supplier') }}</th>
                                                         <th class="border-bottom-0">{{ __('brand') }}</th>
                                                         <th class="border-bottom-0">{{ __('item') }}</th>
                                                         <th class="border-bottom-0">{{ __('incoming amount') }}</th>
-                                                        <th class="border-bottom-0" width="1%">
-                                                            {{ __('action') }}</th>
+                                                        <th class="border-bottom-0" width="1%">{{ __('action') }}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -282,8 +280,7 @@
                                                                     data-quantity="{{ $item->quantity }}"
                                                                     data-supplier-id="{{ $item->supplier->id }}"
                                                                     data-invoice-number="{{ $item->invoice_number }}"
-                                                                    data-item-id="{{ $item->item->id }}">
-                                                                    {{ __('Cancel') }}
+                                                                    data-item-id="{{ $item->item->id }}">{{ __('Cancel') }}
                                                                 </button>
                                                                 <script>
                                                                     // sweetalertconfirm
@@ -434,8 +431,8 @@
                                         <th class="border-bottom-0">{{ __('incoming item code') }}</th>
                                         <th class="border-bottom-0">{{ __('item code') }}</th>
                                         <th class="border-bottom-0">{{ __('supplier') }}</th>
-                                        <th class="border-bottom-0">{{ __('brand') }}</th>
                                         <th class="border-bottom-0">{{ __('item') }}</th>
+                                        <th class="border-bottom-0">{{ __('brand') }}</th>
                                         <th class="border-bottom-0">{{ __('incoming amount') }}</th>
                                         <th class="border-bottom-0">{{ __('status') }}</th>
                                         <th class="border-bottom-0" width="1%">{{ __('action') }}</th>
@@ -745,6 +742,7 @@
             $('#data-approve').DataTable({
                 lengthChange: true,
                 autoWidth: false,
+                responsive:true,
                 language: languageSettings,
                 // language: {
                 //     decimal: "",

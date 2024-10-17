@@ -378,7 +378,7 @@
                     icon: 'warning',
                     title: '{{ __('There is Empty Data !!') }}',
                     showConfirmButton: false,
-                    imer: 1500
+                    timer: 1500
                 });
                 return;
             }

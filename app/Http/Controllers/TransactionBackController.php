@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Supplier;
+use App\Models\GoodsOut;
+use App\Models\GoodsIn;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 
@@ -74,6 +76,17 @@ class TransactionBackController extends Controller
 
     public function save(Request $request):JsonResponse
     {
+        $item = Item::where('id',$request->item_id)->sum('quantity');
+        $goodsIn = GoodsIn::where('item_id',$request->item_id)->sum('quantity');
+        $goodsOut = GoodsOut::where('item_id',$request->item_id)->sum('quantity');
+        $goodsBack = GoodsBack::where('item_id',$request->item_id)->sum('quantity');
+        
+        $totalStock = max(0,$item + $goodsIn - $goodsOut - $goodsBack);
+        if($request->quantity > $totalStock || $totalStock === 0){
+            return  response()->json([
+                "message"=>__("insufficient stock this month")
+            ]) -> setStatusCode(400);
+        }
         $data = [
             'user_id'=>$request->user_id,
             'date_backs'=>$request->date_retur,

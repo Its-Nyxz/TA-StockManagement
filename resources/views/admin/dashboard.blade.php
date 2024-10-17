@@ -111,16 +111,16 @@
         <!-- <div class="col-lg-3 col-6"> -->
         <!-- small box -->
         <!-- <div class="small-box bg-purple">
-                                                                            <div class="inner">
-                                                                                <h3>{{ $customer }}</h3>
+                                                                                    <div class="inner">
+                                                                                        <h3>{{ $customer }}</h3>
 
-                                                                                <p class="font-weight-bold">{{ __('customer') }}</p>
-                                                                            </div>
-                                                                            <div class="icon">
-                                                                                <i class="ion ion-android-person"></i>
-                                                                            </div>
-                                                                            <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
-                                                                            </div> -->
+                                                                                        <p class="font-weight-bold">{{ __('customer') }}</p>
+                                                                                    </div>
+                                                                                    <div class="icon">
+                                                                                        <i class="ion ion-android-person"></i>
+                                                                                    </div>
+                                                                                    <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
+                                                                                    </div> -->
         <!-- </div> -->
 
         {{-- @if (Auth::user()->role->name != 'staff')
@@ -179,8 +179,7 @@
                                 class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-            @endif
- --}}
+            @endif --}}
         @if (Auth::user()->role->name != 'staff')
             <div class="col-lg-3 col-6">
                 <!-- small box -->
@@ -249,79 +248,155 @@
                             </div>
                             <div class="tab-content p-0">
                                 <div class="chart tab-pane active" id="revenue-chart"
-                                    style="position: relative; height: 10rem;">
+                                    style="position: relative; height: 10.5rem;">
                                     <canvas id="stok-barang"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card col-12">
-                        <div class="card-header">
-                            <h1 class="card-title text-lg font-weight-bold text-uppercase">
-                                {{ __('List of Low Stock of Goods') }}</h1>
-                            <div class="row" style="position: relative">
-                                <div class="d-flex justify-content-end w-100">
-                                    <a href="{{ route('laporan.stok') }}"
-                                        class="small-box-footer">{{ __('messages.more-info') }} <i
-                                            class="fas fa-arrow-circle-right"></i></a>
+                    @if (Auth::user()->role->name != 'staff')
+                        <div class="card col-12">
+                            <div class="card-header">
+                                <h1 class="card-title text-lg font-weight-bold text-uppercase">
+                                    {{ __('List of Low Stock of Goods') }}</h1>
+                                <div class="row" style="position: relative">
+                                    <div class="d-flex justify-content-end w-100">
+                                        <a href="{{ route('laporan.stok') }}"
+                                            class="small-box-footer">{{ __('messages.more-info') }} <i
+                                                class="fas fa-arrow-circle-right"></i></a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-body py-3">
-                            <div class="row  d-flex justify-content-start align-items-center">
-                                <div class="col-12">
-                                    <div class="table-responsive" style="max-height: 15rem; overflow-y: auto;">
-                                        <table id="data-tabel" width="100%"
-                                            class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
-                                            <thead>
-                                                <tr>
-                                                    <th class="border-bottom-0" width="4%">{{ __('no') }}</th>
-                                                    <th class="border-bottom-0">{{ __('photo') }}</th>
-                                                    <th class="border-bottom-0">{{ __('code') }}</th>
-                                                    <th class="border-bottom-0">{{ __('stock') }}</th>
-                                                    <th class="border-bottom-0">{{ __('name') }}</th>
-                                                    <th class="border-bottom-0">{{ __('type') }}</th>
-                                                    <th class="border-bottom-0">{{ __('unit') }}</th>
-                                                    <th class="border-bottom-0">{{ __('brand') }}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($get_item_sum as $item)
+                            <div class="card-body py-3" style="height: 15rem;">
+                                <div class="row  d-flex justify-content-start align-items-center">
+                                    <div class="col-12">
+                                        <div class="table-responsive" style="max-height: 12rem; overflow-y: auto;">
+                                            <table id="data-tabel" width="100%"
+                                                class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
+                                                <thead>
                                                     <tr>
-                                                        <td>
-                                                            {{ $loop->iteration }}
-                                                        </td>
-                                                        <td>
-                                                            <img src="{{ asset($item->image ? 'storage/barang/' . $item->image : 'default.png') }}"
-                                                                style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd' />
-                                                        </td>
-                                                        <td>
-                                                            {{ $item->code }}
-                                                        </td>
-                                                        <td class="text-danger font-weight-bold">
-                                                            {{ $item->quantity + $item->goodsIns->sum('quantity') - $item->goodsOuts->sum('quantity') - $item->goodsBacks->sum('quantity') }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $item->name }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $item->category->name }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $item->unit->name }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $item->brand->name }}
-                                                        </td>
+                                                        <th class="border-bottom-0" width="4%">{{ __('no') }}
+                                                        </th>
+                                                        <th class="border-bottom-0">{{ __('photo') }}</th>
+                                                        <th class="border-bottom-0">{{ __('code') }}</th>
+                                                        <th class="border-bottom-0">{{ __('stock') }}</th>
+                                                        <th class="border-bottom-0">{{ __('name') }}</th>
+                                                        <th class="border-bottom-0">{{ __('type') }}</th>
+                                                        <th class="border-bottom-0">{{ __('unit') }}</th>
+                                                        <th class="border-bottom-0">{{ __('brand') }}</th>
                                                     </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($get_item_sum as $item)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $loop->iteration }}
+                                                            </td>
+                                                            <td>
+                                                                <img src="{{ asset($item->image ? 'storage/barang/' . $item->image : 'default.png') }}"
+                                                                    style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd' />
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->code }}
+                                                            </td>
+                                                            <td class="text-warning font-weight-bold">
+                                                                {{ $item->quantity + $item->goodsIns->sum('quantity') - $item->goodsOuts->sum('quantity') - $item->goodsBacks->sum('quantity') }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->name }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->category->name }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->unit->name }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->brand->name }}
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
+                    @if (Auth::user()->role->name == 'staff')
+                        <div class="card col-12">
+                            <div class="card-header">
+                                <h1 class="card-title text-lg font-weight-bold text-uppercase">
+                                    {{ __('List of Transaction In by User') }}</h1>
+                                <div class="row" style="position: relative">
+                                    <div class="d-flex justify-content-end w-100">
+                                        <a href="{{ route('transaksi.masuk') }}"
+                                            class="small-box-footer">{{ __('messages.more-info') }} <i
+                                                class="fas fa-arrow-circle-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body py-3" style="height: 15rem;">
+                                <div class="row  d-flex justify-content-start align-items-center">
+                                    <div class="col-12">
+                                        <div class="table-responsive" style="max-height: 12rem; overflow-y: auto;">
+                                            <table id="data-tabel" width="100%"
+                                                class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="border-bottom-0" width="4%">{{ __('no') }}
+                                                        </th>
+                                                        <th class="border-bottom-0">{{ __('date') }}</th>
+                                                        <th class="border-bottom-0">{{ __('incoming item code') }}</th>
+                                                        <th class="border-bottom-0">{{ __('item code') }}</th>
+                                                        <th class="border-bottom-0">{{ __('incoming amount') }}</th>
+                                                        <th class="border-bottom-0">{{ __('status') }}</th>
+                                                        {{-- <th class="border-bottom-0">{{__('item')}}</th>
+                                                    <th class="border-bottom-0">{{__('supplier')}}</th> --}}
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($get_goodsIns as $item)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $loop->iteration }}
+                                                            </td>
+                                                            <td>
+                                                                {{ \Carbon\Carbon::parse($item->date_received)->format('d F Y') }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->invoice_number }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->item->code }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->quantity }}
+                                                            </td>
+                                                            <td>
+                                                                <span
+                                                                    class="badge {{ $item->status == 0 ? 'badge-warning' : 'badge-success' }}">
+                                                                    {{ $item->status == 0 ? 'Pending' : 'Approved' }}
+                                                                </span>
+                                                            </td>
+                                                            {{-- <td>
+                                                            {{ $item->item->name }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $item->supplier->name }}
+                                                        </td> --}}
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="col-sm-12 col-lg-6" id="daily-transactions-card">
@@ -332,41 +407,40 @@
                     </div>
                     <div class="card-body">
                         <div class="tab-content p-0">
-                            <div class="chart tab-pane active" id="pie-chart"
-                                style="position: relative; height: 33.5rem;">
+                            <div class="chart tab-pane active" id="pie-chart" style="position: relative; height: 32rem;">
                                 <canvas id="stok-barang-today"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>4
+            </div>
             <!-- <div class="col-sm-12 col-lg-6">
 
-                                                                  <div class="card">
-                                                                    <div class="card-header">
-                                                                        <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
-                                                                    </div>
-                                                                      <div class="card-body">
-                                                                        <div class="row  d-flex justify-content-start align-items-center">
-                                                                          <div class="col-6">
-                                                                            <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
-                                                                            <div class="input-group mb-3">
-                                                                              <div class="w-100 mb-3 d-flex align-items-center py-3">
-                                                                                <input type="month" name="month-income" id="month-income" class="form-control w-50">
-                                                                                <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
+                                                                          <div class="card">
+                                                                            <div class="card-header">
+                                                                                <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
+                                                                            </div>
+                                                                              <div class="card-body">
+                                                                                <div class="row  d-flex justify-content-start align-items-center">
+                                                                                  <div class="col-6">
+                                                                                    <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
+                                                                                    <div class="input-group mb-3">
+                                                                                      <div class="w-100 mb-3 d-flex align-items-center py-3">
+                                                                                        <input type="month" name="month-income" id="month-income" class="form-control w-50">
+                                                                                        <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
+                                                                                      </div>
+                                                                                    </div>
+                                                                                  </div>
+                                                                                </div>
+                                                                                <div class="tab-content p-0">
+                                                                                  <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
+                                                                                    <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
+                                                                                  </div>
+                                                                                </div>
                                                                               </div>
                                                                             </div>
-                                                                          </div>
-                                                                        </div>
-                                                                        <div class="tab-content p-0">
-                                                                          <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
-                                                                            <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
-                                                                          </div>
-                                                                        </div>
-                                                                      </div>
-                                                                    </div>
 
-                                                                </div> -->
+                                                                        </div> -->
         </div>
     </div>
 
@@ -599,7 +673,7 @@
                 const goodsBackToday = data?.goods_back_today ?? 0;
                 const goodsTotalToday = data?.goods_total_today ?? 0;
 
-                console.log(data);
+                // console.log(data);
 
                 // Check if all values are 0
                 if (goodsInToday === 0 && goodsOutToday === 0 && goodsBackToday === 0 && goodsTotalToday ===
@@ -620,10 +694,10 @@
                                 goodsTotalToday
                             ],
                             backgroundColor: [
-                                'rgba(75, 192, 192, 0.6)', // Barang Masuk
-                                'rgba(255, 99, 132, 0.6)', // Barang Keluar
-                                'rgba(54, 162, 235, 0.6)', // Barang Retur
-                                'rgba(255, 206, 86, 0.6)' // Total Stok
+                                'rgba(75, 192, 192, 0.6)',
+                                'rgba(255, 99, 132, 0.6)',
+                                'rgba(54, 162, 235, 0.6)',
+                                'rgba(255, 206, 86, 0.6)'
                             ],
                             borderColor: [
                                 'rgba(75, 192, 192, 1)',
@@ -635,6 +709,7 @@
                         }]
                     },
                     options: {
+                        maintainAspectRatio: false,
                         responsive: true,
                         plugins: {
                             legend: {

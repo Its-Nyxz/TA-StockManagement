@@ -138,5 +138,6 @@
   "Password Can't Empty": "Password Tidak Boleh Kosong",
   "Login Failed !": "Login Gagal !",
   "no transactions this month !" : "tidak ada transaksi pada bulan ini !",
-  "List of Low Stock of Goods" : "Daftar Stok Barang yang Menipis"
+  "List of Low Stock of Goods" : "Daftar Stok Barang yang Menipis",
+  "List of Transaction In by User": "Daftar Transaksi Masuk berdasarkan User"
 }

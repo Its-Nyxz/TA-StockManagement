@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use App\Models\GoodsIn;
+use App\Models\GoodsOut;
 use App\Models\GoodsBack;
 use App\Models\Supplier;
 use App\Models\User;
@@ -44,7 +45,7 @@ class TransactionInController extends Controller
             $goodsins->where('user_id', Auth::user()->id);
         };
 
-        $goodsins->where('status','!=','2');
+        $goodsins->where('status', '!=', '2');
         $goodsins->latest()->get();
         // $goodsins = GoodsIn::with('item','user','supplier')->latest()->get();
         if ($request->ajax()) {
@@ -207,31 +208,42 @@ class TransactionInController extends Controller
     public function cancel(Request $request, $id)
     {
         $transaction = GoodsIn::find($id);
-
         if ($transaction) {
             $transaction->status = '2';
+
+            $item = Item::where('id',$request->item_id)->sum('quantity');
+            $goodsIn = GoodsIn::where('item_id',$request->item_id)->sum('quantity');
+            $goodsOut = GoodsOut::where('item_id',$request->item_id)->sum('quantity');
+            $goodsBack = GoodsBack::where('item_id',$request->item_id)->sum('quantity');
+            
+            $totalStock = max(0,$item + $goodsIn - $goodsOut - $goodsBack);
+            if($request->quantity > $totalStock || $totalStock === 0){
+                return  response()->json([
+                    "message"=>__("insufficient stock this month")
+                ]) -> setStatusCode(400);
+            }
+            dd($totalStock);
             $transaction->save();
-            
-        $data = [
-            'user_id' => $request->user_id,
-            'date_backs' => $request->date_retur,
-            'quantity' => $request->quantity,
-            'description' => $request->description,
-            'supplier_id' => $request->supplier_id,
-            'invoice_number' => $request->invoice_number,
-            'item_id' => $request->item_id
-        ];
+            $data = [
+                'user_id' => $request->user_id,
+                'date_backs' => $request->date_retur,
+                'quantity' => $request->quantity,
+                'description' => $request->description,
+                'supplier_id' => $request->supplier_id,
+                'invoice_number' => $request->invoice_number,
+                'item_id' => $request->item_id
+            ];
 
-        // Create the GoodsBack record
-        GoodsBack::create($data);
+            // Create the GoodsBack record
+            GoodsBack::create($data);
 
-        // Optionally update the item's active status
-        $item = Item::find($request->item_id);
-        if ($item) {
-            $item->active = "true"; // Set active status
-            $item->save();
-        }
-            
+            // Optionally update the item's active status
+            $item = Item::find($request->item_id);
+            if ($item) {
+                $item->active = "true"; // Set active status
+                $item->save();
+            }
+
             return response()->json(['success' => true, 'message' => __('Transaction Cancel or Returned successfully.')]);
         }
 

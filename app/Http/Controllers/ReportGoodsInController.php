@@ -44,6 +44,9 @@ class ReportGoodsInController extends Controller
             ->addColumn("item_name",function($data){
                 return $data -> item -> name;
             })
+            ->addColumn("brand_name",function($data){
+                return $data -> item -> brand -> name;
+            })
 
             ->addColumn("status", function ($data) {
                 if ($data->status == 0) {

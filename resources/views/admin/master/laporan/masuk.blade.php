@@ -39,12 +39,13 @@
                         <table id="data-tabel" width="100%"  class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
                             <thead>
                                 <tr>
-                                    <th class="border-bottom-0" width="8%">{{__('no')}}</th>
+                                    <th class="border-bottom-0" width="4%">{{__('no')}}</th>
                                     <th class="border-bottom-0">{{__('date')}}</th>
                                     <th class="border-bottom-0">{{__('incoming item code')}}</th>
                                     <th class="border-bottom-0">{{__('item code')}}</th>
                                     <th class="border-bottom-0">{{__('supplier')}}</th>
                                     <th class="border-bottom-0">{{__('item')}}</th>
+                                    <th class="border-bottom-0">{{__('brand')}}</th>
                                     <th class="border-bottom-0">{{__('incoming amount')}}</th>
                                     <th class="border-bottom-0">{{__('status')}}</th>
                                 </tr>
@@ -158,6 +159,10 @@
                },{
                 data:"item_name",
                 name:"item_name"
+               },
+               {
+                data:"brand_name",
+                name:"brand_name"
                },
                {
                 data:"quantity",

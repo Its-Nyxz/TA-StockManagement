@@ -68,7 +68,7 @@ class ReportStockController extends Controller
                     $count = $item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur ;
                     $result = $count. "/" . $data->unit->name;
                     $result = max(0, $result);
-                    if ($count == 0) {
+                    if ($count <= 0) {
                         return "<span class='text-red font-weight-bold'>" . $result . "</span>" . ' ' . "<span class='badge badge-danger'>" . __("Stock Empty") . "</span>";;
                     }else if ($count <= 10) {
                         return "<span class='text-red font-weight-bold'>" . $result . "</span>" . ' ' . "<span class='badge badge-danger'>" . __("Stock Running Low") . "</span>";;

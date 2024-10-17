@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\GoodsOut;
 use App\Models\GoodsIn;
 use App\Models\Customer;
+use App\Models\GoodsBack;
 use App\Models\Item;
 use App\Models\User;
 use Yajra\DataTables\DataTables;
@@ -77,14 +78,21 @@ class TransactionOutController extends Controller
     public function save(Request $request):JsonResponse
     {
 
-        $currentMonth = date('m',strtotime($request->date_out));
-        $currentYear = date('Y',strtotime($request->date_out));
-        $goodsInThisMonth = GoodsIn::whereMonth('date_received', $currentMonth)
-        ->whereYear('date_received', $currentYear)->sum('quantity');
-        $goodsOutThisMonth = GoodsOut::whereMonth('date_out', $currentMonth)
-        ->whereYear('date_out', $currentYear)->sum('quantity');
-        $totalStockThisMonth = max(0,$goodsInThisMonth - $goodsOutThisMonth);
-        if($request->quantity > $totalStockThisMonth || $totalStockThisMonth == 0){
+        // $currentMonth = date('m',strtotime($request->date_out));
+        // $currentYear = date('Y',strtotime($request->date_out));
+        // $goodsInThisMonth = GoodsIn::whereMonth('date_received', $currentMonth)
+        // ->whereYear('date_received', $currentYear)->sum('quantity');
+        // $goodsOutThisMonth = GoodsOut::whereMonth('date_out', $currentMonth)
+        // ->whereYear('date_out', $currentYear)->sum('quantity');
+        // $goodsBackThisMonth = GoodsBack::whereMonth('date_backs', $currentMonth)
+        // ->whereYear('date_backs', $currentYear)->sum('quantity');
+        $item = Item::where('id',$request->item_id)->sum('quantity');
+        $goodsIn = GoodsIn::where('item_id',$request->item_id)->sum('quantity');
+        $goodsOut = GoodsOut::where('item_id',$request->item_id)->sum('quantity');
+        $goodsBack = GoodsBack::where('item_id',$request->item_id)->sum('quantity');
+
+        $totalStock = max(0,$item + $goodsIn - $goodsOut - $goodsBack);
+        if($request->quantity > $totalStock || $totalStock === 0){
             return  response()->json([
                 "message"=>__("insufficient stock this month")
             ]) -> setStatusCode(400);

@@ -15,6 +15,7 @@ use App\Models\GoodsIn;
 use App\Models\GoodsOut;
 use App\Models\GoodsBack;
 use App\Models\Customer;
+use Illuminate\Support\Facades\Auth;
 
 
 class DashboardController extends Controller
@@ -47,6 +48,12 @@ class DashboardController extends Controller
                     - $item->goodsBacks->sum('quantity');
                 return $total_stok >= 10 && $total_stok <= 50;;
             });
+        $get_goodsIns = GoodsIn::with('item', 'user', 'supplier');
+        if (Auth::user()->role->id > 2) {
+            $get_goodsIns->where('user_id', Auth::user()->id);
+        }; 
+        $get_goodsIns->where('status','!=','2');
+        $get_goodsIns = $get_goodsIns->latest()->get();
         return view('admin.dashboard', compact(
             'product_count',
             'category_count',
@@ -61,7 +68,8 @@ class DashboardController extends Controller
             'total_stok',
             'approvals',
             'get_item',
-            'get_item_sum'
+            'get_item_sum',
+            'get_goodsIns'
         ));
     }
 }
