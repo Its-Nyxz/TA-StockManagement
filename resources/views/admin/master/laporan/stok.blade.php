@@ -29,7 +29,7 @@
                         </div>
                         @if(Auth::user()->role->name != 'staff')
                         <div class="col-lg-6  w-100 d-flex justify-content-end align-items-center">
-                                <button class="btn btn-outline-primary font-weight-bold m-1" id="print"><i class="fas fa-print m-1"></i><span class="d-none d-lg-block d-xl-inline">{{ __("print") }}</span></button>
+                                <button class="btn btn-outline-primary font-weight-bold m-1" id="print"><i class="fas fa-print m-1"></i><span class="d-none d-lg-block d-xl-inline">{{ __("Print") }}</span></button>
                                 <button class="btn btn-outline-danger font-weight-bold m-1" id="export-pdf"><i class="fas fa-file-pdf m-1"></i><span class="d-none d-lg-block d-xl-inline">{{ __("messages.export-to", ["file" => "pdf"]) }}</span></button>
                                 <button class="btn btn-outline-success font-weight-bold m-1" id="export-excel"><i class="fas fa-file-excel m-1"></i><span class="d-none d-lg-block d-xl-inline">{{ __("messages.export-to", ["file" => "excel"]) }}</span></button>
                         </div>
@@ -138,7 +138,7 @@
             },
             columns:[
                 {
-                    "data":null,"sortable":false,
+                    "data":null,"sortable":false,"className": "text-center",
                     render:function(data,type,row,meta){
                         return meta.row + meta.settings._iDisplayStart+1;
                     }

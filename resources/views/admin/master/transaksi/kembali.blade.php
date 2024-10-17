@@ -37,14 +37,14 @@
                                         <div class = "d-flex justify-content-end">
                                             <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
                                                     class="fas fa-filter m-1"></i><span
-                                                    class="d-none d-lg-block d-xl-inline">{{ __('filter') }}</span></button>
+                                                    class="d-none d-lg-block d-xl-inline">{{ __('Filter') }}</span></button>
                                             <button
                                                 class="btn {{ $in_status != 0 ? 'btn-success' : 'btn-warning' }} m-1 mt-1"
                                                 type="button" data-toggle="modal"
                                                 {{ $in_status != 0 ? 'data-target="#TambahData"' : 'data-target="alert"' }}
                                                 id="modal-button"><i class="fas fa-plus m-1"></i><span
                                                     class="d-none d-lg-block d-xl-inline">
-                                                    {{ __('add data') }}</span></button>
+                                                    {{ __('Add data') }}</span></button>
                                         </div>
                                     </div>
                                 </div>
@@ -310,6 +310,7 @@
                 columns: [{
                         "data": null,
                         "sortable": false,
+                        "className": "text-center",
                         render: function(data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }

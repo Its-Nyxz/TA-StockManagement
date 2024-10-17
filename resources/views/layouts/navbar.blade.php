@@ -94,17 +94,19 @@
         @endif
 
 
-        <li class="nav-item dropdown" data-toggle="dropdown">
+        <li class="nav-item dropdown" data-toggle="dropdown-navbar">
             <div class="user-panel mt-3 pb-3 mb-3 d-flex justify-content-center align-items-center">
                 <div class="info font-weight-bold" style="text-transform:capitalize;">
-                    <a href="javascript:void(0)" class="d-block" style="color:gray !important;"
+                    <a href="{{ route('settings.profile') }}" class="d-block" style="color:gray !important;"
                         id="user">{{ Auth::user()->name }}</a>
                 </div>
                 <div class="image">
+                    <a href="{{ route('settings.profile') }}">
                     <img src="{{ empty(Auth::user()->image) ? asset('user.png') : asset('storage/profile/' . Auth::user()->image) }}"
-                        class="img-circle elevation-2"
+                        class="img-circle elevation-2" 
                         style="width:100% !important;max-width:35px !important;aspect-ratio:1 !important;object-fit:cover !important;"
                         id="img_profile" alt="User Image">
+                    </a>
                 </div>
             </div>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">

@@ -236,7 +236,7 @@
                                         <div class="w-100 d-flex mb-2 align-items-center">
                                             <input type="month" name="month" id="month" class="form-control w-50">
                                             <button id="filter" class="btn d-flex btn-primary mx-2 text-capitalize"><i
-                                                    class="fas fa-filter"></i>{{ __('filter') }}</button>
+                                                    class="fas fa-filter"></i>{{ __('Filter') }}</button>
                                         </div>
                                     </div>
                                 </div>

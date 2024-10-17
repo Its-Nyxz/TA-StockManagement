@@ -66,13 +66,13 @@
                                 <thead>
                                     <tr>
                                         <th class="border-bottom-0" width="4%">No</th>
-                                        <th class="border-bottom-0">Nama</th>
-                                        <th class="border-bottom-0">Nomor HP</th>
-                                        <th class="border-bottom-0">Alamat</th>
-                                        <th class="border-bottom-0">Email</th>
-                                        <th class="border-bottom-0">Website</th>
+                                        <th class="border-bottom-0">{{ __('name') }}</th>
+                                        <th class="border-bottom-0">{{ __('phone number') }}</th>
+                                        <th class="border-bottom-0">{{ __('address') }}</th>
+                                        <th class="border-bottom-0">{{ __('email') }}</th>
+                                        <th class="border-bottom-0">{{ __('website') }}</th>
                                         @if (Auth::user()->role->name != 'staff')
-                                            <th class="border-bottom-0" width="1%">Tindakan</th>
+                                            <th class="border-bottom-0" width="1%">{{ __('action') }}</th>
                                         @endif
                                     </tr>
                                 </thead>
@@ -153,6 +153,7 @@
                 columns: [{
                         "data": null,
                         "sortable": false,
+                        "className": "text-center",
                         render: function(data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }

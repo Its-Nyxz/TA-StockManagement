@@ -21,4 +21,9 @@ class Supplier extends Model
     {
         return $this -> hasMany(GoodsIn::class);
     }
+
+    public function item(): HasMany
+    {
+        return $this -> hasMany(Item::class);
+    }
 }

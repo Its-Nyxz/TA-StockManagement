@@ -56,13 +56,13 @@
                                                     data-toggle="modal" data-target="#modal_approve"
                                                     id="modal-button-approve"><i class="fas fa-list m-1"></i><span
                                                         class="d-none d-lg-block d-xl-inline">
-                                                        {{ __('approval') }}</span> <span
+                                                        {{ __('Approval') }}</span> <span
                                                         class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ count($approvals) }}</span></button>
                                             @endif
                                             <button class="btn btn-success m-1 mt-1" type="button" data-toggle="modal"
                                                 data-target="#TambahData" id="modal-button"><i
                                                     class="fas fa-plus m-1"></i><span class="d-none d-lg-block d-xl-inline">
-                                                    {{ __('add data') }}</span> </button>
+                                                    {{ __('Add data') }}</span> </button>
                                         </div>
                                     </div>
                                 </div>
@@ -465,6 +465,7 @@
                 columns: [{
                         "data": null,
                         "sortable": false,
+                        "className": "text-center",
                         render: function(data, type, row, meta) {
                             return meta.row + meta.settings._iDisplayStart + 1;
                         }

@@ -12,7 +12,7 @@
                 <div class="card-header row">
                     <div class="d-flex justify-content-end align-items-center w-100">
                     @if(Auth::user()->role->name != 'staff')
-                        <button class="btn btn-success" type="button"  data-toggle="modal" data-target="#TambahData" id="modal-button"><i class="fas fa-plus"></i> {{ __("add data") }}</button>
+                        <button class="btn btn-success" type="button"  data-toggle="modal" data-target="#TambahData" id="modal-button"><i class="fas fa-plus"></i> {{ __("Add data") }}</button>
                     @endif
                     </div>
                 </div>
@@ -217,7 +217,7 @@
             ajax:`{{route('barang.list')}}`,
             columns:[
                 {
-                    "data":null,"sortable":false,
+                    "data":null,"sortable":false,"className": "text-center",
                     render:function(data,type,row,meta){
                         return meta.row + meta.settings._iDisplayStart+1;
                     }
