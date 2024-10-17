@@ -25,7 +25,7 @@ class Notification
     
         foreach ($productIds as $productId) {
             // Menghitung total stok untuk setiap ID produk
-            $totalStock = GoodsIn::where('item_id', $productId)->sum('quantity')
+            $totalStock = Item::where('id',$productId)->sum('quantity') + GoodsIn::where('item_id', $productId)->sum('quantity')
                 - GoodsOut::where('item_id', $productId)->sum('quantity')
                 - GoodsBack::where('item_id', $productId)->sum('quantity');
             
@@ -62,7 +62,7 @@ function getLowStockNotifCount()
         
         foreach ($productIds as $productId) {
             // Menghitung total stok untuk setiap ID produk
-            $totalStock = GoodsIn::where('item_id', $productId)->sum('quantity')
+            $totalStock = Item::where('id',$productId)->sum('quantity') + GoodsIn::where('item_id', $productId)->sum('quantity')
                 - GoodsOut::where('item_id', $productId)->sum('quantity')
                 - GoodsBack::where('item_id', $productId)->sum('quantity');
             

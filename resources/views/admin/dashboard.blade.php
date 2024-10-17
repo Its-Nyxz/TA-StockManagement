@@ -111,16 +111,16 @@
         <!-- <div class="col-lg-3 col-6"> -->
         <!-- small box -->
         <!-- <div class="small-box bg-purple">
-                                                                    <div class="inner">
-                                                                        <h3>{{ $customer }}</h3>
+                                                                            <div class="inner">
+                                                                                <h3>{{ $customer }}</h3>
 
-                                                                        <p class="font-weight-bold">{{ __('customer') }}</p>
-                                                                    </div>
-                                                                    <div class="icon">
-                                                                        <i class="ion ion-android-person"></i>
-                                                                    </div>
-                                                                    <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
-                                                                    </div> -->
+                                                                                <p class="font-weight-bold">{{ __('customer') }}</p>
+                                                                            </div>
+                                                                            <div class="icon">
+                                                                                <i class="ion ion-android-person"></i>
+                                                                            </div>
+                                                                            <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
+                                                                            </div> -->
         <!-- </div> -->
 
         {{-- @if (Auth::user()->role->name != 'staff')
@@ -259,11 +259,18 @@
                         <div class="card-header">
                             <h1 class="card-title text-lg font-weight-bold text-uppercase">
                                 {{ __('List of Low Stock of Goods') }}</h1>
+                            <div class="row" style="position: relative">
+                                <div class="d-flex justify-content-end w-100">
+                                    <a href="{{ route('laporan.stok') }}"
+                                        class="small-box-footer">{{ __('messages.more-info') }} <i
+                                            class="fas fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body py-3">
                             <div class="row  d-flex justify-content-start align-items-center">
                                 <div class="col-12">
-                                    <div class="table-responsive">
+                                    <div class="table-responsive" style="max-height: 15rem; overflow-y: auto;">
                                         <table id="data-tabel" width="100%"
                                             class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
                                             <thead>
@@ -279,14 +286,14 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($get_item as $item)
+                                                @foreach ($get_item_sum as $item)
                                                     <tr>
                                                         <td>
                                                             {{ $loop->iteration }}
                                                         </td>
                                                         <td>
                                                             <img src="{{ asset($item->image ? 'storage/barang/' . $item->image : 'default.png') }}"
-                                                            style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd' />
+                                                                style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd' />
                                                         </td>
                                                         <td>
                                                             {{ $item->code }}
@@ -326,7 +333,7 @@
                     <div class="card-body">
                         <div class="tab-content p-0">
                             <div class="chart tab-pane active" id="pie-chart"
-                                style="position: relative; height: 32.1rem;">
+                                style="position: relative; height: 33.5rem;">
                                 <canvas id="stok-barang-today"></canvas>
                             </div>
                         </div>
@@ -335,31 +342,31 @@
             </div>4
             <!-- <div class="col-sm-12 col-lg-6">
 
-                                                          <div class="card">
-                                                            <div class="card-header">
-                                                                <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
-                                                            </div>
-                                                              <div class="card-body">
-                                                                <div class="row  d-flex justify-content-start align-items-center">
-                                                                  <div class="col-6">
-                                                                    <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
-                                                                    <div class="input-group mb-3">
-                                                                      <div class="w-100 mb-3 d-flex align-items-center py-3">
-                                                                        <input type="month" name="month-income" id="month-income" class="form-control w-50">
-                                                                        <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
+                                                                  <div class="card">
+                                                                    <div class="card-header">
+                                                                        <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
+                                                                    </div>
+                                                                      <div class="card-body">
+                                                                        <div class="row  d-flex justify-content-start align-items-center">
+                                                                          <div class="col-6">
+                                                                            <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
+                                                                            <div class="input-group mb-3">
+                                                                              <div class="w-100 mb-3 d-flex align-items-center py-3">
+                                                                                <input type="month" name="month-income" id="month-income" class="form-control w-50">
+                                                                                <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
+                                                                              </div>
+                                                                            </div>
+                                                                          </div>
+                                                                        </div>
+                                                                        <div class="tab-content p-0">
+                                                                          <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
+                                                                            <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
+                                                                          </div>
+                                                                        </div>
                                                                       </div>
                                                                     </div>
-                                                                  </div>
-                                                                </div>
-                                                                <div class="tab-content p-0">
-                                                                  <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
-                                                                    <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
-                                                                  </div>
-                                                                </div>
-                                                              </div>
-                                                            </div>
 
-                                                        </div> -->
+                                                                </div> -->
         </div>
     </div>
 
@@ -389,6 +396,7 @@
                     dataType: 'json',
                     success: function(data) {
                         const emptyMessage = document.getElementById('empty-message');
+                        const chartCanvas = document.getElementById('stok-barang').parentElement;
                         // if (data.goods_in_this_month + data.goods_out_this_month + data
                         // .goods_back_this_month + data.total_stock_this_month === 0) {
                         // return false; 
@@ -397,12 +405,14 @@
                         if (data.goods_in_this_month + data.goods_out_this_month + data
                             .goods_back_this_month + data.total_stock_this_month === 0) {
                             emptyMessage.style.display = 'block';
+                            chartCanvas.style.display = 'none';
                             if (ChartStokBarang) {
                                 ChartStokBarang.destroy();
                             }
                             return;
                         } else {
                             emptyMessage.style.display = 'none';
+                            chartCanvas.style.display = 'block';
                         }
                         $("input[name='month']").val(data.month);
                         const chartstok_barang = document.getElementById('stok-barang').getContext(

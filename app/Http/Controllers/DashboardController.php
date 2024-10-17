@@ -36,11 +36,32 @@ class DashboardController extends Controller
         $item_out = GoodsOut::sum('quantity');
         $item_back = GoodsBack::sum('quantity');
         $total_stok = $item + $item_in - $item_out - $item_back;
-        $staffCount = User::where('role_id',3)->count();
+        $staffCount = User::where('role_id', 3)->count();
         $approvals = GoodsIn::with('item', 'supplier')->where('status', 0)->get();
-        $get_item = Item::orderBy('id','DESC')->get();
-        return view('admin.dashboard',compact('product_count',
-        'category_count','unit_count',
-        'brand_count','goodsin','goodsout','goodsback','customer','supplier','staffCount','total_stok','approvals','get_item'));
+        $get_item = Item::orderBy('id', 'DESC')->get();
+        $get_item_sum = Item::with(['goodsIns', 'goodsOuts', 'goodsBacks'])
+            ->get()
+            ->filter(function ($item) {
+                $total_stok = $item->quantity + $item->goodsIns->sum('quantity')
+                    - $item->goodsOuts->sum('quantity')
+                    - $item->goodsBacks->sum('quantity');
+                return $total_stok >= 10 && $total_stok <= 50;;
+            });
+        return view('admin.dashboard', compact(
+            'product_count',
+            'category_count',
+            'unit_count',
+            'brand_count',
+            'goodsin',
+            'goodsout',
+            'goodsback',
+            'customer',
+            'supplier',
+            'staffCount',
+            'total_stok',
+            'approvals',
+            'get_item',
+            'get_item_sum'
+        ));
     }
 }
