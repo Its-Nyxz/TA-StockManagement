@@ -38,8 +38,9 @@ class DashboardController extends Controller
         $total_stok = $item + $item_in - $item_out - $item_back;
         $staffCount = User::where('role_id',3)->count();
         $approvals = GoodsIn::with('item', 'supplier')->where('status', 0)->get();
+        $get_item = Item::orderBy('id','DESC')->get();
         return view('admin.dashboard',compact('product_count',
         'category_count','unit_count',
-        'brand_count','goodsin','goodsout','goodsback','customer','supplier','staffCount','total_stok','approvals'));
+        'brand_count','goodsin','goodsout','goodsback','customer','supplier','staffCount','total_stok','approvals','get_item'));
     }
 }

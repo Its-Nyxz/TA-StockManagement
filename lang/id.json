@@ -137,5 +137,6 @@
   "Username Can't Empty": "Username Tidak Boleh Kosong",
   "Password Can't Empty": "Password Tidak Boleh Kosong",
   "Login Failed !": "Login Gagal !",
-  "no transactions this month !" : "tidak ada transaksi pada bulan ini !"
+  "no transactions this month !" : "tidak ada transaksi pada bulan ini !",
+  "List of Low Stock of Goods" : "Daftar Stok Barang yang Menipis"
 }

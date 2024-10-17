@@ -7,20 +7,25 @@
 
             <div class="col-lg-3 col-6">
                 <!-- small box -->
-                <div class="small-box bg-purple">
-                    <div class="inner">
-                        <h3>{{ $product_count }}</h3>
+                @if (Auth::user()->role->name !== 'staff')
+                    <div class="small-box bg-pink">
+                    @else
+                        <div class="small-box bg-purple">
+                @endif
+                <div class="inner">
+                    <h3>{{ $product_count }}</h3>
 
-                        <p class="font-weight-bold">{{ __('goods') }}</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-boxes"></i>
-                    </div>
-                    <a href="{{ route('barang') }}" class="small-box-footer">{{ __('messages.more-info') }} <i
-                            class="fas fa-arrow-circle-right"></i></a>
+                    <p class="font-weight-bold">{{ __('goods') }}</p>
                 </div>
+                <div class="icon">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <a href="{{ route('barang') }}" class="small-box-footer">{{ __('messages.more-info') }} <i
+                        class="fas fa-arrow-circle-right"></i></a>
             </div>
 
+        </div>
+        @if (Auth::user()->role->name == 'staff')
             <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-pink">
@@ -68,97 +73,96 @@
                             class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
+        @endif
 
-
-
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3>{{ $goodsin }}</h3>
-
-                        <p class="font-weight-bold">{{ __('incoming transaction') }}</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-arrow-swap"></i>
-                    </div>
-                    <a href="{{ route('transaksi.masuk') }}" class="small-box-footer">{{ __('messages.more-info') }} <i
-                            class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-6">
-                <!-- small box -->
-                <div class="small-box bg-red">
-                    <div class="inner" style="color:white !important;">
-                        <h3>{{ $goodsout }}</h3>
-
-                        <p class="font-weight-bold">{{ __('outbound transaction') }}</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-arrow-swap"></i>
-                    </div>
-                    <a href="{{ route('transaksi.keluar') }}" class="small-box-footer"
-                        style="color:white !important;">{{ __('messages.more-info') }} <i
-                            class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-
-            <!-- <div class="col-lg-3 col-6"> -->
-            <!-- small box -->
-            <!-- <div class="small-box bg-purple">
-                                                      <div class="inner">
-                                                        <h3>{{ $customer }}</h3>
-
-                                                        <p class="font-weight-bold">{{ __('customer') }}</p>
-                                                      </div>
-                                                      <div class="icon">
-                                                        <i class="ion ion-android-person"></i>
-                                                      </div>
-                                                      <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
-                                                    </div> -->
-            <!-- </div> -->
-
-            @if (Auth::user()->role->name != 'staff')
-                <div class="col-lg-3 col-6">
+        {{-- <div class="col-lg-3 col-6">
                     <!-- small box -->
-                    <div class="small-box bg-info">
-                        <!-- style="color:white !important;" -->
+                    <div class="small-box bg-green">
                         <div class="inner">
-                            <h3>{{ $goodsback }}</h3>
+                            <h3>{{ $goodsin }}</h3>
 
-                            <p class="font-weight-bold">{{ __('return transaction') }}</p>
+                            <p class="font-weight-bold">{{ __('incoming transaction') }}</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-arrow-swap"></i>
                         </div>
-                        <a href="{{ route('transaksi.kembali') }}" class="small-box-footer"
+                        <a href="{{ route('transaksi.masuk') }}" class="small-box-footer">{{ __('messages.more-info') }} <i
+                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6">
+                    <!-- small box -->
+                    <div class="small-box bg-red">
+                        <div class="inner" style="color:white !important;">
+                            <h3>{{ $goodsout }}</h3>
+
+                            <p class="font-weight-bold">{{ __('outbound transaction') }}</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-arrow-swap"></i>
+                        </div>
+                        <a href="{{ route('transaksi.keluar') }}" class="small-box-footer"
                             style="color:white !important;">{{ __('messages.more-info') }} <i
                                 class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                </div>
-            @endif
+                </div> --}}
 
-            @if (Auth::user()->role->name != 'staff')
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-yellow">
-                        <div class="inner" style="color:white !important;">
-                            <h3>{{ count($approvals) }}</h3>
+        <!-- <div class="col-lg-3 col-6"> -->
+        <!-- small box -->
+        <!-- <div class="small-box bg-purple">
+                                                                    <div class="inner">
+                                                                        <h3>{{ $customer }}</h3>
 
-                            <p class="font-weight-bold">{{ __('approval') }}</p>
+                                                                        <p class="font-weight-bold">{{ __('customer') }}</p>
+                                                                    </div>
+                                                                    <div class="icon">
+                                                                        <i class="ion ion-android-person"></i>
+                                                                    </div>
+                                                                    <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
+                                                                    </div> -->
+        <!-- </div> -->
+
+        {{-- @if (Auth::user()->role->name != 'staff')
+                    <div class="col-lg-3 col-6">
+                        <!-- small box -->
+                        <div class="small-box bg-info">
+                            <!-- style="color:white !important;" -->
+                            <div class="inner">
+                                <h3>{{ $goodsback }}</h3>
+
+                                <p class="font-weight-bold">{{ __('return transaction') }}</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-arrow-swap"></i>
+                            </div>
+                            <a href="{{ route('transaksi.kembali') }}" class="small-box-footer"
+                                style="color:white !important;">{{ __('messages.more-info') }} <i
+                                    class="fas fa-arrow-circle-right"></i></a>
                         </div>
-                        <div class="icon">
-                            <i class="fas fa-clipboard-check"></i>
-                        </div>
-                        <a href="{{ route('transaksi.masuk') }}" style="color:white !important;"
-                            class="small-box-footer">{{ __('messages.more-info') }} <i
-                                class="fas fa-arrow-circle-right"></i></a>
                     </div>
-                </div>
-            @endif
+                @endif --}}
 
-            @if (Auth::user()->role->name == 'staff')
+        @if (Auth::user()->role->name != 'staff')
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-teal">
+                    <div class="inner" style="color:white !important;">
+                        <h3>{{ count($approvals) }}</h3>
+
+                        <p class="font-weight-bold">{{ __('approval') }}</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <a href="{{ route('transaksi.masuk') }}" style="color:white !important;"
+                        class="small-box-footer">{{ __('messages.more-info') }} <i
+                            class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        @endif
+
+        {{-- @if (Auth::user()->role->name == 'staff')
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-info">
@@ -176,11 +180,11 @@
                     </div>
                 </div>
             @endif
-
-
+ --}}
+        @if (Auth::user()->role->name != 'staff')
             <div class="col-lg-3 col-6">
                 <!-- small box -->
-                <div class="small-box bg-gray">
+                <div class="small-box bg-olive">
                     <div class="inner">
                         <h3>{{ $supplier }}</h3>
 
@@ -194,60 +198,118 @@
                 </div>
             </div>
 
-            @if (Auth::user()->role->name != 'staff')
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-maroon">
-                        <!-- style="color:white !important;" -->
-                        <div class="inner" style="color:white !important;">
-                            <h3>{{ $staffCount }}</h3>
 
-                            <p class="font-weight-bold">{{ __('employee') }}</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-android-person"></i>
-                        </div>
-                        <a href="{{ route('settings.employee') }}" class="small-box-footer"
-                            style="color:white !important;">{{ __('messages.more-info') }} <i
-                                class="fas fa-arrow-circle-right"></i></a>
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-maroon">
+                    <!-- style="color:white !important;" -->
+                    <div class="inner" style="color:white !important;">
+                        <h3>{{ $staffCount }}</h3>
+
+                        <p class="font-weight-bold">{{ __('employee') }}</p>
                     </div>
+                    <div class="icon">
+                        <i class="ion ion-android-person"></i>
+                    </div>
+                    <a href="{{ route('settings.employee') }}" class="small-box-footer"
+                        style="color:white !important;">{{ __('messages.more-info') }} <i
+                            class="fas fa-arrow-circle-right"></i></a>
                 </div>
-            @endif
-
-
-
-
-        </div>
+            </div>
+        @endif
+    </div>
     </div>
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 col-lg-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h1 class="card-title text-lg font-weight-bold text-uppercase">
-                            {{ __('monthly goods transaction') }}</h1>
-                    </div>
-                    <div class="card-body">
-                        <div class="row  d-flex justify-content-start align-items-center">
-                            <div class="col-6">
-                                <label for="month" class="form-label text-capitalize">{{ __('select month') }}</label>
-                                <div class="input-group mb-3">
-                                    <div class="w-100 mb-3 d-flex align-items-center py-3">
-                                        <input type="month" name="month" id="month" class="form-control w-50">
-                                        <button id="filter" class="btn d-flex btn-primary mx-2 text-capitalize"><i
-                                                class="fas fa-filter"></i>{{ __('filter') }}</button>
+            <div class="col-sm-6 col-lg-6">
+                <div class="row">
+                    <div class="card col-12">
+                        <div class="card-header">
+                            <h1 class="card-title text-lg font-weight-bold text-uppercase">
+                                {{ __('monthly goods transaction') }}</h1>
+                        </div>
+                        <div class="card-body py-3">
+                            <div class="row  d-flex justify-content-start align-items-center">
+                                <div class="col-6">
+                                    {{-- <label for="month" class="form-label text-capitalize">{{ __('select month') }}</label> --}}
+                                    <div class="input-group">
+                                        <div class="w-100 d-flex mb-2 align-items-center">
+                                            <input type="month" name="month" id="month" class="form-control w-50">
+                                            <button id="filter" class="btn d-flex btn-primary mx-2 text-capitalize"><i
+                                                    class="fas fa-filter"></i>{{ __('filter') }}</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="tab-content p-0">
+                                <div class="chart tab-pane active" id="revenue-chart"
+                                    style="position: relative; height: 10rem;">
+                                    <canvas id="stok-barang"></canvas>
+                                    <p id="empty-message" class="text-center text-muted" style="display: none;">
+                                        {{ __('no transactions this month !') }}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="tab-content p-0">
-                            <div class="chart tab-pane active" id="revenue-chart"
-                                style="position: relative; height: 19.6rem;">
-                                <canvas id="stok-barang"></canvas>
-                                <p id="empty-message" class="text-center text-muted" style="display: none;">
-                                   {{ __('no transactions this month !') }}
-                                </p>
+                    </div>
+                    <div class="card col-12">
+                        <div class="card-header">
+                            <h1 class="card-title text-lg font-weight-bold text-uppercase">
+                                {{ __('List of Low Stock of Goods') }}</h1>
+                        </div>
+                        <div class="card-body py-3">
+                            <div class="row  d-flex justify-content-start align-items-center">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table id="data-tabel" width="100%"
+                                            class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
+                                            <thead>
+                                                <tr>
+                                                    <th class="border-bottom-0" width="4%">{{ __('no') }}</th>
+                                                    <th class="border-bottom-0">{{ __('photo') }}</th>
+                                                    <th class="border-bottom-0">{{ __('code') }}</th>
+                                                    <th class="border-bottom-0">{{ __('stock') }}</th>
+                                                    <th class="border-bottom-0">{{ __('name') }}</th>
+                                                    <th class="border-bottom-0">{{ __('type') }}</th>
+                                                    <th class="border-bottom-0">{{ __('unit') }}</th>
+                                                    <th class="border-bottom-0">{{ __('brand') }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($get_item as $item)
+                                                    <tr>
+                                                        <td>
+                                                            {{ $loop->iteration }}
+                                                        </td>
+                                                        <td>
+                                                            <img src="{{ asset($item->image ? 'storage/barang/' . $item->image : 'default.png') }}"
+                                                            style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd' />
+                                                        </td>
+                                                        <td>
+                                                            {{ $item->code }}
+                                                        </td>
+                                                        <td class="text-danger font-weight-bold">
+                                                            {{ $item->goodsIns->sum('quantity') - $item->goodsOuts->sum('quantity') - $item->goodsBacks->sum('quantity') }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $item->name }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $item->category->name }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $item->unit->name }}
+                                                        </td>
+                                                        <td>
+                                                            {{ $item->brand->name }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -261,7 +323,8 @@
                     </div>
                     <div class="card-body">
                         <div class="tab-content p-0">
-                            <div class="chart tab-pane active" id="pie-chart" style="position: relative; height: 28rem;">
+                            <div class="chart tab-pane active" id="pie-chart"
+                                style="position: relative; height: 31.3rem;">
                                 <canvas id="stok-barang-today"></canvas>
                             </div>
                         </div>
@@ -270,31 +333,31 @@
             </div>
             <!-- <div class="col-sm-12 col-lg-6">
 
-                                              <div class="card">
-                                                <div class="card-header">
-                                                    <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
-                                                </div>
-                                                  <div class="card-body">
-                                                    <div class="row  d-flex justify-content-start align-items-center">
-                                                      <div class="col-6">
-                                                        <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
-                                                        <div class="input-group mb-3">
-                                                          <div class="w-100 mb-3 d-flex align-items-center py-3">
-                                                            <input type="month" name="month-income" id="month-income" class="form-control w-50">
-                                                            <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
-                                                          </div>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                    <div class="tab-content p-0">
-                                                      <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
-                                                        <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                </div>
+                                                          <div class="card">
+                                                            <div class="card-header">
+                                                                <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
+                                                            </div>
+                                                              <div class="card-body">
+                                                                <div class="row  d-flex justify-content-start align-items-center">
+                                                                  <div class="col-6">
+                                                                    <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
+                                                                    <div class="input-group mb-3">
+                                                                      <div class="w-100 mb-3 d-flex align-items-center py-3">
+                                                                        <input type="month" name="month-income" id="month-income" class="form-control w-50">
+                                                                        <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
+                                                                      </div>
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                                                                <div class="tab-content p-0">
+                                                                  <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
+                                                                    <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
+                                                                  </div>
+                                                                </div>
+                                                              </div>
+                                                            </div>
 
-                                            </div> -->
+                                                        </div> -->
         </div>
     </div>
 
@@ -381,6 +444,7 @@
                                 yAxes: [{
                                     ticks: {
                                         beginAtZero: true,
+                                        stepSize: 20,
                                         callback: function(value, index, values) {
                                             return Math.floor(value);
                                         }
