@@ -10,6 +10,7 @@
   "types of goods": "Jenis Barang",
   "unit of goods": "Satuan Barang",
   "brand of goods": "Merk Barang",
+  "supplier of goods": "Pemasok Barang",
   "outbound transaction": "Transaksi Keluar",
   "transaction": "transaksi",
   "customer": "pelanggan",
@@ -36,6 +37,7 @@
   "username": "nama panggilan",
   "password": "kata sandi",
   "select brand": "pilih merk",
+  "select supplier": "pilih pemasok",
   "select unit": "pilih satuan",
   "role": "peran",
   "select category": "pilih jenis",
@@ -83,7 +85,7 @@
   "data failed to delete":"data gagal dihapus",
   "data deleted successfully":"data berhasil dihapus",
   "incorrect username or password":"username atau kata sandi salah",
-  "login successful":"login berhasil",
+  "welcome, login successful !!":"Selamat Datang, login berhasil !!",
   "insufficient stock this month":"stok tidak mencukupi bulan ini",
   "start date":"tanggal mulai",
   "end date":"tanggal akhir",
@@ -139,6 +141,6 @@
   "Login Failed !": "Login Gagal !",
   "no transactions this month !" : "tidak ada transaksi pada bulan ini !",
   "List of Low Stock of Goods" : "Daftar Stok Barang yang Menipis",
-  "List of Transaction In by User": "Daftar Transaksi Masuk berdasarkan User",
-  "action":"Aksi"
+  "List of Incoming Transactions by Today's Users": "Daftar Transaksi Masuk Berdasarkan Pengguna Hari ini",
+  "action": "aksi"
 }

@@ -95,6 +95,7 @@
                                                         <th class="border-bottom-0">{{ __('type') }}</th>
                                                         <th class="border-bottom-0">{{ __('unit') }}</th>
                                                         <th class="border-bottom-0">{{ __('brand') }}</th>
+                                                        <th class="border-bottom-0">{{ __('supplier') }}</th>
                                                         <th class="border-bottom-0">{{ __('stock amount') }}</th>
                                                         {{-- <th class="border-bottom-0">{{__('price')}}</th> --}}
                                                         <th class="border-bottom-0" width="1%">{{ __('action') }}
@@ -147,7 +148,7 @@
                                                     </label>
                                                     <select name="supplier" id="supplier" class="form-control">
                                                         <option selected value="">--
-                                                            {{ __('choose a supplier') }} --</option>
+                                                            {{ __('select supplier') }} --</option>
                                                         @foreach ($suppliers as $supplier)
                                                             <option value="{{ $supplier->id }}">{{ $supplier->name }}
                                                             </option>
@@ -241,7 +242,8 @@
                                                         <th class="border-bottom-0">{{ __('brand') }}</th>
                                                         <th class="border-bottom-0">{{ __('item') }}</th>
                                                         <th class="border-bottom-0">{{ __('incoming amount') }}</th>
-                                                        <th class="border-bottom-0" width="1%">{{ __('action') }}</th>
+                                                        <th class="border-bottom-0" width="1%">{{ __('action') }}
+                                                        </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -461,7 +463,15 @@
                 lengthChange: true,
                 processing: true,
                 serverSide: true,
-                ajax: `{{ route('barang.list') }}`,
+                // ajax: `{{ route('barang.list') }}`,
+                // ajax: `{{ route('barang.list.in') }}`,
+                ajax: {
+                    url: `{{ route('barang.list.in') }}`,
+                    data: function(d) {
+                        let supplierId = $("select[name='supplier']").val();
+                        d.supplier_id = supplierId;
+                    }
+                },
                 columns: [{
                         "data": null,
                         "sortable": false,
@@ -492,6 +502,10 @@
                         name: 'brand_name'
                     },
                     {
+                        data: 'supplier_name',
+                        name: 'supplier_name'
+                    },
+                    {
                         data: 'total',
                         name: 'total'
                     },
@@ -509,6 +523,31 @@
 
         $(document).ready(function() {
             load();
+
+            $("#barang").prop('disabled', true);
+            $("#cari-barang").prop('disabled', true);
+
+            $("select[name='supplier']").on('change', function() {
+                let supplierId = $(this).val();
+                if (supplierId) {
+                    $("#barang").prop('disabled', false);
+                    $("#cari-barang").prop('disabled', false);
+                } else {
+                    $("#barang").prop('disabled', true);
+                    $("#cari-barang").prop('disabled', true);
+                }
+
+                $('#data-barang').DataTable().ajax.reload();
+            });
+
+            $(document).on('click', '#barang', function() {
+                let supplierId = $("select[name='supplier']").val();
+                if (!supplierId) {
+                    alert('Please select a supplier before proceeding.');
+                    return;
+                }
+            });
+
 
             // pilih data barang
             $(document).on("click", ".pilih-data-barang", function() {
@@ -528,6 +567,8 @@
                         $("input[name='nama_barang']").val(data.name);
                         $("input[name='satuan_barang']").val(data.unit_name);
                         $("input[name='jenis_barang']").val(data.category_name);
+                        // $("input[name='brand_barang']").val(data.brand_name);
+                        // $("select[name='supplier'").val(data.supplier_id).trigger('change');
                         $('#modal-barang').modal('hide');
                         $('#TambahData').modal('show');
                     }
@@ -551,6 +592,8 @@
                     $("input[name='nama_barang']").val(data.name);
                     $("input[name='satuan_barang']").val(data.unit_name);
                     $("input[name='jenis_barang']").val(data.category_name);
+                    // $("input[name='brand_barang']").val(data.brand_name);
+                    // $("select[name='supplier']").val(data.supplier_name);
                 }
             });
 
@@ -673,7 +716,6 @@
 
             $('#supplier').select2({
                 theme: 'bootstrap4',
-                placeholder: "-- Pilih Pemasok--",
                 allowClear: true,
                 minimumInputLength: 0 // Set this to enable search after 1 character
             });
@@ -743,7 +785,7 @@
             $('#data-approve').DataTable({
                 lengthChange: true,
                 autoWidth: false,
-                responsive:true,
+                responsive: true,
                 language: languageSettings,
                 // language: {
                 //     decimal: "",
@@ -871,8 +913,6 @@
             });
 
         });
-
-
 
         $(document).on("click", ".ubah", function() {
             $("#modal-button").click();

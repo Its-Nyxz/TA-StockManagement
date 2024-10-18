@@ -65,6 +65,15 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="supplier" class="form-label">{{ __("supplier of goods") }} <span class="text-danger">*</span></label>
+                                        <select name="supplier" id="supplier" class="form-control">
+                                            <option selected value="">--{{ __('select supplier') }} --</option>
+                                            @foreach ($supplier as $sp)
+                                                <option value="{{$sp->id}}">{{$sp->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                     <div class="form-group item-count" id="item-count">
                                         <label for="harga" class="form-label">{{ __("initial amount") }} <span class="text-danger">*</span></label>
                                         <input type="number" value="0" name="jumlah" class="form-control">
@@ -102,6 +111,7 @@
                                     <th class="border-bottom-0">{{ __("type") }}</th>
                                     <th class="border-bottom-0">{{ __("unit") }}</th>
                                     <th class="border-bottom-0">{{ __("brand") }}</th>
+                                    <th class="border-bottom-0">{{ __("supplier") }}</th>
                                     <th class="border-bottom-0">{{ __("initial stock") }}</th>
                                     <!-- <th class="border-bottom-0">{{ __("price") }}</th> -->
                                     @if(Auth::user()->role->name != 'staff')
@@ -244,6 +254,10 @@
                     name:'brand_name'
                 },
                 {
+                    data:'supplier_name',
+                    name:'supplier_name'
+                },
+                {
                     data:'quantity',
                     name:'quantity'
                 },
@@ -268,6 +282,7 @@
         const category_id = $("select[name='jenisbarang']").val();
         const unit_id = $("select[name='satuan']").val();
         const brand_id = $("select[name='merk']").val();
+        const supplier_id = $("select[name='supplier']").val();
         // const price = $("input[name='harga']").val();
         // return console.log({name,code,category_id,unit_id,brand_id,price,quantity});
         const Form = new FormData();
@@ -277,12 +292,13 @@
         Form.append('category_id', category_id);
         Form.append('unit_id', unit_id);
         Form.append('brand_id', brand_id);
+        Form.append('supplier_id', supplier_id);
         // Form.append('price', price);
-        if(name.length == 0){
+        if(name.length == 0 || category_id.length == 0 || unit_id.length == 0 || brand_id.length == 0 || supplier_id.length == 0){
             return Swal.fire({
                 position: "center",
                 icon: "warning",
-                title: "nama tidak boleh kosong !",
+                title: "Bertanda * Tidak Boleh Kosong !",
                 showConfirmButton: false,
                 imer: 1500
             });
@@ -318,6 +334,7 @@
                     $("select[name='jenisbarang']").val(null);
                     $("select[name='satuan']").val(null);
                     $("select[name='merk']").val(null);
+                    $("select[name='supplier']").val(null);
                     $("input[name='jumlah']").val(0);
                     // $("input[name='harga']").val(null);
                     $('#data-tabel').DataTable().ajax.reload();
@@ -337,6 +354,7 @@
         const category_id = $("select[name='jenisbarang']").val();
         const unit_id = $("select[name='satuan']").val();
         const brand_id = $("select[name='merk']").val();
+        const supplier_id = $("select[name='supplier']").val();
         // const price = $("input[name='harga']").val();
         const quantity = $("input[name='jumlah']").val();
         // return console.log({name,code,category_id,unit_id,brand_id,price,quantity});
@@ -348,6 +366,7 @@
         Form.append('category_id', category_id);
         Form.append('unit_id', unit_id);
         Form.append('brand_id', brand_id);
+        Form.append('supplier_id', supplier_id);
         Form.append('quantity',quantity);
         // Form.append('price', price);
         $.ajax({
@@ -373,6 +392,7 @@
                     $("select[name='jenisbarang']").val(null);
                     $("select[name='satuan']").val(null);
                     $("select[name='merk']").val(null);
+                    $("select[name='supplier']").val(null);
                     $("input[name='jumlah']").val(0);
                     // $("input[name='harga']").val(null);
                     $('#data-tabel').DataTable().ajax.reload();
@@ -389,9 +409,8 @@
         $("#harga").on("input",harga);
         isi();
 
-        $('#jenisbarang, #satuan, #merk').select2({
+        $('#jenisbarang, #satuan, #merk, #supplier').select2({
             theme: 'bootstrap4',
-            placeholder: "-- Pilih --",
             allowClear: true,
             minimumInputLength: 0  // Set this to enable search after 1 character
         });
@@ -414,7 +433,7 @@
             // $("select[name='jenisbarang']").val(null);
             // $("select[name='satuan']").val(null);
             // $("select[name='merk']").val(null);
-            $("select[name='jenisbarang'], select[name='satuan'], select[name='merk']").val(null).trigger('change'); // Reset Select2
+            $("select[name='jenisbarang'], select[name='satuan'], select[name='merk'], select[name='supplier']").val(null).trigger('change'); // Reset Select2
             $("input[name='jumlah']").val(0);
             // $("input[name='harga']").val(null);
             $("#simpan").data('action', 'simpan');
@@ -449,6 +468,7 @@
                 $("select[name='jenisbarang']").val(data.category_id).trigger('change'); // Set nilai dan trigger
                 $("select[name='satuan']").val(data.unit_id).trigger('change'); // Set nilai dan trigger
                 $("select[name='merk']").val(data.brand_id).trigger('change'); // Set nilai dan trigger
+                $("select[name='supplier']").val(data.supplier_id).trigger('change'); // Set nilai dan trigger
                 $("input[name='jumlah']").val(data.quantity);
                 // $("input[name='harga']").val(data.price);
             }

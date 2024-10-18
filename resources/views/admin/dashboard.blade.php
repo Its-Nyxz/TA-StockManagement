@@ -2,6 +2,11 @@
 @section('title', 'Dashboard')
 @section('content')
     <div class="container-fluid">
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-alert">
+                {{ session('success') }}
+            </div>
+        @endif
         <!-- Small boxes (Stat box) -->
         <div class="row">
 
@@ -10,7 +15,7 @@
                 @if (Auth::user()->role->name !== 'staff')
                     <div class="small-box bg-pink">
                     @else
-                        <div class="small-box bg-purple">
+                        <div class="small-box bg-maroon ">
                 @endif
                 <div class="inner">
                     <h3>{{ $product_count }}</h3>
@@ -111,16 +116,16 @@
         <!-- <div class="col-lg-3 col-6"> -->
         <!-- small box -->
         <!-- <div class="small-box bg-purple">
-                                                                                    <div class="inner">
-                                                                                        <h3>{{ $customer }}</h3>
+                                                                                                    <div class="inner">
+                                                                                                        <h3>{{ $customer }}</h3>
 
-                                                                                        <p class="font-weight-bold">{{ __('customer') }}</p>
-                                                                                    </div>
-                                                                                    <div class="icon">
-                                                                                        <i class="ion ion-android-person"></i>
-                                                                                    </div>
-                                                                                    <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
-                                                                                    </div> -->
+                                                                                                        <p class="font-weight-bold">{{ __('customer') }}</p>
+                                                                                                    </div>
+                                                                                                    <div class="icon">
+                                                                                                        <i class="ion ion-android-person"></i>
+                                                                                                    </div>
+                                                                                                    <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
+                                                                                                    </div> -->
         <!-- </div> -->
 
         {{-- @if (Auth::user()->role->name != 'staff')
@@ -146,7 +151,7 @@
         @if (Auth::user()->role->name != 'staff')
             <div class="col-lg-3 col-6">
                 <!-- small box -->
-                <div class="small-box bg-teal">
+                <div class="small-box bg-maroon">
                     <div class="inner" style="color:white !important;">
                         <h3>{{ count($approvals) }}</h3>
 
@@ -183,7 +188,7 @@
         @if (Auth::user()->role->name != 'staff')
             <div class="col-lg-3 col-6">
                 <!-- small box -->
-                <div class="small-box bg-olive">
+                <div class="small-box bg-teal">
                     <div class="inner">
                         <h3>{{ $supplier }}</h3>
 
@@ -200,7 +205,7 @@
 
             <div class="col-lg-3 col-6">
                 <!-- small box -->
-                <div class="small-box bg-maroon">
+                <div class="small-box bg-olive">
                     <!-- style="color:white !important;" -->
                     <div class="inner" style="color:white !important;">
                         <h3>{{ $staffCount }}</h3>
@@ -234,7 +239,8 @@
                                     {{-- <label for="month" class="form-label text-capitalize">{{ __('select month') }}</label> --}}
                                     <div class="input-group">
                                         <div class="w-100 d-flex mb-2 align-items-center">
-                                            <input type="month" name="month" id="month" class="form-control w-50">
+                                            <input type="month" name="month" id="month"
+                                                class="form-control w-50">
                                             <button id="filter" class="btn d-flex btn-primary mx-2 text-capitalize"><i
                                                     class="fas fa-filter"></i>{{ __('Filter') }}</button>
                                         </div>
@@ -328,7 +334,7 @@
                         <div class="card col-12">
                             <div class="card-header">
                                 <h1 class="card-title text-lg font-weight-bold text-uppercase">
-                                    {{ __('List of Transaction In by User') }}</h1>
+                                    {{ __("List of Incoming Transactions by Today's Users") }}</h1>
                                 <div class="row" style="position: relative">
                                     <div class="d-flex justify-content-end w-100">
                                         <a href="{{ route('transaksi.masuk') }}"
@@ -416,31 +422,31 @@
             </div>
             <!-- <div class="col-sm-12 col-lg-6">
 
-                                                                          <div class="card">
-                                                                            <div class="card-header">
-                                                                                <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
-                                                                            </div>
-                                                                              <div class="card-body">
-                                                                                <div class="row  d-flex justify-content-start align-items-center">
-                                                                                  <div class="col-6">
-                                                                                    <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
-                                                                                    <div class="input-group mb-3">
-                                                                                      <div class="w-100 mb-3 d-flex align-items-center py-3">
-                                                                                        <input type="month" name="month-income" id="month-income" class="form-control w-50">
-                                                                                        <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
-                                                                                      </div>
-                                                                                    </div>
-                                                                                  </div>
-                                                                                </div>
-                                                                                <div class="tab-content p-0">
-                                                                                  <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
-                                                                                    <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
-                                                                                  </div>
-                                                                                </div>
-                                                                              </div>
-                                                                            </div>
+                                                                                          <div class="card">
+                                                                                            <div class="card-header">
+                                                                                                <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
+                                                                                            </div>
+                                                                                              <div class="card-body">
+                                                                                                <div class="row  d-flex justify-content-start align-items-center">
+                                                                                                  <div class="col-6">
+                                                                                                    <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
+                                                                                                    <div class="input-group mb-3">
+                                                                                                      <div class="w-100 mb-3 d-flex align-items-center py-3">
+                                                                                                        <input type="month" name="month-income" id="month-income" class="form-control w-50">
+                                                                                                        <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
+                                                                                                      </div>
+                                                                                                    </div>
+                                                                                                  </div>
+                                                                                                </div>
+                                                                                                <div class="tab-content p-0">
+                                                                                                  <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
+                                                                                                    <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
+                                                                                                  </div>
+                                                                                                </div>
+                                                                                              </div>
+                                                                                            </div>
 
-                                                                        </div> -->
+                                                                                        </div> -->
         </div>
     </div>
 
@@ -725,6 +731,19 @@
             };
 
             renderChart();
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const alert = document.getElementById('success-alert');
+            if (alert) {
+                setTimeout(function() {
+                    alert.style.opacity = '0'; 
+                    setTimeout(function() {
+                        alert.style.display = 'none';
+                    }, 500);
+                }, 1500);
+            }
         });
     </script>
 

@@ -15,7 +15,7 @@ class Item extends Model
         'name','image','code',
         'price','quantity','category_id','brand_id',
         'unit_id',
-        'active'
+        'active','supplier_id'
     ];
 
     public function category(): BelongsTo
@@ -49,4 +49,8 @@ class Item extends Model
         return $this -> hasMany(GoodsBack::class);
     }
 
+    public function supplier(): BelongsTo
+    {
+        return $this -> belongsTo(Supplier::class);
+    }
 }

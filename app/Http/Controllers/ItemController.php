@@ -11,6 +11,7 @@ use App\Models\Item;
 use App\Models\Category;
 use App\Models\Unit;
 use App\Models\Brand;
+use App\Models\Supplier;
 
 class ItemController extends Controller
 {
@@ -19,11 +20,12 @@ class ItemController extends Controller
         $jenisbarang = Category::all();
         $satuan = Unit::all();
         $merk = Brand::all();
-        return view('admin.master.barang.index',compact('jenisbarang','satuan','merk'));
+        $supplier = Supplier::all();
+        return view('admin.master.barang.index',compact('jenisbarang','satuan','merk','supplier'));
     }
     public function list(Request $request): JsonResponse 
     {
-        $items = Item::with('category','unit','brand','goodsIns','goodsOuts','goodsBacks')->latest()->get();
+        $items = Item::with('category','unit','brand','supplier','goodsIns','goodsOuts','goodsBacks')->latest()->get();
         if($request -> ajax()){
             return DataTables::of($items)
             // ->addColumn('img',function($data){
@@ -47,6 +49,9 @@ class ItemController extends Controller
             })
             -> addColumn('brand_name',function($data){
                 return $data -> brand -> name;
+            })
+            -> addColumn('supplier_name',function($data){
+                return $data -> supplier -> name;
             })
             ->addColumn("total", function ($data) {
                 $totalQuantityIn = $data->goodsIns->sum('quantity');
@@ -82,6 +87,7 @@ class ItemController extends Controller
             'category_id'=>$request->category_id,
             'brand_id'=>$request->brand_id,
             'unit_id'=>$request->unit_id,
+            'supplier_id'=>$request->supplier_id,
         ];
         if ($request->file('image') != null) {
             $image = $request->file('image');
@@ -98,9 +104,11 @@ class ItemController extends Controller
     public function detail(Request $request): JsonResponse
     {
         $id = $request -> id;
-        $data = Item::with('category','unit','brand')->find($id);
+        $data = Item::with('category','unit','brand','supplier')->find($id);
         $data ['category_name'] = $data -> category -> name;
         $data ['unit_name'] = $data -> unit -> name;
+        // $data ['brand_name'] = $data -> brand -> name;
+        // $data ['supplier_name'] = $data -> supplier -> name;
         return response()->json(
             ["data"=>$data]
         )->setStatusCode(200);
@@ -109,9 +117,11 @@ class ItemController extends Controller
     public function detailByCode(Request $request): JsonResponse
     {
         $code = $request->code;
-        $data = Item::with('category','unit','brand')->where("code",$code)->first();
+        $data = Item::with('category','unit','brand','supplier')->where("code",$code)->first();
         $data ['category_name'] = $data -> category -> name;
         $data ['unit_name'] = $data -> unit -> name;
+        // $data ['brand_name'] = $data -> brand -> name;
+        // $data ['supplier_name'] = $data -> supplier -> name;
         return response()->json(
             ["data"=>$data]
         )->setStatusCode(200);
@@ -128,7 +138,8 @@ class ItemController extends Controller
             'quantity'=>$request->quantity,
             'category_id'=>$request->category_id,
             'brand_id'=>$request->brand_id,
-            'unit_id'=>$request->unit_id
+            'unit_id'=>$request->unit_id,
+            'supplier_id'=>$request->supplier_id
         ];
         if ($request->file('image') != null) {
             Storage::delete('public/barang/'.$item->image);

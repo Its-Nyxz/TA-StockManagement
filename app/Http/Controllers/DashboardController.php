@@ -16,7 +16,7 @@ use App\Models\GoodsOut;
 use App\Models\GoodsBack;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
-
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -52,7 +52,7 @@ class DashboardController extends Controller
         if (Auth::user()->role->id > 2) {
             $get_goodsIns->where('user_id', Auth::user()->id);
         }; 
-        $get_goodsIns->where('status','!=','2');
+        $get_goodsIns->where('status','!=','2')->whereDate('date_received',Carbon::now());
         $get_goodsIns = $get_goodsIns->latest()->get();
         return view('admin.dashboard', compact(
             'product_count',

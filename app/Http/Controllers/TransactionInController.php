@@ -162,31 +162,78 @@ class TransactionInController extends Controller
 
     public function listIn(Request $request): JsonResponse
     {
-        $items = Item::with('category', 'unit', 'brand')->where('active', 'true')->latest()->get();
-        if ($request->ajax()) {
+        // $items = Item::with('category', 'unit', 'brand')->where('active', 'false')->latest()->get();
+        // if ($request->ajax()) {
+        //     return DataTables::of($items)
+        //         ->addColumn('img', function ($data) {
+        //             if (empty($data->image)) {
+        //                 return "<img src='" . asset('default.png') . "' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
+        //             }
+        //             return "<img src='" . asset('storage/barang/' . $data->image) . "' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
+        //         })
+        //         ->addColumn('category_name', function ($data) {
+        //             return $data->category->name;
+        //         })
+        //         ->addColumn('unit_name', function ($data) {
+        //             return $data->unit->name;
+        //         })
+        //         ->addColumn('brand_name', function ($data) {
+        //             return $data->brand->name;
+        //         })
+        //         ->addColumn('tindakan', function ($data) {
+        //             $button = "<button class='ubah btn btn-success m-1' id='" . $data->id . "'>" . __("edit") . "</button>";
+        //             $button .= "<button class='hapus btn btn-danger m-1' id='" . $data->id . "'>" . __("delete") . "</button>";
+        //             return $button;
+        //         })
+        //         ->rawColumns(['img', 'tindakan'])
+        //         ->make(true);
+        // }
+
+        $items = Item::with('category','unit','brand','supplier','goodsIns','goodsOuts','goodsBacks')->where('supplier_id',$request->supplier_id)->latest()->get();
+        // dd($items);
+        if($request -> ajax()){
             return DataTables::of($items)
-                ->addColumn('img', function ($data) {
-                    if (empty($data->image)) {
-                        return "<img src='" . asset('default.png') . "' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
-                    }
-                    return "<img src='" . asset('storage/barang/' . $data->image) . "' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
-                })
-                ->addColumn('category_name', function ($data) {
-                    return $data->category->name;
-                })
-                ->addColumn('unit_name', function ($data) {
-                    return $data->unit->name;
-                })
-                ->addColumn('brand_name', function ($data) {
-                    return $data->brand->name;
-                })
-                ->addColumn('tindakan', function ($data) {
-                    $button = "<button class='ubah btn btn-success m-1' id='" . $data->id . "'>" . __("edit") . "</button>";
-                    $button .= "<button class='hapus btn btn-danger m-1' id='" . $data->id . "'>" . __("delete") . "</button>";
+            ->addColumn('img', function($data) {
+                $imageUrl = empty($data->image) 
+                    ? asset('default.png') 
+                    : asset('storage/barang/'.$data->image);
+            
+                return "<img src='".$imageUrl."' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
+            })
+            -> addColumn('category_name',function($data){
+                return $data->category->name;
+            })
+            -> addColumn('unit_name',function($data){
+                return $data->unit->name;
+            })
+            -> addColumn('brand_name',function($data){
+                return $data -> brand -> name;
+            })
+            -> addColumn('supplier_name',function($data){
+                return $data -> supplier -> name;
+            })
+            ->addColumn("total", function ($data) {
+                $totalQuantityIn = $data->goodsIns->sum('quantity');
+                $totalQuantityOut = $data->goodsOuts->sum('quantity');
+                $totalQuantityRetur = $data->goodsBacks->sum('quantity');
+                $item = Item::with("unit")->find($data -> id);
+                $result = $data->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur ."/". $item -> unit -> name;
+                $result = max(0, $result);
+                if($result == 0){
+                    return $result;
+                }
+                return $result;
+            })
+            ->rawColumns(['total'])
+
+            -> addColumn('tindakan',function($data){
+                    $button = "<button class='ubah btn btn-success m-1' id='".$data->id."'><i class='fas fa-pen m-1'></i>".__("edit")."</button>";
+                    $button .= "<button class='hapus btn btn-danger m-1' id='".$data->id."'><i class='fas fa-trash m-1'></i>".__("delete")."</button>";
                     return $button;
-                })
-                ->rawColumns(['img', 'tindakan'])
-                ->make(true);
+            })
+            ->rawColumns(['img','tindakan'])
+            -> make(true);
+
         }
     }
 
