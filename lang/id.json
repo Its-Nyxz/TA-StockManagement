@@ -76,8 +76,8 @@
   "address":"alamat",
   "email":"surel",
   "website":"situs web",
-  "delete":"Hapus",
-  "edit":"Ubah",
+  "Delete":"Hapus",
+  "Edit":"Ubah",
   "failed to save":"gagal menyimpan",
   "saved successfully":"berhasil disimpan",
   "data failed to change":"data gagal diubah",
@@ -140,7 +140,9 @@
   "Password Can't Empty": "Password Tidak Boleh Kosong",
   "Login Failed !": "Login Gagal !",
   "no transactions this month !" : "tidak ada transaksi pada bulan ini !",
-  "List of Low Stock of Goods" : "Daftar Stok Barang yang Menipis",
+  "Low Stock List (10-50)" : "Daftar Stok Barang Rendah (10-50)",
   "List of Incoming Transactions by Today's Users": "Daftar Transaksi Masuk Berdasarkan Pengguna Hari ini",
-  "action": "aksi"
+  "action": "aksi",
+  "choose supplier first": "pilih pemasok dulu",
+  "variant name": "Nama Variant"
 }

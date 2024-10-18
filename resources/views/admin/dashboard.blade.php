@@ -264,7 +264,7 @@
                         <div class="card col-12">
                             <div class="card-header">
                                 <h1 class="card-title text-lg font-weight-bold text-uppercase">
-                                    {{ __('List of Low Stock of Goods') }}</h1>
+                                    {{ __('Low Stock List (10-50)') }}</h1>
                                 <div class="row" style="position: relative">
                                     <div class="d-flex justify-content-end w-100">
                                         <a href="{{ route('laporan.stok') }}"
@@ -290,6 +290,7 @@
                                                         <th class="border-bottom-0">{{ __('type') }}</th>
                                                         <th class="border-bottom-0">{{ __('unit') }}</th>
                                                         <th class="border-bottom-0">{{ __('brand') }}</th>
+                                                        <th class="border-bottom-0">{{ __('supplier') }}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -319,6 +320,9 @@
                                                             </td>
                                                             <td>
                                                                 {{ $item->brand->name }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $item->supplier->name }}
                                                             </td>
                                                         </tr>
                                                     @endforeach

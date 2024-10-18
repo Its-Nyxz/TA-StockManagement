@@ -162,7 +162,8 @@
                                                     <label for="kode_barang" class="form-label">{{ __('item code') }}
                                                         <span class="text-danger">*</span></label>
                                                     <div class="input-group">
-                                                        <input type="text" name="kode_barang" class="form-control">
+                                                        <input type="text" name="kode_barang" id="kode_barang" class="form-control"
+                                                            placeholder="{{ __('choose supplier first') }} ">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-primary" type="button"
                                                                 id="cari-barang"><i class="fas fa-search"></i></button>
@@ -421,7 +422,6 @@
                         </div>
                     </div>
 
-
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="data-tabel" width="100%"
@@ -459,10 +459,67 @@
         function pilih() {}
 
         function load() {
+
+            const langID = {
+                decimal: "",
+                searchPlaceholder: "Cari Data",
+                emptyTable: "Tabel kosong",
+                info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
+                infoFiltered: "(difilter dari _MAX_ total data)",
+                infoPostFix: "",
+                thousands: ".",
+                lengthMenu: "Tampilkan _MENU_ data",
+                loadingRecords: "Memuat...",
+                processing: "Sedang memproses...",
+                search: "Cari:",
+                zeroRecords: "Data tidak ditemukan",
+                paginate: {
+                    first: "<<",
+                    last: ">>",
+                    next: ">",
+                    previous: "<",
+                },
+                aria: {
+                    orderable: "Urutkan kolom ini",
+                    orderableReverse: "Urutkan kolom ini terbalik",
+                },
+            };
+
+            const langEN = {
+                decimal: "",
+                searchPlaceholder: "Search Data",
+                emptyTable: "No data available",
+                info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                infoEmpty: "Showing 0 to 0 of 0 entries",
+                infoFiltered: "(filtered from _MAX_ total entries)",
+                infoPostFix: "",
+                thousands: ",",
+                lengthMenu: "Show _MENU_ entries",
+                loadingRecords: "Loading...",
+                processing: "Processing...",
+                search: "Search:",
+                zeroRecords: "No matching records found",
+                paginate: {
+                    first: "<<",
+                    last: ">>",
+                    next: ">",
+                    previous: "<",
+                },
+                aria: {
+                    orderable: "Order by this column",
+                    orderableReverse: "Reverse order this column",
+                },
+            };
+
+            const currentLang = $('html').attr('lang');
+            const languageSettings = currentLang === 'id' ? langID : langEN;
+
             $('#data-barang').DataTable({
                 lengthChange: true,
                 processing: true,
                 serverSide: true,
+                language:languageSettings,
                 // ajax: `{{ route('barang.list') }}`,
                 // ajax: `{{ route('barang.list.in') }}`,
                 ajax: {
@@ -524,21 +581,26 @@
         $(document).ready(function() {
             load();
 
-            $("#barang").prop('disabled', true);
-            $("#cari-barang").prop('disabled', true);
+            const barang = document.getElementById('barang');
+            const cari_barang = document.getElementById('cari-barang');
+
+            barang.style.display = 'none';
+            cari_barang.style.display = 'none';
 
             $("select[name='supplier']").on('change', function() {
                 let supplierId = $(this).val();
                 if (supplierId) {
-                    $("#barang").prop('disabled', false);
-                    $("#cari-barang").prop('disabled', false);
+                    barang.style.display = 'block';
+                    cari_barang.style.display = 'block';
                 } else {
-                    $("#barang").prop('disabled', true);
-                    $("#cari-barang").prop('disabled', true);
+                    barang.style.display = 'none';
+                    cari_barang.style.display = 'none';
                 }
 
+                $('#kode_barang').removeAttr('placeholder');
+
                 $('#data-barang').DataTable().ajax.reload();
-            });
+            }); 
 
             $(document).on('click', '#barang', function() {
                 let supplierId = $("select[name='supplier']").val();

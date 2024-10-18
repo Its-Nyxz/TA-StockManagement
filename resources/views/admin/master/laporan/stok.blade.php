@@ -23,7 +23,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-4 pt-4">
-                                    <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i class="fas fa-filter m-1"></i>{{ __("filter") }}</button>
+                                    <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i class="fas fa-filter m-1"></i>{{ __("Filter") }}</button>
                                 </div>
                             </div>
                         </div>

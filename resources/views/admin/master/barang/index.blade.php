@@ -107,7 +107,7 @@
                                     <th class="border-bottom-0" width="4%">{{ __("no") }}</th>
                                     <th class="border-bottom-0">{{ __("photo") }}</th>
                                     <th class="border-bottom-0">{{ __("code") }}</th>
-                                    <th class="border-bottom-0">{{ __("name") }}</th>
+                                    <th class="border-bottom-0">{{ __("variant name") }}</th>
                                     <th class="border-bottom-0">{{ __("type") }}</th>
                                     <th class="border-bottom-0">{{ __("unit") }}</th>
                                     <th class="border-bottom-0">{{ __("brand") }}</th>

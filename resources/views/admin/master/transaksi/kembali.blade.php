@@ -123,7 +123,7 @@
                                                     class="form-label">{{ __('choose a supplier') }}<span
                                                         class="text-danger">*</span></label>
                                                 <select name="supplier" id="supplier" class="form-control">
-                                                    <option selected value="-- Pilih Supplier --">--
+                                                    <option selected value="">--
                                                         {{ __('choose a supplier') }} --</option>
                                                     @foreach ($suppliers as $supplier)
                                                         <option value="{{ $supplier->id }}">{{ $supplier->name }}
@@ -141,7 +141,8 @@
                                             <label for="kode_barang" class="form-label">{{ __('item code') }} <span
                                                     class="text-danger">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" name="kode_barang" class="form-control">
+                                                <input type="text" name="kode_barang" id="kode_barang" class="form-control"
+                                                            placeholder="{{ __('choose supplier first') }} ">
                                                 <div class="input-group-append">
                                                     <button class="btn btn-outline-primary" type="button"
                                                         id="cari-barang"><i class="fas fa-search"></i></button>
@@ -306,7 +307,14 @@
                 // responsive: true,
                 serverSide: true,
                 language:languageSettings,
-                ajax: `{{ route('barang.list') }}`,
+                // ajax: `{{ route('barang.list') }}`,
+                ajax: {
+                    url: `{{ route('barang.list.in') }}`,
+                    data: function(d) {
+                        let supplierId = $("select[name='supplier']").val();
+                        d.supplier_id = supplierId;
+                    }
+                },
                 columns: [{
                         "data": null,
                         "sortable": false,
@@ -354,6 +362,35 @@
 
         $(document).ready(function() {
             load();
+
+            const barang = document.getElementById('barang');
+            const cari_barang = document.getElementById('cari-barang');
+
+            barang.style.display = 'none';
+            cari_barang.style.display = 'none';
+
+            $("select[name='supplier']").on('change', function() {
+                let supplierId = $(this).val();
+                if (supplierId) {
+                    barang.style.display = 'block';
+                    cari_barang.style.display = 'block';
+                } else {
+                    barang.style.display = 'none';
+                    cari_barang.style.display = 'none';
+                }
+
+                $('#kode_barang').removeAttr('placeholder');
+
+                $('#data-barang').DataTable().ajax.reload();
+            }); 
+
+            $(document).on('click', '#barang', function() {
+                let supplierId = $("select[name='supplier']").val();
+                if (!supplierId) {
+                    alert('Please select a supplier before proceeding.');
+                    return;
+                }
+            });
 
             // pilih data barang
             $(document).on("click", ".pilih-data-barang", function() {
@@ -545,7 +582,6 @@
 
             $('#supplier').select2({
                 theme: 'bootstrap4',
-                placeholder: "-- Pilih --",
                 allowClear: true,
                 minimumInputLength: 0 // Set this to enable search after 1 character
             });
