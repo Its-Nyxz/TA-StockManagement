@@ -1,4 +1,4 @@
-@extends('layouts.app')
+    @extends('layouts.app')
 @section('title', __("messages.setting-label", ["name" => __("user")]))
 @section('content')
 <x-head-datatable/>

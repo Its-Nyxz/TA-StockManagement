@@ -308,6 +308,7 @@
                                                             </td>
                                                             <td class="text-warning font-weight-bold">
                                                                 {{ $item->quantity + $item->goodsIns->sum('quantity') - $item->goodsOuts->sum('quantity') - $item->goodsBacks->sum('quantity') }}
+                                                                {{ $item->unit->name }} 
                                                             </td>
                                                             <td>
                                                                 {{ $item->name }}
@@ -357,7 +358,7 @@
                                                     <tr>
                                                         <th class="border-bottom-0" width="4%">{{ __('no') }}
                                                         </th>
-                                                        <th class="border-bottom-0">{{ __('date') }}</th>
+                                                        <th class="border-bottom-0">{{ __('name') }}</th>
                                                         <th class="border-bottom-0">{{ __('incoming item code') }}</th>
                                                         <th class="border-bottom-0">{{ __('item code') }}</th>
                                                         <th class="border-bottom-0">{{ __('incoming amount') }}</th>
@@ -374,7 +375,8 @@
                                                                 {{ $loop->iteration }}
                                                             </td>
                                                             <td>
-                                                                {{ \Carbon\Carbon::parse($item->date_received)->format('d F Y') }}
+                                                                {{-- {{ \Carbon\Carbon::parse($item->date_received)->format('d F Y') }} --}}
+                                                                {{ $item->item->name }}
                                                             </td>
                                                             <td>
                                                                 {{ $item->invoice_number }}
@@ -383,7 +385,8 @@
                                                                 {{ $item->item->code }}
                                                             </td>
                                                             <td>
-                                                                {{ $item->quantity }}
+                                                                {{ $item->quantity}}
+                                                                {{  $item->item->unit->name }}
                                                             </td>
                                                             <td>
                                                                 <span

@@ -108,7 +108,7 @@
 
     function simpan(){
             $.ajax({
-                url:`{{route('customer.save')}}`,
+                // url:`{{route('customer.save')}}`,
                 type:"post",
                 contenType:"json",
                 data:{
@@ -141,7 +141,7 @@
 
     function ubah(){
             $.ajax({
-                url:`{{route('customer.update')}}`,
+                // url:`{{route('customer.update')}}`,
                 type:"put",
                 data:{
                     id:$("#id").val(),

@@ -30,17 +30,18 @@
 
         @if (Auth::user()->role->id <= 2)
             <li class="nav-item dropdown d-flex justify-content-center align-items-center">
-            <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown"
+                <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown"
                     role="button">
                     <i class="fas fa-solid fa-envelope"></i>
-                    @if ( count(getLowStockNotifCount()) > 0)
+                    @if (count(getLowStockNotifCount()) > 0)
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            {{  count(getLowStockNotifCount()) }}
+                            {{ count(getLowStockNotifCount()) }}
                         </span>
                     @endif
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <span class="dropdown-header">{{  count(getLowStockNotifCount()) }} {{ __('Low or Empty Stock Notifications') }}</span>
+                    <span class="dropdown-header">{{ count(getLowStockNotifCount()) }}
+                        {{ __('Low or Empty Stock Notifications') }}</span>
                     <div class="dropdown-divider"></div>
                     @foreach (Notification::getLowStockNotifGet() as $stoks)
                         <div class="dropdown-item d-flex justify-content-between mb-2">
@@ -66,7 +67,7 @@
                 <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown"
                     role="button">
                     <i class="fas fa-solid fa-inbox"></i>
-                    @if ( getGoodsInApproval()->count() > 0)
+                    @if (getGoodsInApproval()->count() > 0)
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             {{ getGoodsInApproval()->count() }}
                         </span>
@@ -97,17 +98,18 @@
         <li class="nav-item dropdown" data-toggle="dropdown-navbar">
             <div class="user-panel mt-3 pb-3 mb-3 d-flex justify-content-center align-items-center">
                 <div class="info font-weight-bold" style="text-transform:capitalize;">
-                    <a href="{{ route('settings.profile') }}" class="d-block" style="color:gray !important;"
-                        id="user">{{ Auth::user()->name }}</a>
+                    <a href="{{ route('settings.profile') }}">
+                        <span class="d-block" style="color:gray !important;"
+                            id="user">{{ Auth::user()->name }}</span>
+
                 </div>
                 <div class="image">
-                    <a href="{{ route('settings.profile') }}">
                     <img src="{{ empty(Auth::user()->image) ? asset('user.png') : asset('storage/profile/' . Auth::user()->image) }}"
-                        class="img-circle elevation-2" 
+                        class="img-circle elevation-2"
                         style="width:100% !important;max-width:35px !important;aspect-ratio:1 !important;object-fit:cover !important;"
                         id="img_profile" alt="User Image">
-                    </a>
                 </div>
+                </a>
             </div>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <div class="dropdown-divider"></div>
