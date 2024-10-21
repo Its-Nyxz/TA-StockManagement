@@ -296,4 +296,11 @@ class TransactionInController extends Controller
 
         return response()->json(['success' => false, 'message' => __('Transaction not found.')]);
     }
+
+    public function modal(Request $request)
+{
+    session(['show_modal' => true]);
+
+    return redirect()->route('transaksi.masuk');
+}
 }

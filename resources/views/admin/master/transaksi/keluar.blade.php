@@ -24,16 +24,16 @@
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
-                                            @if (Auth::user()->role->id <= 2)
-                                                <label for="date_start">{{ __('users') }}: </label>
-                                                <select name="inputer" id="inputer" class="form-control w-100">
-                                                    <option value="">-- {{ __('select user responsible') }} --
-                                                    </option>
-                                                    @foreach ($users as $user)
-                                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            @endif
+                                            @can('super&admin')
+                                            <label for="date_start">{{ __('users') }}: </label>
+                                            <select name="inputer" id="inputer" class="form-control w-100">
+                                                <option value="">-- {{ __('select user responsible') }} --
+                                                </option>
+                                                @foreach ($users as $user)
+                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @endcan
                                         </div>
                                     </div>
                                     <div class="text-end col-sm-3 pt-4">
@@ -437,7 +437,7 @@
                 .then(() => {
                     setTimeout(function() {
                         location.reload(); // Reloads the page after 1500ms
-                    }, 1500);
+                    }, 1000);
                 });
         }
 
@@ -488,7 +488,7 @@
             }).then(() => {
                 setTimeout(function() {
                     location.reload(); // Reloads the page after 1500ms
-                }, 1500);
+                }, 1000);
             });
         }
 

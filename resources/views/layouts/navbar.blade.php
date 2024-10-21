@@ -28,7 +28,7 @@
             </a>
         </li>
 
-        @if (Auth::user()->role->id <= 2)
+        @can('super&admin')
             <li class="nav-item dropdown d-flex justify-content-center align-items-center">
                 <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown"
                     role="button">
@@ -37,8 +37,8 @@
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             {{ count(getLowStockNotifCount()) }}
                         </span>
-                    @endif
-                </a>
+                        @endif
+                    </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     <span class="dropdown-header">{{ count(getLowStockNotifCount()) }}
                         {{ __('Low or Empty Stock Notifications') }}</span>
@@ -60,9 +60,6 @@
                         class="dropdown-item dropdown-footer">{{ __('See Report Stok') }}</a>
                 </div>
             </li>
-        @endif
-
-        @if (Auth::user()->role->id <= 2)
             <li class="nav-item dropdown d-flex justify-content-center align-items-center">
                 <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown"
                     role="button">
@@ -88,11 +85,12 @@
                         </div>
                         <div class="dropdown-divider"></div>
                     @endforeach
-                    <a href="{{ route('transaksi.masuk') }}"
+                    <a href="{{  route('transaksi.masuk.approval') }}"
                         class="dropdown-item dropdown-footer">{{ __('See All Approvals') }}</a>
                 </div>
             </li>
-        @endif
+            @endcan
+
 
 
         <li class="nav-item dropdown" data-toggle="dropdown-navbar">

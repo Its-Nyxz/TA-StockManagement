@@ -8,9 +8,10 @@
             <div class="card w-100">
                 <div class="card-header row">
                     <div class="d-flex justify-content-end align-items-center w-100">
-                        @if (Auth::user()->role->id == '1')
+                        @can('super')    
                         <button class="btn btn-success" type="button"  data-toggle="modal" data-target="#TambahData" id="modal-button"><i class="fas fa-plus m-1"></i>{{ __("add data") }}</button>
-                        @endif
+                        @endcan
+                        
                     </div>
                 </div>
 
@@ -39,7 +40,7 @@
                                 <label for="password">{{ __("password") }}</label>
                                 <input type="password" class="form-control" id="password"></textarea>
                             </div>
-                            @if (Auth::user()->role->id == '1')
+                            @can('super')    
                             <div class="form-group mb-3">
                                 <label for="role">{{ __("role") }}</label>
                                 <select class="form-control" id="role">
@@ -49,7 +50,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            @endif
+                            @endcan
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" id="kembali">{{ __("back") }}</button>

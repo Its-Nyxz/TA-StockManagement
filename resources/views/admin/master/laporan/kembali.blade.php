@@ -213,14 +213,57 @@
                 ],
                 buttons: [{
                         extend: 'excel',
-                        class: 'buttons-excel'
+                        class: 'buttons-excel',
+                        title: function() {
+                            const startDate = $("input[name='start_date']").val();
+                            const endDate = $("input[name='end_date']").val();
+                            const today = new Date().toLocaleDateString('id-ID', {
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric'
+                            });
+                            const title = '{{ __("Return Report") }}';
+                            if (startDate && endDate) {
+                                return `${title} (${startDate}_{{ __("to") }}_${endDate})`;
+                            }
+                            return `${title} (${today})`;
+                        }
                     },
                     {
                         extend: 'print',
-                        class: 'buttons-print'
-                    }, {
+                        class: 'buttons-print',
+                        title: function() {
+                            const startDate = $("input[name='start_date']").val();
+                            const endDate = $("input[name='end_date']").val();
+                            const today = new Date().toLocaleDateString('id-ID', {
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric'
+                            });
+                            const title = '{{ __("Return Report") }}';
+                            if (startDate && endDate) {
+                                return `${title} (${startDate}_{{ __("to") }}_${endDate})`;
+                            }
+                            return `${title} (${today})`;
+                        }
+                    },
+                    {
                         extend: 'pdf',
-                        class: 'buttons-pdf'
+                        class: 'buttons-pdf',
+                        title: function() {
+                            const startDate = $("input[name='start_date']").val();
+                            const endDate = $("input[name='end_date']").val();
+                            const today = new Date().toLocaleDateString('id-ID', {
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric'
+                            });
+                            const title = '{{ __("Return Report") }}';
+                            if (startDate && endDate) {
+                                return `${title} (${startDate}_{{ __("to") }}_${endDate})`;
+                            }
+                            return `${title} (${today})`;
+                        }
                     }
                 ]
             });

@@ -30,7 +30,7 @@
             </div>
 
         </div>
-        @if (Auth::user()->role->name == 'staff')
+        @can('user')
             <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-pink">
@@ -78,10 +78,10 @@
                             class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-        @endif
+        @endcan
 
         {{-- <div class="col-lg-3 col-6">
-                    <!-- small box -->
+                <!-- small box -->
                     <div class="small-box bg-green">
                         <div class="inner">
                             <h3>{{ $goodsin }}</h3>
@@ -116,16 +116,16 @@
         <!-- <div class="col-lg-3 col-6"> -->
         <!-- small box -->
         <!-- <div class="small-box bg-purple">
-                                                                                                    <div class="inner">
-                                                                                                        <h3>{{ $customer }}</h3>
+                                                                                                                <div class="inner">
+                                                                                                                    <h3>{{ $customer }}</h3>
 
-                                                                                                        <p class="font-weight-bold">{{ __('customer') }}</p>
-                                                                                                    </div>
-                                                                                                    <div class="icon">
-                                                                                                        <i class="ion ion-android-person"></i>
-                                                                                                    </div>
-                                                                                                    <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
-                                                                                                    </div> -->
+                                                                                                                    <p class="font-weight-bold">{{ __('customer') }}</p>
+                                                                                                                </div>
+                                                                                                                <div class="icon">
+                                                                                                                    <i class="ion ion-android-person"></i>
+                                                                                                                </div>
+                                                                                                                <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
+                                                                                                                </div> -->
         <!-- </div> -->
 
         {{-- @if (Auth::user()->role->name != 'staff')
@@ -148,7 +148,7 @@
                     </div>
                 @endif --}}
 
-        @if (Auth::user()->role->name != 'staff')
+        @can('super&admin')
             <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-maroon">
@@ -161,31 +161,10 @@
                         <i class="fas fa-clipboard-check"></i>
                     </div>
                     <a href="{{ route('transaksi.masuk') }}" style="color:white !important;"
-                        class="small-box-footer">{{ __('messages.more-info') }} <i
-                            class="fas fa-arrow-circle-right"></i></a>
+                        class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-        @endif
 
-        {{-- @if (Auth::user()->role->name == 'staff')
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-info">
-                        <div class="inner" style="color:white !important;">
-                            <h3>{{ $total_stok }}</h3>
-
-                            <p class="font-weight-bold">{{ __('stock amount') }}</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-solid fa-warehouse"></i>
-                        </div>
-                        <a href="{{ route('laporan.stok') }}" style="color:white !important;"
-                            class="small-box-footer">{{ __('messages.more-info') }} <i
-                                class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-            @endif --}}
-        @if (Auth::user()->role->name != 'staff')
             <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-teal">
@@ -202,11 +181,9 @@
                 </div>
             </div>
 
-
             <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-olive">
-                    <!-- style="color:white !important;" -->
                     <div class="inner" style="color:white !important;">
                         <h3>{{ $staffCount }}</h3>
 
@@ -220,7 +197,26 @@
                             class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
-        @endif
+        @endcan
+        {{-- @if (Auth::user()->role->name == 'staff')
+        <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+                <div class="inner" style="color:white !important;">
+                    <h3>{{ $total_stok }}</h3>
+                    
+                    <p class="font-weight-bold">{{ __('stock amount') }}</p>
+                </div>
+                <div class="icon">
+                            <i class="fas fa-solid fa-warehouse"></i>
+                        </div>
+                        <a href="{{ route('laporan.stok') }}" style="color:white !important;"
+                            class="small-box-footer">{{ __('messages.more-info') }} <i
+                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            @endif --}}
+
     </div>
     </div>
 
@@ -239,8 +235,7 @@
                                     {{-- <label for="month" class="form-label text-capitalize">{{ __('select month') }}</label> --}}
                                     <div class="input-group">
                                         <div class="w-100 d-flex mb-2 align-items-center">
-                                            <input type="month" name="month" id="month"
-                                                class="form-control w-50">
+                                            <input type="month" name="month" id="month" class="form-control w-50">
                                             <button id="filter" class="btn d-flex btn-primary mx-2 text-capitalize"><i
                                                     class="fas fa-filter"></i>{{ __('Filter') }}</button>
                                         </div>
@@ -260,7 +255,8 @@
                             </div>
                         </div>
                     </div>
-                    @if (Auth::user()->role->name != 'staff')
+                    {{-- @if (Auth::user()->role->name != 'staff') --}}
+                    @can('super&admin')
                         <div class="card col-12">
                             <div class="card-header">
                                 <h1 class="card-title text-lg font-weight-bold text-uppercase">
@@ -308,7 +304,7 @@
                                                             </td>
                                                             <td class="text-warning font-weight-bold">
                                                                 {{ $item->quantity + $item->goodsIns->sum('quantity') - $item->goodsOuts->sum('quantity') - $item->goodsBacks->sum('quantity') }}
-                                                                {{ $item->unit->name }} 
+                                                                {{ $item->unit->name }}
                                                             </td>
                                                             <td>
                                                                 {{ $item->name }}
@@ -334,8 +330,10 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
-                    @if (Auth::user()->role->name == 'staff')
+                    @endcan
+                    {{-- @endif --}}
+                    {{-- @if (Auth::user()->role->name == 'staff') --}}
+                    @can('user')
                         <div class="card col-12">
                             <div class="card-header">
                                 <h1 class="card-title text-lg font-weight-bold text-uppercase">
@@ -385,8 +383,8 @@
                                                                 {{ $item->item->code }}
                                                             </td>
                                                             <td>
-                                                                {{ $item->quantity}}
-                                                                {{  $item->item->unit->name }}
+                                                                {{ $item->quantity }}
+                                                                {{ $item->item->unit->name }}
                                                             </td>
                                                             <td>
                                                                 <span
@@ -395,9 +393,9 @@
                                                                 </span>
                                                             </td>
                                                             {{-- <td>
-                                                            {{ $item->item->name }}
-                                                        </td>
-                                                        <td>
+                                                    {{ $item->item->name }}
+                                                </td>
+                                                <td>
                                                             {{ $item->supplier->name }}
                                                         </td> --}}
                                                         </tr>
@@ -409,7 +407,8 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
+                        {{-- @endif --}}
+                    @endcan
                 </div>
             </div>
             <div class="col-sm-12 col-lg-6" id="daily-transactions-card">
@@ -429,31 +428,31 @@
             </div>
             <!-- <div class="col-sm-12 col-lg-6">
 
-                                                                                          <div class="card">
-                                                                                            <div class="card-header">
-                                                                                                <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
-                                                                                            </div>
-                                                                                              <div class="card-body">
-                                                                                                <div class="row  d-flex justify-content-start align-items-center">
-                                                                                                  <div class="col-6">
-                                                                                                    <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
-                                                                                                    <div class="input-group mb-3">
-                                                                                                      <div class="w-100 mb-3 d-flex align-items-center py-3">
-                                                                                                        <input type="month" name="month-income" id="month-income" class="form-control w-50">
-                                                                                                        <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
-                                                                                                      </div>
-                                                                                                    </div>
-                                                                                                  </div>
-                                                                                                </div>
-                                                                                                <div class="tab-content p-0">
-                                                                                                  <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
-                                                                                                    <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
-                                                                                                  </div>
-                                                                                                </div>
-                                                                                              </div>
-                                                                                            </div>
+                                                                                                      <div class="card">
+                                                                                                        <div class="card-header">
+                                                                                                            <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
+                                                                                                        </div>
+                                                                                                          <div class="card-body">
+                                                                                                            <div class="row  d-flex justify-content-start align-items-center">
+                                                                                                              <div class="col-6">
+                                                                                                                <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
+                                                                                                                <div class="input-group mb-3">
+                                                                                                                  <div class="w-100 mb-3 d-flex align-items-center py-3">
+                                                                                                                    <input type="month" name="month-income" id="month-income" class="form-control w-50">
+                                                                                                                    <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
+                                                                                                                  </div>
+                                                                                                                </div>
+                                                                                                              </div>
+                                                                                                            </div>
+                                                                                                            <div class="tab-content p-0">
+                                                                                                              <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
+                                                                                                                <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
+                                                                                                              </div>
+                                                                                                            </div>
+                                                                                                          </div>
+                                                                                                        </div>
 
-                                                                                        </div> -->
+                                                                                                    </div> -->
         </div>
     </div>
 
@@ -745,7 +744,7 @@
             const alert = document.getElementById('success-alert');
             if (alert) {
                 setTimeout(function() {
-                    alert.style.opacity = '0'; 
+                    alert.style.opacity = '0';
                     setTimeout(function() {
                         alert.style.display = 'none';
                     }, 500);

@@ -144,5 +144,8 @@
   "List of Incoming Transactions by Today's Users": "Daftar Transaksi Masuk Berdasarkan Pengguna Hari ini",
   "action": "aksi",
   "choose supplier first": "pilih pemasok dulu",
-  "variant name": "Nama Variant"
+  "variant name": "Nama Variant",
+  "Incoming Report": "Laporan Masuk",
+  "Return Report": "Laporan Retur",
+  "to":"sampai"
 }

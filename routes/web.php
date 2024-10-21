@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 
 Route::middleware(['auth', "localization"])->group(function () {
@@ -46,7 +46,7 @@ Route::middleware(['auth', "localization"])->group(function () {
         Route::get('/daftar-barang', 'list')->name('barang.list');
         Route::post('/simpan', 'save')->name('barang.save');
         Route::post('/info', 'detail')->name('barang.detail');
-        Route::middleware(['employee.middleware'])->group(function () {  
+        Route::middleware(['employee.middleware'])->group(function () {
             Route::post('/ubah', 'update')->name('barang.update');
             Route::delete('/hapus', 'delete')->name('barang.delete');
         });
@@ -123,8 +123,11 @@ Route::middleware(['auth', "localization"])->group(function () {
         Route::put('/update', 'update')->name('transaksi.masuk.update');
         Route::delete('/delete', 'delete')->name('transaksi.masuk.delete');
         Route::get('/barang/list/in', 'listIn')->name('barang.list.in');
-        Route::post('/approve/{id}', 'approve')->name('transaksi.masuk.approve');
-        Route::post('/cancel/{id}', 'cancel')->name('transaksi.masuk.cancel');
+        Route::middleware(['employee.middleware'])->group(function () {
+            Route::get('/modal', 'modal')->name('transaksi.masuk.approval');
+            Route::post('/approve/{id}', 'approve')->name('transaksi.masuk.approve');
+            Route::post('/cancel/{id}', 'cancel')->name('transaksi.masuk.cancel');
+        });
     });
 
 
@@ -138,7 +141,7 @@ Route::middleware(['auth', "localization"])->group(function () {
         Route::put('/ubah', 'update')->name('transaksi.keluar.update');
         Route::delete('/hapus', 'delete')->name('transaksi.keluar.delete');
     });
-    
+
     // Transaksi kembali
     Route::controller(TransactionBackController::class)->prefix('/transaksi/kembali')->middleware('employee.middleware')->group(function () {
         Route::get('/', 'index')->name('transaksi.kembali');

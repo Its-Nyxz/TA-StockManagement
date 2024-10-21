@@ -33,32 +33,36 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-2">
-                                        @if (Auth::user()->role->id <= 2)
-                                            <div class="form-group">
-                                                <label for="date_start">{{ __('users') }}: </label>
-                                                <select name="inputer" id="inputer" class="form-control w-100">
-                                                    <option value="">-- {{ __('select user responsible') }} --
-                                                    </option>
-                                                    @foreach ($users as $user)
-                                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        @endif
+                                        {{-- @if (Auth::user()->role->id <= 2) --}}
+                                        @can('super&admin')
+                                        <div class="form-group">
+                                            <label for="date_start">{{ __('users') }}: </label>
+                                            <select name="inputer" id="inputer" class="form-control w-100">
+                                                <option value="">-- {{ __('select user responsible') }} --
+                                                </option>
+                                                @foreach ($users as $user)
+                                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @endcan
+                                        {{-- @endif --}}
                                     </div>
                                     <div class="text-end col-sm-4 pt-4">
                                         <div class = "d-flex justify-content-end">
                                             <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
                                                     class="fas fa-filter m-1"></i><span
                                                     class="d-none d-lg-block d-xl-inline">{{ __('filter') }}</span></button>
-                                            @if (Auth::user()->role->id <= 2)
+                                            {{-- @if (Auth::user()->role->id <= 2) --}}
+                                            @can('super&admin')
                                                 <button class="btn btn-info m-1 mt-1 position-relative" type="button"
                                                     data-toggle="modal" data-target="#modal_approve"
                                                     id="modal-button-approve"><i class="fas fa-list m-1"></i><span
                                                         class="d-none d-lg-block d-xl-inline">
                                                         {{ __('Approval') }}</span> <span
                                                         class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ count($approvals) }}</span></button>
-                                            @endif
+                                            @endcan
+                                            {{-- @endif --}}
                                             <button class="btn btn-success m-1 mt-1" type="button" data-toggle="modal"
                                                 data-target="#TambahData" id="modal-button"><i
                                                     class="fas fa-plus m-1"></i><span class="d-none d-lg-block d-xl-inline">
@@ -162,7 +166,8 @@
                                                     <label for="kode_barang" class="form-label">{{ __('item code') }}
                                                         <span class="text-danger">*</span></label>
                                                     <div class="input-group">
-                                                        <input type="text" name="kode_barang" id="kode_barang" class="form-control"
+                                                        <input type="text" name="kode_barang" id="kode_barang"
+                                                            class="form-control"
                                                             placeholder="{{ __('choose supplier first') }} ">
                                                         <div class="input-group-append">
                                                             <button class="btn btn-outline-primary" type="button"
@@ -519,7 +524,7 @@
                 lengthChange: true,
                 processing: true,
                 serverSide: true,
-                language:languageSettings,
+                language: languageSettings,
                 // ajax: `{{ route('barang.list') }}`,
                 // ajax: `{{ route('barang.list.in') }}`,
                 ajax: {
@@ -600,7 +605,7 @@
                 $('#kode_barang').removeAttr('placeholder');
 
                 $('#data-barang').DataTable().ajax.reload();
-            }); 
+            });
 
             $(document).on('click', '#barang', function() {
                 let supplierId = $("select[name='supplier']").val();
@@ -674,7 +679,7 @@
                     icon: 'warning',
                     title: '{{ __('There is Empty Data !!') }}',
                     showConfirmButton: false,
-                    imer: 1500
+                    timer: 1500
                 });
                 return;
             }
@@ -716,8 +721,8 @@
                 },
             }).then(() => {
                 setTimeout(function() {
-                    location.reload(); // Reloads the page after 1500ms
-                }, 1500);
+                    location.reload();
+                }, 1000);
             });
         }
 
@@ -766,7 +771,7 @@
             }).then(() => {
                 setTimeout(function() {
                     location.reload(); // Reloads the page after 1500ms
-                }, 1500);
+                }, 1000);
             });
         }
 
@@ -846,7 +851,7 @@
 
             $('#data-approve').DataTable({
                 lengthChange: true,
-                autoWidth: false,
+                // autoWidth: false,
                 responsive: true,
                 language: languageSettings,
                 // language: {
@@ -973,6 +978,11 @@
             $("#filter").on('click', function() {
                 tabel.draw();
             });
+
+            @if (session('show_modal'))
+                $('#modal_approve').modal('show');
+                {{ session()->forget('show_modal') }}
+            @endif
 
         });
 
