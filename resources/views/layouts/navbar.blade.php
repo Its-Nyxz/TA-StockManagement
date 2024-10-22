@@ -37,8 +37,8 @@
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                             {{ count(getLowStockNotifCount()) }}
                         </span>
-                        @endif
-                    </a>
+                    @endif
+                </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     <span class="dropdown-header">{{ count(getLowStockNotifCount()) }}
                         {{ __('Low or Empty Stock Notifications') }}</span>
@@ -85,41 +85,45 @@
                         </div>
                         <div class="dropdown-divider"></div>
                     @endforeach
-                    <a href="{{  route('transaksi.masuk.approval') }}"
+                    <a href="{{ route('transaksi.masuk.approval') }}"
                         class="dropdown-item dropdown-footer">{{ __('See All Approvals') }}</a>
                 </div>
             </li>
-            @endcan
+        @endcan
 
 
 
-        <li class="nav-item dropdown" data-toggle="dropdown-navbar">
-            <div class="user-panel mt-3 pb-3 mb-3 d-flex justify-content-center align-items-center">
+        <li class="nav-item dropdown">
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex justify-content-center align-items-center" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="cursor:pointer;">
                 <div class="info font-weight-bold" style="text-transform:capitalize;">
-                    <a href="{{ route('settings.profile') }}">
-                        <span class="d-block" style="color:gray !important;"
-                            id="user">{{ Auth::user()->name }}</span>
+                    {{-- <a href="{{ route('settings.profile') }}"> --}}
+                    <span class="d-block" style="color:gray !important;" id="user">{{ Auth::user()->name }}</span>
 
                 </div>
                 <div class="image">
-                    <img src="{{ empty(Auth::user()->image) ? asset('user.png') : asset('storage/profile/' . Auth::user()->image) }}"
-                        class="img-circle elevation-2"
-                        style="width:100% !important;max-width:35px !important;aspect-ratio:1 !important;object-fit:cover !important;"
-                        id="img_profile" alt="User Image">
+                        <img src="{{ empty(Auth::user()->image) ? asset('user.png') : asset('storage/profile/' . Auth::user()->image) }}"
+                            class="img-circle elevation-2"
+                            style="width:100% !important;max-width:35px !important;aspect-ratio:1 !important;object-fit:cover !important;"
+                            id="img_profile" alt="User Image">
                 </div>
-                </a>
+                {{-- </a> --}}
             </div>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <div class="dropdown-menu dropdown-menu-right">
+
+                <a href="{{ route('settings.profile') }}" class="dropdown-item">Profile</a>
                 <div class="dropdown-divider"></div>
-                <a onclick="window.location.href=`{{ route('settings.profile') }}`" class="dropdown-item w-100">
-                    <i class="fas fa-user mr-2"></i> Profile
-                </a>
-                <div class="dropdown-divider"></div>
-                <a onclick="window.location.href=`{{ route('login.delete') }}`" class="dropdown-item w-100">
-                    <i class="fas fa-sign-out-alt mr-2"></i> LogOut
-                </a>
+                <a href="{{ route('login.delete') }}" class="dropdown-item">{{ __('messages.logout') }}</a>
             </div>
-            </div>
+                {{-- <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                    <div class="dropdown-divider"></div>
+                    <a onclick="window.location.href=`{{ route('settings.profile') }}`" class="dropdown-item w-100">
+                        <i class="fas fa-user mr-2"></i> Profile
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a onclick="window.location.href=`{{ route('login.delete') }}`" class="dropdown-item w-100">
+                        <i class="fas fa-sign-out-alt mr-2"></i> LogOut
+                    </a>
+                </div> --}}
         </li>
     </ul>
 </nav>

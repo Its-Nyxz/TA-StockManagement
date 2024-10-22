@@ -661,8 +661,6 @@
 
         });
 
-
-
         $(document).on("click", ".ubah", function() {
             $("#modal-button").click();
             $("#simpan").data('action', 'ubah');

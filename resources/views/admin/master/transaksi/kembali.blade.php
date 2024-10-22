@@ -510,11 +510,11 @@
                 }
 
             })
-            // .then(() => {
-            //     setTimeout(function() {
-            //         location.reload(); // Reloads the page after 1500ms
-            //     }, 1500);
-            // });
+            .then(() => {
+                setTimeout(function() {
+                    location.reload(); // Reloads the page after 1500ms
+                }, 1000);
+            }); 
         }
 
 
@@ -567,11 +567,11 @@
                     console.log(err);
                 },
             })
-            // .then(() => {
-            //     setTimeout(function() {
-            //         location.reload(); // Reloads the page after 1500ms
-            //     }, 1500);
-            // });
+            .then(() => {
+                setTimeout(function() {
+                    location.reload();
+                }, 1000);
+            });
         }
 
         $(document).ready(function() {
