@@ -21,6 +21,7 @@ class StockOpname extends Model
         'invoice_number',
         'supplier_id',
         'description',
+        'status',
     ];
 
     public function item(): BelongsTo

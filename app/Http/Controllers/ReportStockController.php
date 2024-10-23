@@ -23,7 +23,7 @@ class ReportStockController extends Controller
     {
         if ($request->ajax()) {
             if (empty($request->start_date) && empty($request->end_date)) {
-                $data = Item::with('goodsOuts', 'goodsIns', 'goodsBacks');
+                $data = Item::with('goodsOuts', 'goodsIns', 'goodsBacks','stockOpnames');
             } else {
                 $data = Item::with(['goodsOuts' => function ($query) use ($request) {
                     $query->whereBetween('date_out', [$request->start_date, $request->end_date]);
@@ -64,8 +64,16 @@ class ReportStockController extends Controller
                     $totalQuantityIn = $item->goodsIns->sum('quantity');
                     $totalQuantityOut = $item->goodsOuts->sum('quantity');
                     $totalQuantityRetur = $item->goodsBacks->sum('quantity');
+                    $totalQuantitySO = $item->stockOpnames->sum('quantity');
                     $data = Item::with("unit")->find($item->id);
-                    $count = $item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur ;
+                    // if ($item->stockOpnames->status === 'plus') {
+                    //     $count = $item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur + $totalQuantitySO;
+                    // }elseif($item->stockOpnames->status === 'min'){
+                    //     $count = $item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur - $totalQuantitySO;
+                    // }else{
+                    //     $count = $item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur;
+                    // }
+                    $count = $item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur;
                     $result = $count. "/" . $data->unit->name;
                     $result = max(0, $result);
                     if ($count <= 0) {
