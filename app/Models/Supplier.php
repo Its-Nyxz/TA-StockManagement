@@ -26,4 +26,21 @@ class Supplier extends Model
     {
         return $this -> hasMany(Item::class);
     }
+
+    public function goodsOut(): HasMany
+    {
+        return $this -> hasMany(GoodsOut::class);
+    }
+
+    public function goodsBack(): HasMany
+    {
+        return $this -> hasMany(GoodsBack::class);
+    }
+
+    public function stockOpname(): HasMany
+    {
+        return $this -> hasMany(StockOpname::class);
+    }
+
+    
 }

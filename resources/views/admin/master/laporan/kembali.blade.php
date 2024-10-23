@@ -42,26 +42,6 @@
                         </div>
                     </div>
 
-                    {{-- Modal Desc --}}
-                    <div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="descriptionModalLabel">{{ __('description') }}</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body capitalize-first-after-period">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal"
-                                        id="kembali">{{ __('Close') }}</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="card-body">
                         <div class="table-responsive">
@@ -197,18 +177,23 @@
                     {
                         data: "description",
                         name: "description",
-                        render: function(data, type, row) {
+                         render: function(data, type, row) {
                             const formattedText = capitalizeAfterPeriod(data);
-                            const maxLength = 50;
+                            const maxLength = 35;
+                            const containerClass =
+                                "description-container"; // Add a class for styling
+
                             if (data.length > maxLength) {
                                 const truncated = formattedText.substr(0, maxLength) + '...';
                                 return `
-                        <span class="capitalize-first-after-period">${truncated}</span>
-                        <button class="btn btn-link show-more" style="padding: 0;" data-full-text="${data}">Show More</button>
-                    `;
+                                <div class="${containerClass}">
+                                    <span class="capitalize-first-after-period">${truncated}</span>
+                                    <button class="btn btn-link show-more" style="padding: 0;" data-full-text="${data}">Show More</button>
+                                </div>
+                            `;
                             }
                             return `<span class="capitalize-first-after-period">${formattedText}</span>`;
-                        }
+                        },
                     }
                 ],
                 buttons: [{
@@ -268,13 +253,25 @@
                 ]
             });
 
-            $(document).on('click', '.show-more', function(e) {
-                e.preventDefault();
+            $(document).on('click', '.show-more', function() {
+                const button = $(this);
+                const fullText = button.attr('data-full-text');
+                const span = button.prev('span');
+                const container = span.parent();
+                const isExpanded = button.data('expanded');
 
-                const fullDescription = $(this).data('full-text');
+                if (isExpanded) {
+                    
+                    span.text(fullText.substr(0, 35) + '...');
+                    button.text('Show More');
+                    container.css('max-height', '50px');
+                } else {
+                    span.text(fullText);
+                    button.text('Show Less');
+                    container.css('max-height', 'none'); 
+                }
 
-                $('#descriptionModal .modal-body').text(fullDescription);
-                $('#descriptionModal').modal('show');
+                button.data('expanded', !isExpanded); 
             });
 
             $("#filter").on('click', function() {

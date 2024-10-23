@@ -62,4 +62,10 @@ class User extends Authenticatable
     {
         return $this -> hasMany(GoodsOut::class);
     }
+
+    public function stockOpname(): HasMany
+    {
+        return $this -> hasMany(StockOpname::class);
+    }
+
 }

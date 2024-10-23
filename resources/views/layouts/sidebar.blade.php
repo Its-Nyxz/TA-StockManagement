@@ -117,7 +117,7 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              @if(Auth::user()->role->name != 'staff')
+              @can('super&admin')
               <li class="nav-item">
                 <a href="{{route('laporan.masuk')}}" class="nav-link text-white">
                 {{-- <i class="fas fa-circle"></i> --}}
@@ -136,7 +136,14 @@
                   <p>{{ __("returned goods report") }}</p>
                 </a>
               </li>
-              @endif
+              <li class="nav-item">
+                <a href="{{route('laporan.so')}}" class="nav-link text-white">
+                {{-- <i class="fas fa-circle"></i> --}}
+                  <p>{{ __("stock opname report") }}</p>
+                </a>
+              </li>
+              @endcan
+
               <li class="nav-item">
                 <a href="{{route('laporan.stok')}}" class="nav-link text-white">
                 {{-- <i class="fas fa-circle"></i> --}}

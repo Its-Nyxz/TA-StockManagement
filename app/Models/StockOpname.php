@@ -5,19 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class GoodsOut extends Model
+class StockOpname extends Model
 {
     use HasFactory;
-    protected $table = "goods_out";
+    protected $table = "stock_opnames";
     protected $fillable = [
         'item_id',
         'user_id',
+        'stok_sistem',
+        'stok_fisik',
         'quantity',
+        'date_so',
         'invoice_number',
-        'date_out',
-        'customer_id',
         'supplier_id',
+        'description',
     ];
 
     public function item(): BelongsTo
@@ -28,11 +31,6 @@ class GoodsOut extends Model
     public function user(): BelongsTo
     {
         return $this -> belongsTo(User::class);
-    }
-
-    public function customer(): BelongsTo
-    {
-        return $this -> belongsTo(Customer::class);
     }
 
     public function supplier(): BelongsTo

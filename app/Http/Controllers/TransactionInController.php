@@ -269,7 +269,6 @@ class TransactionInController extends Controller
                     "message"=>__("insufficient stock this month")
                 ]) -> setStatusCode(400);
             }
-            dd($totalStock);
             $transaction->save();
             $data = [
                 'user_id' => $request->user_id,

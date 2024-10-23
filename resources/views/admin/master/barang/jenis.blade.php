@@ -22,7 +22,7 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="TambahDataModalLabel">{{ __('add type of goods') }}</h5>
+                                    <h5 class="modal-title" id="TambahDataModalLabel"></h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -259,6 +259,7 @@
             });
 
             $("#modal-button").on("click", function() {
+                $("#TambahDataModalLabel").text("{{ __('Add type of goods') }}");
                 $("#name").val(null);
                 $("#desc").val(null);
                 // $("#simpan").text("Simpan");

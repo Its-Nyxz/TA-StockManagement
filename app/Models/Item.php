@@ -53,4 +53,10 @@ class Item extends Model
     {
         return $this -> belongsTo(Supplier::class);
     }
+
+    public function stockOpnames(): HasMany
+    {
+        return $this -> hasMany(StockOpname::class);
+    }
+
 }

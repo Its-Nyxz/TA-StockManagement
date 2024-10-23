@@ -104,9 +104,16 @@ class ItemController extends Controller
     public function detail(Request $request): JsonResponse
     {
         $id = $request -> id;
-        $data = Item::with('category','unit','brand','supplier')->find($id);
+        $data = Item::with('category','unit','brand','supplier','goodsIns','goodsOuts','goodsBacks','stockOpnames')->find($id);
         $data ['category_name'] = $data -> category -> name;
         $data ['unit_name'] = $data -> unit -> name;
+        $stok_awal = $data['quantity'];
+        $stok_masuk = $data->goodsIns->sum('quantity');
+        $stok_keluar = $data->goodsOuts->sum('quantity');
+        $stok_retur = $data->goodsBacks->sum('quantity');
+        $stok_opname = $data->stockOpnames->sum('quantity');
+        $total_stok = $stok_awal + $stok_masuk - $stok_keluar - $stok_retur + $stok_opname;
+        $data['total_stok'] = $total_stok ;
         // $data ['brand_name'] = $data -> brand -> name;
         // $data ['supplier_name'] = $data -> supplier -> name;
         return response()->json(
@@ -117,9 +124,16 @@ class ItemController extends Controller
     public function detailByCode(Request $request): JsonResponse
     {
         $code = $request->code;
-        $data = Item::with('category','unit','brand','supplier')->where("code",$code)->first();
+        $data = Item::with('category','unit','brand','supplier','goodsIns','goodsOuts','goodsBacks','stockOpnames')->where("code",$code)->first();
         $data ['category_name'] = $data -> category -> name;
         $data ['unit_name'] = $data -> unit -> name;
+        $stok_awal = $data['quantity'];
+        $stok_masuk = $data->goodsIns->sum('quantity');
+        $stok_keluar = $data->goodsOuts->sum('quantity');
+        $stok_retur = $data->goodsBacks->sum('quantity');
+        $stok_opname = $data->stockOpnames->sum('quantity');
+        $total_stok = $stok_awal + $stok_masuk - $stok_keluar - $stok_retur + $stok_opname;
+        $data['total_stok'] = $total_stok ;
         // $data ['brand_name'] = $data -> brand -> name;
         // $data ['supplier_name'] = $data -> supplier -> name;
         return response()->json(

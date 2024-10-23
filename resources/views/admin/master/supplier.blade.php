@@ -22,7 +22,7 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="TambahDataModalLabel">{{ __('adding supplier data') }}</h5>
+                                    <h5 class="modal-title" id="TambahDataModalLabel"></h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true" onclick="clear()">&times;</span>
                                     </button>
@@ -318,7 +318,7 @@
             });
 
             $("#modal-button").on("click", function() {
-                $("#TambahDataModalLabel").text("{{ __('adding supplier data') }}");
+                $("#TambahDataModalLabel").text("{{ __('Adding supplier data') }}");
                 $("#name").val(null);
                 $("#phone_number").val(null);
                 $("#address").val(null);

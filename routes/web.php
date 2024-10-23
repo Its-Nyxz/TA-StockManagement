@@ -1,26 +1,28 @@
 <?php
 
+use App\Models\StockOpname;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\BrandController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\TransactionInController;
-use App\Http\Controllers\TransactionOutController;
-use App\Http\Controllers\TransactionBackController;
-use App\Http\Controllers\ReportGoodsInController;
-use App\Http\Controllers\ReportGoodsOutController;
-use App\Http\Controllers\ReportGoodsBackController;
-use App\Http\Controllers\ReportStockController;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\WebSettingController;
-use App\Http\Controllers\AdminatorController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\AdminatorController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\WebSettingController;
+use App\Http\Controllers\ReportStockController;
+use App\Http\Controllers\StockOpnameController;
+use App\Http\Controllers\ReportGoodsInController;
+use App\Http\Controllers\TransactionInController;
+use App\Http\Controllers\ReportGoodsOutController;
+use App\Http\Controllers\TransactionOutController;
 use App\Http\Controllers\ReportFinancialController;
+use App\Http\Controllers\ReportGoodsBackController;
+use App\Http\Controllers\TransactionBackController;
 
 Route::middleware(["localization"])->group(function () {
     Route::get('/', [LoginController::class, 'index'])->name('login');
@@ -168,6 +170,16 @@ Route::middleware(['auth', "localization"])->group(function () {
     Route::controller(ReportGoodsBackController::class)->prefix('/laporan/kembali')->middleware('employee.middleware')->group(function () {
         Route::get('/', 'index')->name('laporan.kembali');
         Route::get('/list', 'list')->name('laporan.kembali.list');
+    });
+
+    // laporan stok opname barang
+    Route::controller(StockOpnameController::class)->prefix('/laporan/so')->middleware('employee.middleware')->group(function () {
+        Route::get('/', 'index')->name('laporan.so');
+        Route::get('/list', 'list')->name('laporan.so.list');
+        Route::post('/simpan', 'save')->name('laporan.so.save');
+        Route::post('/info', 'detail')->name('laporan.so.detail');
+        Route::put('/ubah', 'update')->name('laporan.so.update');
+        Route::delete('/hapus', 'delete')->name('laporan.so.delete');
     });
 
     // laporan stok barang
