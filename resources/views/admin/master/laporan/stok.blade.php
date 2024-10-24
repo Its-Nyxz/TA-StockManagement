@@ -43,11 +43,13 @@
                                 <tr>
                                     <th class="border-bottom-0" width="8%">{{ __("no") }}</th>
                                     <th class="border-bottom-0">{{__('item code')}}</th>
+                                    <th class="border-bottom-0">{{__('supplier')}}</th>
                                     <th class="border-bottom-0">{{__('item')}}</th>
                                     <th class="border-bottom-0">{{__('first stock')}}</th>
                                     <th class="border-bottom-0">{{__('incoming amount')}}</th>
                                     <th class="border-bottom-0">{{__('outgoing amount')}}</th>
                                     <th class="border-bottom-0">{{__('returned amount')}}</th>
+                                    <th class="border-bottom-0">{{__('difference')}}</th>
                                     <th class="border-bottom-0">{{__('stock amount')}}</th>
                                 </tr>
                             </thead>
@@ -147,6 +149,10 @@
                 data:"kode_barang",
                 name:"kode_barang"
                },
+                {
+                data:"pemasok",
+                name:"pemasok"
+               },
                {
                 data:"nama_barang",
                 name:"nama_barang"
@@ -166,6 +172,10 @@
                {
                 data:"jumlah_retur",
                 name:"jumlah_retur"
+               },
+               {
+                data:"jumlah_selisih",
+                name:"jumlah_selisih"
                },
                {
                 data:"total",

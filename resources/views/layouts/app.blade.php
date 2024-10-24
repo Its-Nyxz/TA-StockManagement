@@ -39,7 +39,8 @@
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
         $.widget.bridge('uibutton', $.ui.button)
-    </script>
+        </script>
+    <script src="{{ asset('theme/dist/js/capitalize.js') }}"></script>
     <!-- sweetalert -->
     <script src="{{ asset('theme/alert/js/sweetalert2.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('theme/dist/css/switch.css') }}">
@@ -112,7 +113,6 @@
     <script src="{{ asset('theme/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('theme/dist/js/adminlte.js') }}"></script>
-    <script src="{{ asset('theme/dist/js/capitalize.js') }}"></script>
     <!-- Include Bootstrap JS -->
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script> -->
     <!-- Include Select2 JS -->

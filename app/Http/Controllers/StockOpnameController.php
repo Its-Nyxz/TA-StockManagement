@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Item;
+use App\Models\User;
 use App\Models\GoodsIn;
 use App\Models\GoodsOut;
 use App\Models\Supplier;
@@ -25,14 +26,15 @@ class StockOpnameController extends Controller
     {
         $in_status = Item::where('active', 'true')->count();
         $suppliers = Supplier::all();
-        return view('admin.master.laporan.so', compact('in_status', 'suppliers'));
+        $users = User::all();
+        return view('admin.master.laporan.so', compact('in_status', 'suppliers','users'));
     }
 
     public function list(Request $request): JsonResponse
     {
         if (!empty($request->start_date) && !empty($request->end_date)) {
             $so = StockOpname::with('item', 'user');
-            $so->whereBetween('date_retur', [$request->start_date, $request->end_date]);
+            $so->whereBetween('date_so', [$request->start_date, $request->end_date]);
             if ($request->inputer) {
                 $so->where('user_id', [$request->inputer]);
             }

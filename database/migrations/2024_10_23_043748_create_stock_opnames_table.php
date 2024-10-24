@@ -23,8 +23,8 @@ return new class extends Migration
             $table->integer('stok_fisik');
             $table->integer('quantity')->nullable();
             $table->string('invoice_number');
-            $table->string('status');
-            $table->string('description')->nullable();
+            $table->string('status')->nullable();
+            $table->string('description');
             $table->date('date_so');
             $table->timestamps();
         });

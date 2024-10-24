@@ -189,7 +189,7 @@ class TransactionInController extends Controller
         //         ->make(true);
         // }
 
-        $items = Item::with('category','unit','brand','supplier','goodsIns','goodsOuts','goodsBacks')->where('supplier_id',$request->supplier_id)->latest()->get();
+        $items = Item::with('category','unit','brand','supplier','goodsIns','goodsOuts','goodsBacks', 'stockOpnames')->where('supplier_id',$request->supplier_id)->latest()->get();
         // dd($items);
         if($request -> ajax()){
             return DataTables::of($items)
@@ -216,8 +216,9 @@ class TransactionInController extends Controller
                 $totalQuantityIn = $data->goodsIns->sum('quantity');
                 $totalQuantityOut = $data->goodsOuts->sum('quantity');
                 $totalQuantityRetur = $data->goodsBacks->sum('quantity');
+                $totalQuantitySO = $data->stockOpnames->sum('quantity');
                 $item = Item::with("unit")->find($data -> id);
-                $result = $data->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur ."/". $item -> unit -> name;
+                $result = ($data->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur) + $totalQuantitySO ."/". $item -> unit -> name;
                 $result = max(0, $result);
                 if($result == 0){
                     return $result;

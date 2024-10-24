@@ -31,7 +31,10 @@ class ReportStockController extends Controller
                     $query->whereBetween('date_received', [$request->start_date, $request->end_date]);
                 }, 'goodsBacks'  => function ($query) use ($request) {
                     $query->whereBetween('date_backs', [$request->start_date, $request->end_date]);
-                }]);
+                }, 'stockOpnames'  => function ($query) use ($request) {
+                    $query->whereBetween('date_so', [$request->start_date, $request->end_date]);
+                },
+            ]);
             }
             $data->latest()->get();
             return DataTables::of($data)
@@ -50,6 +53,20 @@ class ReportStockController extends Controller
                     $data = Item::with("unit")->find($item->id);
                     return $totalQuantity . "/" . $data->unit->name;
                 })
+                ->addColumn("jumlah_selisih", function ($item) {
+                    $totalQuantity = $item->stockOpnames->sum('quantity');
+                    $data = Item::with("unit")->find($item->id);
+                    // return $totalQuantity . "/" . $data->unit->name;
+                    if ($totalQuantity < 0) {
+                        $formatted = '<span style="color:red; font-weight:bold">-' . abs($totalQuantity) . ' / ' . $data->unit->name . '</span>';
+                    } else if ($totalQuantity > 0) {
+                        $formatted = '<span style="color:#44d744; font-weight:bold">+' . $totalQuantity . ' / ' . $data->unit->name . '</span>';
+                    }else {
+                        $formatted = '<span>' . $totalQuantity . ' / ' . $data->unit->name . '</span>';
+                    }
+                
+                    return $formatted;
+                })
                 ->addColumn("kode_barang", function ($item) {
                     return $item->code;
                 })
@@ -59,6 +76,9 @@ class ReportStockController extends Controller
                 })
                 ->addColumn("nama_barang", function ($item) {
                     return $item->name;
+                })
+                ->addColumn("pemasok", function ($item) {
+                    return $item->supplier->name;
                 })
                 ->addColumn("total", function ($item) {
                     $totalQuantityIn = $item->goodsIns->sum('quantity');
@@ -73,19 +93,19 @@ class ReportStockController extends Controller
                     // }else{
                     //     $count = $item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur;
                     // }
-                    $count = $item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur;
+                    $count = ($item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur) + $totalQuantitySO;
                     $result = $count. "/" . $data->unit->name;
                     $result = max(0, $result);
                     if ($count <= 0) {
-                        return "<span class='text-red font-weight-bold'>" . $result . "</span>" . ' ' . "<span class='badge badge-danger'>" . __("Stock Empty") . "</span>";;
+                        return "<span class='text-red font-weight-bold'>" . $result . "</span>" . ' ' . "<span class='badge badge-danger'>" . __("Stock Empty") . "</span>";
                     }else if ($count <= 10) {
-                        return "<span class='text-red font-weight-bold'>" . $result . "</span>" . ' ' . "<span class='badge badge-danger'>" . __("Stock Running Low") . "</span>";;
+                        return "<span class='text-red font-weight-bold'>" . $result . "</span>" . ' ' . "<span class='badge badge-danger'>" . __("Stock Running Low") . "</span>";
                     }else{
                         return  "<span class='text-success font-weight-bold'>" . $result . "</span>";
                     }
 
                 })
-                ->rawColumns(['total'])
+                ->rawColumns(['total','jumlah_selisih'])
                 ->make(true);
         }
     }

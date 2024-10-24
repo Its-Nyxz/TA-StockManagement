@@ -10,19 +10,30 @@
                         <div class="row w-100">
                             <div class="col-lg-6  w-100">
                                 <div class="row">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="date_start">{{ __('start date') }}: </label>
                                             <input type="date" name="start_date" class="form-control w-100">
                                         </div>
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="date_start">{{ __('end date') }}: </label>
                                             <input type="date" name="end_date" class="form-control w-100">
                                         </div>
                                     </div>
-                                    <div class="col-sm-4 pt-4">
+                                    <div class="col-sm-3">
+                                        <div class="form-group">
+                                            <label for="date_start">{{ __('users') }}: </label>
+                                            <select name="inputer" id="inputer" class="form-control w-100">
+                                                <option value="">-- {{ __('select user responsible') }} --</option>
+                                                @foreach ($users->where('role_id','<=','2') as $user)
+                                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 pt-4">
                                         <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
                                                 class="fas fa-filter m-1"></i>{{ __('Filter') }}</button>
                                     </div>
@@ -129,7 +140,8 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="description"
-                                                    class="form-label">{{ __('description') }}</label>
+                                                    class="form-label">{{ __('description') }}</label><span
+                                                    class="text-danger">*</span>
                                                 <textarea name="description" id="description" class="form-control" rows="4"></textarea>
                                             </div>
                                         </div>
@@ -183,7 +195,7 @@
                                                             class="form-label">{{ __('physical stock') }}<span
                                                                 class="text-danger">*</span></label>
                                                         <input type="number" id="stock_fisik" name="stock_fisik"
-                                                            class="form-control">
+                                                            class="form-control" min="0">
                                                     </div>
                                                 </div>
                                                 <div class="col-4">
@@ -460,7 +472,7 @@
             const stock_fisik = $("input[name='stock_fisik'").val();
             
 
-            if (!item_id || !date_so || !stock_fisik || !supplier_id) {
+            if (!item_id || !date_so || !stock_fisik || !supplier_id || !description) {
                 Swal.fire({
                     icon: 'warning',
                     title: '{{ __('There is Empty Data !!') }}',
@@ -501,11 +513,13 @@
                         $("input[name='tanggal_so']").val(null);
                         $("input[name='nama_barang']").val(null);
                         $("input[name='kode_barang']").val(null);
+                        $("input[name='status']").val(null);
+                        $("input[name='status_stok']").val(null);
                         $("select[name='jenis_barang']").val(null);
                         $("select[name='satuan_barang']").val(null);
                         $("input[name='jumlah']").val(0);
                         $("textarea[name='description']").val(null);
-                        $("select[name='supplier'").val(null);
+                        $("select[name='supplier']").val(null).trigger('change');;
                         $("input[name='stock_sistem']").val(0);
                         $("input[name='stock_fisik']").val(0);
                         $('#data-tabel').DataTable().ajax.reload();
@@ -581,7 +595,7 @@
                         $("input[name='stock_sistem']").val(0);
                         $("input[name='stock_fisik']").val(0);
                         $("textarea[name='description']").val(null);
-                        $("select[name='supplier'").val(null);
+                        $("select[name='supplier'").val(null).trigger('change');;
                         $('#data-tabel').DataTable().ajax.reload();
                     },
                     error: function(err) {
@@ -605,9 +619,9 @@
                 var stokSistem = parseFloat($('#stock_sistem').val()) || 0;
                 var stokFisik = Math.abs(parseFloat($('#stock_fisik').val())) || 0;
 
-                var selisih = stokSistem - stokFisik;
+                var selisih =stokFisik - stokSistem ;
                 
-                $('#jumlah').val(Math.abs(selisih));
+                $('#jumlah').val(selisih);
 
                 var status = '';
                 if (stokSistem < stokFisik) {
@@ -618,11 +632,10 @@
                     status = "{{ __('Stock is Correct') }}";
                 }
 
-                // Tampilkan status selisih
                 $('#status').val(status);
             });
 
-            $('#supplier').select2({
+            $('#supplier,#inputer').select2({
                 theme: 'bootstrap4',
                 allowClear: true,
                 minimumInputLength: 0 // Set this to enable search after 1 character
@@ -695,6 +708,7 @@
                     data: function(d) {
                         d.start_date = $("input[name='start_date']").val();
                         d.end_date = $("input[name='end_date']").val();
+                        d.inputer = $("#inputer").val();
                     }
                 },
                 columns: [{
@@ -831,7 +845,6 @@
                 const isExpanded = button.data('expanded');
 
                 if (isExpanded) {
-                    
                     span.text(fullText.substr(0, 35) + '...');
                     button.text('Show More');
                     container.css('max-height', '50px');
@@ -934,7 +947,7 @@
                     $("input[name='stock_fisik']").val(data.stok_fisik);
                     $("input[name='status']").val(data.status);
                     $("textarea[name='description']").val(data.description);
-                    $("select[name='supplier']").val(data.supplier_id).trigger('change');;
+                    $("select[name='supplier']").val(data.supplier_id).trigger('change');
                 }
             });
 
