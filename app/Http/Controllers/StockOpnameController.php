@@ -16,6 +16,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreStockOpnameRequest;
 use App\Http\Requests\UpdateStockOpnameRequest;
+use Illuminate\Validation\Rules\Can;
 
 class StockOpnameController extends Controller
 {
@@ -32,18 +33,20 @@ class StockOpnameController extends Controller
 
     public function list(Request $request): JsonResponse
     {
+        $so = StockOpname::with('item', 'user', 'supplier');
+
         if (!empty($request->start_date) && !empty($request->end_date)) {
-            $so = StockOpname::with('item', 'user');
             $so->whereBetween('date_so', [$request->start_date, $request->end_date]);
-            if ($request->inputer) {
-                $so->where('user_id', [$request->inputer]);
-            }
-        } else if (!empty($request->inputer)) {
-            $so = StockOpname::with('item', 'user');
-            $so->where('user_id', [$request->inputer]);
-        } else {
-            $so = StockOpname::with('item', 'user');
         }
+
+        if (!empty($request->inputer)) {
+            $so->where('user_id', $request->inputer);
+        }
+
+        if (!empty($request->supplier_id)) {
+            $so->where('supplier_id', [$request->supplier_id]);
+        }
+
         if (Auth::user()->role->id > 2) {
             $so->where('user_id', Auth::user()->id);
         };

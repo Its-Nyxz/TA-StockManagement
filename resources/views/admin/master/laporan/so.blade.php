@@ -8,53 +8,66 @@
                 <div class="card w-100">
                     <div class="card-header row">
                         <div class="row w-100">
-                            <div class="col-lg-6  w-100">
+                            <div class="col-lg-12  w-100">
                                 <div class="row">
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <div class="form-group">
                                             <label for="date_start">{{ __('start date') }}: </label>
                                             <input type="date" name="start_date" class="form-control w-100">
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-2">
                                         <div class="form-group">
                                             <label for="date_start">{{ __('end date') }}: </label>
                                             <input type="date" name="end_date" class="form-control w-100">
                                         </div>
                                     </div>
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-1">
                                         <div class="form-group">
                                             <label for="date_start">{{ __('users') }}: </label>
                                             <select name="inputer" id="inputer" class="form-control w-100">
                                                 <option value="">-- {{ __('select user responsible') }} --</option>
-                                                @foreach ($users->where('role_id','<=','2') as $user)
+                                                @foreach ($users->where('role_id', '<=', '2') as $user)
                                                     <option value="{{ $user->id }}">{{ $user->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-3 pt-4">
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label for="date_start">{{ __('supplier') }}: </label>
+                                            <select name="supplier_id" id="supplier_id" class="form-control w-100">
+                                                <option value="">-- {{ __('select user responsible') }} --</option>
+                                                @foreach ($suppliers as $supplier)
+                                                    <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-1 pt-4">
                                         <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
                                                 class="fas fa-filter m-1"></i>{{ __('Filter') }}</button>
                                     </div>
+                                    <div class="text-end col-sm-4 pt-4">
+                                        <div class = "d-flex justify-content-end">
+                                            <button class="btn {{ $in_status != 0 ? 'btn-success' : 'btn-info' }} m-1 mt-1"
+                                                type="button" data-toggle="modal"
+                                                {{ $in_status != 0 ? 'data-target="#TambahData"' : 'data-target="alert"' }}
+                                                id="modal-button"><i class="fas fa-plus m-1"></i><span
+                                                    class="d-none d-lg-block d-xl-inline">
+                                                    {{ __('Add data') }}</span></button>
+                                            <button class="btn btn-outline-primary font-weight-bold m-1 mt-1" id="print"><i
+                                                    class="fas fa-print m-1"></i><span
+                                                    class="d-none d-lg-block d-xl-inline"></span></button>
+                                            <button class="btn btn-outline-danger font-weight-bold m-1 mt-1" id="export-pdf"><i
+                                                    class="fas fa-file-pdf m-1"></i><span
+                                                    class="d-none d-lg-block d-xl-inline"></span></button>
+                                            <button class="btn btn-outline-success font-weight-bold m-1 mt-1" id="export-excel"><i
+                                                    class="fas fa-file-excel m-1"></i><span
+                                                    class="d-none d-lg-block d-xl-inline"></span></button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-6  w-100 d-flex justify-content-end align-items-center">
-                                <button class="btn {{ $in_status != 0 ? 'btn-success' : 'btn-info' }} m-1 mt-1"
-                                    type="button" data-toggle="modal"
-                                    {{ $in_status != 0 ? 'data-target="#TambahData"' : 'data-target="alert"' }}
-                                    id="modal-button"><i class="fas fa-plus m-1"></i><span
-                                        class="d-none d-lg-block d-xl-inline">
-                                        {{ __('Add data') }}</span></button>
-                                <button class="btn btn-outline-primary font-weight-bold m-1" id="print"><i
-                                        class="fas fa-print m-1"></i><span
-                                        class="d-none d-lg-block d-xl-inline">{{ __('Print') }}</span></button>
-                                <button class="btn btn-outline-danger font-weight-bold m-1" id="export-pdf"><i
-                                        class="fas fa-file-pdf m-1"></i><span
-                                        class="d-none d-lg-block d-xl-inline">{{ __('messages.export-to', ['file' => 'pdf']) }}</span></button>
-                                <button class="btn btn-outline-success font-weight-bold m-1" id="export-excel"><i
-                                        class="fas fa-file-excel m-1"></i><span
-                                        class="d-none d-lg-block d-xl-inline">{{ __('messages.export-to', ['file' => 'excel']) }}</span></button>
                             </div>
                         </div>
                     </div>
@@ -113,7 +126,8 @@
                                     <div class="row">
                                         <div class="col-md-7">
                                             <div class="form-group">
-                                                <label for="kode" class="form-label">{{ __('return item code') }}<span
+                                                <label for="kode"
+                                                    class="form-label">{{ __('return item code') }}<span
                                                         class="text-danger">*</span></label>
                                                 <input type="text" name="kode" readonly class="form-control">
                                                 <input type="hidden" name="id" />
@@ -209,8 +223,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="status"
-                                                    class="form-label">{{ __('status') }}<span
+                                                <label for="status" class="form-label">{{ __('status') }}<span
                                                         class="text-danger"></span></label>
                                                 <input type="text" id="status" name="status" readonly
                                                     class="form-control">
@@ -245,7 +258,9 @@
                                         <th class="border-bottom-0">{{ __('difference') }}</th>
                                         <th class="border-bottom-0">{{ __('description') }}</th>
                                         <th class="border-bottom-0">{{ __('status') }}</th>
-                                        <th class="border-bottom-0" width="1%">{{ __('action') }}</th>
+                                        @can('super')
+                                            <th class="border-bottom-0" width="1%">{{ __('action') }}</th>
+                                        @endcan
                                     </tr>
                                 </thead>
                             </table>
@@ -264,7 +279,6 @@
         });
 
         function load() {
-            // Define language settings
             const langID = {
                 decimal: "",
                 searchPlaceholder: "Cari Data",
@@ -322,10 +336,9 @@
             $('#data-barang').DataTable({
                 lengthChange: true,
                 processing: true,
-                // responsive: true,
+                responsive: true,
                 serverSide: true,
                 language: languageSettings,
-                // ajax: `{{ route('barang.list') }}`,
                 ajax: {
                     url: `{{ route('barang.list.in') }}`,
                     data: function(d) {
@@ -470,7 +483,7 @@
             const supplier_id = $("select[name='supplier'").val();
             const stock_sistem = $("input[name='stock_sistem'").val();
             const stock_fisik = $("input[name='stock_fisik'").val();
-            
+
 
             if (!item_id || !date_so || !stock_fisik || !supplier_id || !description) {
                 Swal.fire({
@@ -494,58 +507,57 @@
             Form.append('stock_fisik', stock_fisik);
 
             $.ajax({
-                    url: `{{ route('laporan.so.save') }}`,
-                    type: "post",
-                    processData: false,
-                    contentType: false,
-                    dataType: 'json',
-                    data: Form,
-                    success: function(res) {
+                url: `{{ route('laporan.so.save') }}`,
+                type: "post",
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                data: Form,
+                success: function(res) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: res.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    $('#kembali').click();
+                    $("input[name='id_barang']").val(null);
+                    $("input[name='tanggal_so']").val(null);
+                    $("input[name='nama_barang']").val(null);
+                    $("input[name='kode_barang']").val(null);
+                    $("input[name='status']").val(null);
+                    $("select[name='jenis_barang']").val(null);
+                    $("select[name='satuan_barang']").val(null);
+                    $("input[name='jumlah']").val(0);
+                    $("textarea[name='description']").val(null);
+                    $("select[name='supplier'").val("-- {{ __('choose a supplier') }} --");
+                    $("input[name='stock_sistem']").val(0);
+                    $("input[name='stock_fisik']").val(0);
+                    $('#data-tabel').DataTable().ajax.reload();
+                },
+                statusCode: {
+                    400: function(res) {
+                        const {
+                            message
+                        } = res.responseJSON;
                         Swal.fire({
                             position: "center",
-                            icon: "success",
-                            title: res.message,
+                            icon: "warning",
+                            title: "Oops...",
+                            text: message,
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 1900
                         });
-                        $('#kembali').click();
-                        $("input[name='id_barang']").val(null);
-                        $("input[name='tanggal_so']").val(null);
-                        $("input[name='nama_barang']").val(null);
-                        $("input[name='kode_barang']").val(null);
-                        $("input[name='status']").val(null);
-                        $("input[name='status_stok']").val(null);
-                        $("select[name='jenis_barang']").val(null);
-                        $("select[name='satuan_barang']").val(null);
-                        $("input[name='jumlah']").val(0);
-                        $("textarea[name='description']").val(null);
-                        $("select[name='supplier']").val(null).trigger('change');;
-                        $("input[name='stock_sistem']").val(0);
-                        $("input[name='stock_fisik']").val(0);
-                        $('#data-tabel').DataTable().ajax.reload();
-                    },
-                    statusCode: {
-                        400: function(res) {
-                            const {
-                                message
-                            } = res.responseJSON;
-                            Swal.fire({
-                                position: "center",
-                                icon: "warning",
-                                title: "Oops...",
-                                text: message,
-                                showConfirmButton: false,
-                                timer: 1900
-                            });
-                        }
                     }
+                }
 
-                })
-                .then(() => {
-                    setTimeout(function() {
-                        location.reload(); // Reloads the page after 1500ms
-                    }, 1000);
-                });
+            })
+            // .then(() => {
+            //     setTimeout(function() {
+            //         location.reload(); // Reloads the page after 1500ms
+            //     }, 1000);
+            // });
         }
 
         function ubah() {
@@ -561,52 +573,52 @@
             const stock_fisik = $("input[name='stock_fisik']").val();
 
             $.ajax({
-                    url: `{{ route('laporan.so.update') }}`,
-                    type: "put",
-                    data: {
-                        id,
-                        item_id,
-                        user_id,
-                        date_so,
-                        description,
-                        invoice_number,
-                        supplier_id,
-                        quantity,
-                        stock_sistem,
-                        stock_fisik
-                    },
-                    success: function(res) {
-                        Swal.fire({
-                            position: "center",
-                            icon: "success",
-                            title: res.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                        $('#kembali').click();
-                        $("input[name='id']").val(null);
-                        $("input[name='id_barang']").val(null);
-                        $("input[name='nama_barang']").val(null);
-                        $("input[name='tanggal_so']").val(null);
-                        $("input[name='kode_barang']").val(null);
-                        $("select[name='jenis_barang']").val(null);
-                        $("select[name='satuan_barang']").val(null);
-                        $("input[name='jumlah']").val(0);
-                        $("input[name='stock_sistem']").val(0);
-                        $("input[name='stock_fisik']").val(0);
-                        $("textarea[name='description']").val(null);
-                        $("select[name='supplier'").val(null).trigger('change');;
-                        $('#data-tabel').DataTable().ajax.reload();
-                    },
-                    error: function(err) {
-                        console.log(err);
-                    },
-                })
-                .then(() => {
-                    setTimeout(function() {
-                        location.reload();
-                    }, 1000);
-                });
+                url: `{{ route('laporan.so.update') }}`,
+                type: "put",
+                data: {
+                    id,
+                    item_id,
+                    user_id,
+                    date_so,
+                    description,
+                    invoice_number,
+                    supplier_id,
+                    quantity,
+                    stock_sistem,
+                    stock_fisik
+                },
+                success: function(res) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: res.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    $('#kembali').click();
+                    $("input[name='id']").val(null);
+                    $("input[name='id_barang']").val(null);
+                    $("input[name='nama_barang']").val(null);
+                    $("input[name='tanggal_so']").val(null);
+                    $("input[name='kode_barang']").val(null);
+                    $("select[name='jenis_barang']").val(null);
+                    $("select[name='satuan_barang']").val(null);
+                    $("input[name='jumlah']").val(0);
+                    $("input[name='stock_sistem']").val(0);
+                    $("input[name='stock_fisik']").val(0);
+                    $("textarea[name='description']").val(null);
+                    $("select[name='supplier'").val(null).trigger('change');;
+                    $('#data-tabel').DataTable().ajax.reload();
+                },
+                error: function(err) {
+                    console.log(err);
+                },
+            })
+            // .then(() => {
+            //     setTimeout(function() {
+            //         location.reload();
+            //     }, 1000);
+            // });
         }
 
         $(document).ready(function() {
@@ -619,8 +631,8 @@
                 var stokSistem = parseFloat($('#stock_sistem').val()) || 0;
                 var stokFisik = Math.abs(parseFloat($('#stock_fisik').val())) || 0;
 
-                var selisih =stokFisik - stokSistem ;
-                
+                var selisih = stokFisik - stokSistem;
+
                 $('#jumlah').val(selisih);
 
                 var status = '';
@@ -709,6 +721,7 @@
                         d.start_date = $("input[name='start_date']").val();
                         d.end_date = $("input[name='end_date']").val();
                         d.inputer = $("#inputer").val();
+                        d.supplier_id = $("#supplier_id").val();
                     }
                 },
                 columns: [{
@@ -726,7 +739,8 @@
                     {
                         data: "invoice_number",
                         name: "invoice_number"
-                    }, {
+                    },
+                    {
                         data: "kode_barang",
                         name: "kode_barang"
                     },
@@ -753,7 +767,7 @@
                     {
                         data: "description",
                         name: "description",
-                         render: function(data, type, row) {
+                        render: function(data, type, row) {
                             const formattedText = capitalizeAfterPeriod(data);
                             const maxLength = 35;
                             const containerClass =
@@ -775,10 +789,12 @@
                         data: "status",
                         name: "status"
                     },
-                    {
-                        data: "tindakan",
-                        name: "tindakan"
-                    }
+                    @if (Auth::user()->role->name == 'super_admin')
+                        {
+                            data: "tindakan",
+                            name: "tindakan"
+                        }
+                    @endif
                 ],
                 buttons: [{
                         extend: 'excel',
@@ -796,6 +812,11 @@
                                 return `${title} (${startDate}_{{ __('to') }}_${endDate})`;
                             }
                             return `${title} (${today})`;
+                        },
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                return idx !== 10 && idx !== 11;
+                            }
                         }
                     },
                     {
@@ -814,6 +835,11 @@
                                 return `${title} (${startDate}_{{ __('to') }}_${endDate})`;
                             }
                             return `${title} (${today})`;
+                        },
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                return idx !== 10 && idx !== 11;
+                            }
                         }
                     },
                     {
@@ -832,6 +858,11 @@
                                 return `${title} (${startDate}_{{ __('to') }}_${endDate})`;
                             }
                             return `${title} (${today})`;
+                        },
+                        exportOptions: {
+                            columns: function(idx, data, node) {
+                                return idx !== 10 && idx !== 11;
+                            }
                         }
                     }
                 ]
@@ -851,10 +882,10 @@
                 } else {
                     span.text(fullText);
                     button.text('Show Less');
-                    container.css('max-height', 'none'); 
+                    container.css('max-height', 'none');
                 }
 
-                button.data('expanded', !isExpanded); 
+                button.data('expanded', !isExpanded);
             });
 
             $("#barang").on("click", function() {

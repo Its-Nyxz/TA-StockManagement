@@ -386,10 +386,6 @@
 
             $(document).on('click', '#barang', function() {
                 let supplierId = $("select[name='supplier']").val();
-                if (!supplierId) {
-                    alert('Please select a supplier before proceeding.');
-                    return;
-                }
             });
 
             // pilih data barang

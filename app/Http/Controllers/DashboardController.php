@@ -15,6 +15,7 @@ use App\Models\GoodsIn;
 use App\Models\GoodsOut;
 use App\Models\GoodsBack;
 use App\Models\Customer;
+use App\Models\StockOpname;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -30,22 +31,25 @@ class DashboardController extends Controller
         $goodsin = GoodsIn::count();
         $goodsout = GoodsOut::count();
         $goodsback = GoodsBack::count();
+        $stockopname = StockOpname::count();
         $customer = Customer::count();
         $supplier = Supplier::count();
         $item = Item::sum('quantity');
         $item_in = GoodsIn::sum('quantity');
         $item_out = GoodsOut::sum('quantity');
         $item_back = GoodsBack::sum('quantity');
-        $total_stok = $item + $item_in - $item_out - $item_back;
+        $item_so = StockOpname::sum('quantity');
+        $total_stok = ($item + $item_in - $item_out - $item_back) + $item_so;
         $staffCount = User::where('role_id', '>' , 1)->count();
         $approvals = GoodsIn::with('item', 'supplier')->where('status', 0)->get();
         $get_item = Item::orderBy('id', 'DESC')->get();
-        $get_item_sum = Item::with(['goodsIns', 'goodsOuts', 'goodsBacks'])
+        $get_item_sum = Item::with(['goodsIns', 'goodsOuts', 'goodsBacks', 'stockOpnames'])
             ->get()
             ->filter(function ($item) {
                 $total_stok = $item->quantity + $item->goodsIns->sum('quantity')
                     - $item->goodsOuts->sum('quantity')
                     - $item->goodsBacks->sum('quantity');
+                    - $item->stockOpnames->sum('quantity');
                 return $total_stok >= 10 && $total_stok <= 50;;
             });
         $get_goodsIns = GoodsIn::with('item', 'user', 'supplier');
@@ -62,6 +66,7 @@ class DashboardController extends Controller
             'goodsin',
             'goodsout',
             'goodsback',
+            'stockopname',
             'customer',
             'supplier',
             'staffCount',

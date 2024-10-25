@@ -114,9 +114,11 @@
                                     <th class="border-bottom-0">{{ __("supplier") }}</th>
                                     <th class="border-bottom-0">{{ __("initial stock") }}</th>
                                     <!-- <th class="border-bottom-0">{{ __("price") }}</th> -->
-                                    @if(Auth::user()->role->name != 'staff')
+                                    {{-- @if(Auth::user()->role->name != 'staff') --}}
+                                    @can('super&admin')
                                     <th class="border-bottom-0" width="1%">{{ __("action") }}</th>
-                                    @endif
+                                    @endcan
+                                    {{-- @endif --}}
                                 </tr>
                             </thead>
                         </table>

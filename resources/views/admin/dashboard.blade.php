@@ -3,10 +3,10 @@
 @section('content')
     <div class="container-fluid">
         @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show fade" role="alert" id="success-alert">
-            {{ session('success') }}
-        </div>
-    @endif
+            <div class="alert alert-success alert-dismissible fade show fade" role="alert" id="success-alert">
+                {{ session('success') }}
+            </div>
+        @endif
         <!-- Small boxes (Stat box) -->
         <div class="row">
 
@@ -116,16 +116,16 @@
         <!-- <div class="col-lg-3 col-6"> -->
         <!-- small box -->
         <!-- <div class="small-box bg-purple">
-                                                                                                                <div class="inner">
-                                                                                                                    <h3>{{ $customer }}</h3>
+                                                                                                                            <div class="inner">
+                                                                                                                                <h3>{{ $customer }}</h3>
 
-                                                                                                                    <p class="font-weight-bold">{{ __('customer') }}</p>
-                                                                                                                </div>
-                                                                                                                <div class="icon">
-                                                                                                                    <i class="ion ion-android-person"></i>
-                                                                                                                </div>
-                                                                                                                <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
-                                                                                                                </div> -->
+                                                                                                                                <p class="font-weight-bold">{{ __('customer') }}</p>
+                                                                                                                            </div>
+                                                                                                                            <div class="icon">
+                                                                                                                                <i class="ion ion-android-person"></i>
+                                                                                                                            </div>
+                                                                                                                            <a href="{{ route('customer') }}" class="small-box-footer">{{ __('messages.more-info') }} <i class="fas fa-arrow-circle-right"></i></a>
+                                                                                                                            </div> -->
         <!-- </div> -->
 
         {{-- @if (Auth::user()->role->name != 'staff')
@@ -255,7 +255,6 @@
                             </div>
                         </div>
                     </div>
-                    {{-- @if (Auth::user()->role->name != 'staff') --}}
                     @can('super&admin')
                         <div class="card col-12">
                             <div class="card-header">
@@ -283,10 +282,9 @@
                                                         <th class="border-bottom-0">{{ __('code') }}</th>
                                                         <th class="border-bottom-0">{{ __('stock') }}</th>
                                                         <th class="border-bottom-0">{{ __('name') }}</th>
-                                                        <th class="border-bottom-0">{{ __('type') }}</th>
-                                                        <th class="border-bottom-0">{{ __('unit') }}</th>
-                                                        <th class="border-bottom-0">{{ __('brand') }}</th>
                                                         <th class="border-bottom-0">{{ __('supplier') }}</th>
+                                                        <th class="border-bottom-0">{{ __('brand') }}</th>
+                                                        <th class="border-bottom-0">{{ __('type') }}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -303,23 +301,20 @@
                                                                 {{ $item->code }}
                                                             </td>
                                                             <td class="text-warning font-weight-bold">
-                                                                {{ $item->quantity + $item->goodsIns->sum('quantity') - $item->goodsOuts->sum('quantity') - $item->goodsBacks->sum('quantity') }}
+                                                                {{ $item->quantity + $item->goodsIns->sum('quantity') - $item->goodsOuts->sum('quantity') - $item->goodsBacks->sum('quantity') + $item->stockOpnames->sum('quantity') }}
                                                                 {{ $item->unit->name }}
                                                             </td>
                                                             <td>
                                                                 {{ $item->name }}
                                                             </td>
                                                             <td>
-                                                                {{ $item->category->name }}
-                                                            </td>
-                                                            <td>
-                                                                {{ $item->unit->name }}
+                                                                {{ $item->supplier->name }}
                                                             </td>
                                                             <td>
                                                                 {{ $item->brand->name }}
                                                             </td>
                                                             <td>
-                                                                {{ $item->supplier->name }}
+                                                                {{ $item->category->name }}
                                                             </td>
                                                         </tr>
                                                     @endforeach
@@ -331,8 +326,6 @@
                             </div>
                         </div>
                     @endcan
-                    {{-- @endif --}}
-                    {{-- @if (Auth::user()->role->name == 'staff') --}}
                     @can('user')
                         <div class="card col-12">
                             <div class="card-header">
@@ -407,7 +400,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- @endif --}}
                     @endcan
                 </div>
             </div>
@@ -428,31 +420,31 @@
             </div>
             <!-- <div class="col-sm-12 col-lg-6">
 
-                                                                                                      <div class="card">
-                                                                                                        <div class="card-header">
-                                                                                                            <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
-                                                                                                        </div>
-                                                                                                          <div class="card-body">
-                                                                                                            <div class="row  d-flex justify-content-start align-items-center">
-                                                                                                              <div class="col-6">
-                                                                                                                <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
-                                                                                                                <div class="input-group mb-3">
-                                                                                                                  <div class="w-100 mb-3 d-flex align-items-center py-3">
-                                                                                                                    <input type="month" name="month-income" id="month-income" class="form-control w-50">
-                                                                                                                    <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
-                                                                                                                  </div>
-                                                                                                                </div>
-                                                                                                              </div>
-                                                                                                            </div>
-                                                                                                            <div class="tab-content p-0">
-                                                                                                              <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
-                                                                                                                <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
-                                                                                                              </div>
-                                                                                                            </div>
-                                                                                                          </div>
-                                                                                                        </div>
+                                                                                                                  <div class="card">
+                                                                                                                    <div class="card-header">
+                                                                                                                        <h1 class="card-title text-lg font-weight-bold text-uppercase">{{ __('incomes and expenses on this month') }}</h1>
+                                                                                                                    </div>
+                                                                                                                      <div class="card-body">
+                                                                                                                        <div class="row  d-flex justify-content-start align-items-center">
+                                                                                                                          <div class="col-6">
+                                                                                                                            <label for="month-income" class="form-label text-capitalize">{{ __('select month') }}</label>
+                                                                                                                            <div class="input-group mb-3">
+                                                                                                                              <div class="w-100 mb-3 d-flex align-items-center py-3">
+                                                                                                                                <input type="month" name="month-income" id="month-income" class="form-control w-50">
+                                                                                                                                <button id="filter-income" class="d-flex btn btn-primary mx-2 text-capitalize"><i class="fas fa-filter"></i>{{ __('filter') }}</button>
+                                                                                                                              </div>
+                                                                                                                            </div>
+                                                                                                                          </div>
+                                                                                                                        </div>
+                                                                                                                        <div class="tab-content p-0">
+                                                                                                                          <div class="chart tab-pane active" id="revenue-chart" style="position: relative; height: 300px;">
+                                                                                                                            <canvas id="pendapatan" height="300" style="height: 300px;"></canvas>
+                                                                                                                          </div>
+                                                                                                                        </div>
+                                                                                                                      </div>
+                                                                                                                    </div>
 
-                                                                                                    </div> -->
+                                                                                                                </div> -->
         </div>
     </div>
 
@@ -483,13 +475,9 @@
                     success: function(data) {
                         const emptyMessage = document.getElementById('empty-message');
                         const chartCanvas = document.getElementById('stok-barang').parentElement;
-                        // if (data.goods_in_this_month + data.goods_out_this_month + data
-                        // .goods_back_this_month + data.total_stock_this_month === 0) {
-                        // return false; 
-                        // document.getElementById('monthly-transactions-card').style.display = 'none';
-                        // }
                         if (data.goods_in_this_month + data.goods_out_this_month + data
-                            .goods_back_this_month + data.total_stock_this_month === 0) {
+                            .goods_back_this_month + data.goods_so_this_month + data
+                            .total_stock_this_month === 0) {
                             emptyMessage.style.display = 'block';
                             chartCanvas.style.display = 'none';
                             if (ChartStokBarang) {
@@ -500,28 +488,34 @@
                             emptyMessage.style.display = 'none';
                             chartCanvas.style.display = 'block';
                         }
+
                         $("input[name='month']").val(data.month);
                         const chartstok_barang = document.getElementById('stok-barang').getContext(
                             '2d');
                         const data_stok = {
-                            labels: ['Barang Masuk', 'Barang Keluar', 'Barang Retur', 'Total Stok'],
+                            labels: ['Barang Masuk', 'Barang Keluar', 'Barang Retur', 'Selisih',
+                                'Total Stok'
+                            ],
                             datasets: [{
                                 label: 'Jumlah',
                                 data: [data.goods_in_this_month, data.goods_out_this_month,
                                     data.goods_back_this_month, data
+                                    .goods_so_this_month, data
                                     .total_stock_this_month
                                 ],
                                 backgroundColor: [
                                     'rgba(75, 192, 192, 0.2)',
                                     'rgba(255, 99, 132, 0.2)',
                                     'rgba(54, 162, 235, 0.2)',
-                                    'rgba(255, 206, 86, 0.2)'
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 205, 86, 0.2)'
                                 ],
                                 borderColor: [
                                     'rgba(75, 192, 192, 1)',
                                     'rgba(255, 99, 132, 1)',
                                     'rgba(54, 162, 235, 1)',
-                                    'rgba(255, 206, 86, 1)'
+                                    'rgba(255, 159, 64, 1)',
+                                    'rgba(255, 205, 86, 1)'
                                 ],
                                 borderWidth: 1
                             }]
@@ -683,12 +677,14 @@
                 const goodsInToday = data?.goods_in_today ?? 0;
                 const goodsOutToday = data?.goods_out_today ?? 0;
                 const goodsBackToday = data?.goods_back_today ?? 0;
+                const goodsSoToday = data?.goods_so_today ?? 0;
                 const goodsTotalToday = data?.goods_total_today ?? 0;
 
                 // console.log(data);
 
                 // Check if all values are 0
-                if (goodsInToday === 0 && goodsOutToday === 0 && goodsBackToday === 0 && goodsTotalToday ===
+                if (goodsInToday === 0 && goodsOutToday === 0 && goodsBackToday === 0 && goodsSoToday ===
+                    0 && goodsTotalToday ===
                     0) {
                     // return false;
                     document.getElementById('daily-transactions-card').style.display = 'none';
@@ -699,23 +695,28 @@
                 const chart = new Chart(ctx, {
                     type: 'pie',
                     data: {
-                        labels: ['Barang Masuk', 'Barang Keluar', 'Barang Retur', 'Total Stok'],
+                        labels: ['Barang Masuk', 'Barang Keluar', 'Barang Retur', 'Selisih',
+                            'Total Stok'
+                        ],
                         datasets: [{
                             label: 'Goods Transactions Today',
                             data: [goodsInToday, goodsOutToday, goodsBackToday,
+                                goodsSoToday,
                                 goodsTotalToday
                             ],
                             backgroundColor: [
-                                'rgba(75, 192, 192, 0.6)',
-                                'rgba(255, 99, 132, 0.6)',
-                                'rgba(54, 162, 235, 0.6)',
-                                'rgba(255, 206, 86, 0.6)'
+                                'rgba(75, 192, 192, 0.4)',
+                                'rgba(255, 99, 132, 0.4)',
+                                'rgba(54, 162, 235, 0.4)',
+                                'rgba(255, 159, 64, 0.4)',
+                                'rgba(255, 205, 86, 0.4)'
                             ],
                             borderColor: [
                                 'rgba(75, 192, 192, 1)',
                                 'rgba(255, 99, 132, 1)',
                                 'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)'
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255, 205, 86, 1)'
                             ],
                             borderWidth: 1
                         }]

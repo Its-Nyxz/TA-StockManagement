@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\Auth;
-use App\Models\GoodsOut;
-use App\Models\GoodsIn;
-use App\Models\Customer;
-use App\Models\GoodsBack;
+use Carbon\Carbon;
 use App\Models\Item;
 use App\Models\User;
+use App\Models\GoodsIn;
+use App\Models\Customer;
+use App\Models\GoodsOut;
+use App\Models\Supplier;
+use App\Models\GoodsBack;
+use App\Models\StockOpname;
+use Illuminate\View\View;
+use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
-use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionOutController extends Controller
 {
@@ -22,22 +24,23 @@ class TransactionOutController extends Controller
         $in_status = Item::where('active','true')->count();
         $customers = Customer::all();
         $users = User::all();
-        return view('admin.master.transaksi.keluar',compact('customers','in_status','users'));
+        $suppliers = Supplier::all();
+        return view('admin.master.transaksi.keluar',compact('customers','in_status','users','suppliers'));
     }
 
     public function list(Request $request):JsonResponse
     {
         if( !empty($request->start_date) && !empty($request->end_date) ){
-            $goodsouts = GoodsOut::with('item','user','customer');
+            $goodsouts = GoodsOut::with('item','user','supplier');
             $goodsouts -> whereBetween('date_out',[$request->start_date,$request->end_date]);
             if($request->inputer){
                 $goodsouts -> where('user_id',[$request->inputer]);
             }
         }else if(!empty($request->inputer)){
-            $goodsouts = GoodsOut::with('item','user','customer');
+            $goodsouts = GoodsOut::with('item','user','supplier');
             $goodsouts -> where('user_id',[$request->inputer]);
         }else{
-            $goodsouts = GoodsOut::with('item','user','customer');
+            $goodsouts = GoodsOut::with('item','user','supplier');
         }
         if(Auth::user()->role->id > 2){
             $goodsouts -> where('user_id',Auth::user()->id);
@@ -55,9 +58,12 @@ class TransactionOutController extends Controller
             ->addColumn("kode_barang",function($data){
                 return $data -> item -> code;
             })
-            // ->addColumn("customer_name",function($data){
-            //     return $data -> customer -> name;
+            // ->addColumn("costumer_name",function($data){
+            //     return $data -> costumer -> name;
             // })
+            ->addColumn("pemasok",function($data){
+                return $data -> supplier -> name;
+            })
             ->addColumn("brand_name",function($data){
                 return $data -> item -> brand -> name;
             })
@@ -90,8 +96,9 @@ class TransactionOutController extends Controller
         $goodsIn = GoodsIn::where('item_id',$request->item_id)->sum('quantity');
         $goodsOut = GoodsOut::where('item_id',$request->item_id)->sum('quantity');
         $goodsBack = GoodsBack::where('item_id',$request->item_id)->sum('quantity');
+        $stockOpname = StockOpname::where('item_id',$request->item_id)->sum('quantity');
 
-        $totalStock = max(0,$item + $goodsIn - $goodsOut - $goodsBack);
+        $totalStock = max(0,$item + $goodsIn - $goodsOut - $goodsBack + $stockOpname);
         if($request->quantity > $totalStock || $totalStock === 0){
             return  response()->json([
                 "message"=>__("insufficient stock this month")
@@ -103,6 +110,7 @@ class TransactionOutController extends Controller
             'quantity'=>$request->quantity,
             'invoice_number'=>$request->invoice_number,
             'date_out'=>$request->date_out,
+            'supplier_id'=>$request->supplier_id,
             'customer_id'=>1
         ];
         GoodsOut::create($data);
@@ -121,6 +129,7 @@ class TransactionOutController extends Controller
         $data['jenis_barang'] = $barang -> category -> name;
         $data['nama_barang'] = $barang  -> name;
         $data['customer_id'] = $data -> customer_id;
+        $data['supplier_id'] = $data -> supplier_id;
         $data['id_barang'] = $barang -> id;
         return response()->json(
             ["data"=>$data]
@@ -133,6 +142,7 @@ class TransactionOutController extends Controller
         $data = GoodsOut::find($id);
         $data -> user_id = $request->user_id;
         $data -> customer_id = $request->customer_id;
+        $data -> supplier_id = $request->supplier_id;
         $data -> date_out = $request->date_out;
         $data -> quantity = $request->quantity;
         $data -> item_id = $request->item_id;

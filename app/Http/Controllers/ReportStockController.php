@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\GoodsIn;
 use App\Models\GoodsOut;
 use App\Models\GoodsBack;
+use App\Models\StockOpname;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 
@@ -126,12 +127,15 @@ class ReportStockController extends Controller
             ->whereYear('date_out', $currentYear)->sum('quantity');
         $goodsBackThisMonth = GoodsBack::whereMonth('date_backs', $currentMonth)
             ->whereYear('date_backs', $currentYear)->sum('quantity');
-        $totalStockThisMonth = max(0, $goodsInThisMonth - $goodsOutThisMonth - $goodsBackThisMonth);
+        $goodsSoThisMonth = StockOpname::whereMonth('date_so', $currentMonth)
+            ->whereYear('date_so', $currentYear)->sum('quantity');
+        $totalStockThisMonth = max(0, $goodsInThisMonth - $goodsOutThisMonth - $goodsBackThisMonth + $goodsSoThisMonth);
         return response()->json([
             'month' => $currentYear . '-' . $currentMonth,
             'goods_in_this_month' => $goodsInThisMonth,
             'goods_out_this_month' => $goodsOutThisMonth,
             'goods_back_this_month' => $goodsBackThisMonth,
+            'goods_so_this_month' => $goodsSoThisMonth,
             'total_stock_this_month' => $totalStockThisMonth,
         ]);
     }
@@ -145,12 +149,14 @@ class ReportStockController extends Controller
         $goodsInToday = GoodsIn::whereDate('date_received', $today)->sum('quantity') ?? 0;
         $goodsOutToday = GoodsOut::whereDate('date_out', $today)->sum('quantity') ?? 0;
         $goodsBackToday = GoodsBack::whereDate('date_backs', $today)->sum('quantity') ?? 0;
-        $totalStockToday = max(0, $goodsInToday - $goodsOutToday - $goodsBackToday);
+        $goodsSoToday = StockOpname::whereDate('date_so', $today)->sum('quantity') ?? 0;
+        $totalStockToday = max(0, $goodsInToday - $goodsOutToday - $goodsBackToday + $goodsSoToday);
 
         return response()->json([
             'goods_in_today' => $goodsInToday,
             'goods_out_today' => $goodsOutToday,
             'goods_back_today' => $goodsBackToday,
+            'goods_so_today' => $goodsSoToday,
             'goods_total_today' => $totalStockToday,
         ]);
     }

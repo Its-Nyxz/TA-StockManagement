@@ -53,7 +53,6 @@
                                             <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
                                                     class="fas fa-filter m-1"></i><span
                                                     class="d-none d-lg-block d-xl-inline">{{ __('filter') }}</span></button>
-                                            {{-- @if (Auth::user()->role->id <= 2) --}}
                                             @can('super&admin')
                                                 <button class="btn btn-info m-1 mt-1 position-relative" type="button"
                                                     data-toggle="modal" data-target="#modal_approve"
@@ -62,7 +61,6 @@
                                                         {{ __('Approval') }}</span> <span
                                                         class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ count($approvals) }}</span></button>
                                             @endcan
-                                            {{-- @endif --}}
                                             <button class="btn btn-success m-1 mt-1" type="button" data-toggle="modal"
                                                 data-target="#TambahData" id="modal-button"><i
                                                     class="fas fa-plus m-1"></i><span class="d-none d-lg-block d-xl-inline">
@@ -609,10 +607,6 @@
 
             $(document).on('click', '#barang', function() {
                 let supplierId = $("select[name='supplier']").val();
-                if (!supplierId) {
-                    alert('Please select a supplier before proceeding.');
-                    return;
-                }
             });
 
 
