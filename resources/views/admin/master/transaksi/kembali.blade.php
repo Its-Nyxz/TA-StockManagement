@@ -224,6 +224,7 @@
                                         <th class="border-bottom-0">{{ __('item code') }}</th>
                                         <th class="border-bottom-0">{{ __('supplier') }}</th>
                                         <th class="border-bottom-0">{{ __('item') }}</th>
+                                        <th class="border-bottom-0">{{ __('brand') }}</th>
                                         <th class="border-bottom-0">{{ __('returned amount') }}</th>
                                         <th class="border-bottom-0">{{ __('description') }}</th>
                                         <th class="border-bottom-0" width="1%">{{ __('action') }}</th>
@@ -685,6 +686,10 @@
                         name: "supplier_name"
                     },
                     {
+                        data: "brand",
+                        name: "brand"
+                    },
+                    {
                         data: "quantity",
                         name: "quantity"
                     },
@@ -803,7 +808,7 @@
                 $("input[name='satuan_barang']").val(null);
                 $("input[name='jumlah']").val(null);
                 $("textarea[name='description']").val(null);
-                $("select[name='supplier'").val(null);
+                $("select[name='supplier'").val(null).trigger('change');
                 $("#simpan").data('action', 'simpan');
             });
 

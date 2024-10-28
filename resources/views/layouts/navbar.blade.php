@@ -30,7 +30,7 @@
 
         @can('super&admin')
             <li class="nav-item dropdown d-flex justify-content-center align-items-center">
-                <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown"
+                <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown" title="{{ __('Low or Empty Stock Notifications') }}"
                     role="button">
                     <i class="fas fa-solid fa-envelope"></i>
                     @if (count(getLowStockNotifCount()) > 0)
@@ -47,8 +47,10 @@
                         <div class="dropdown-item d-flex justify-content-between mb-2">
                             <div>
                                 <strong>{{ $stoks->item_code }}</strong><br>
-                                <small>{{ $stoks->item_name }}</small><br>
-                                <small>{{ $stoks->merk }}</small>
+                                <small>{{ Str::limit($stoks->supplier, 15, '...') }}</small> -
+                                <small>{{ Str::limit($stoks->item_name, 15, '...') }}</small> /
+                                <small>{{ $stoks->unit }}</small><br>
+                                <small>{{ Str::limit($stoks->merk, 15, '...') }}</small>
                             </div>
                             <span class="text-danger text-md">{{ $stoks->total_stock }}</span>
                             {{-- <span
@@ -61,7 +63,7 @@
                 </div>
             </li>
             <li class="nav-item dropdown d-flex justify-content-center align-items-center">
-                <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown"
+                <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown" title="{{ __('Approval Notifications') }}"
                     role="button">
                     <i class="fas fa-solid fa-inbox"></i>
                     @if (getGoodsInApproval()->count() > 0)
@@ -78,7 +80,9 @@
                         <div class="dropdown-item d-flex justify-content-between mb-2">
                             <div>
                                 <strong>{{ $approval->invoice_number }}</strong><br>
+                                <small> {{ Str::limit($approval->supplier->name, 15, '...') }}</small> -
                                 <small> {{ Str::limit($approval->item->name, 15, '...') }}</small><br>
+                                <small> {{ Str::limit($approval->item->brand->name, 15, '...') }}</small><br>
                             </div>
                             <span
                                 class="float-right text-muted text-sm">{{ $approval->created_at->diffForHumans() }}</span>
@@ -89,41 +93,61 @@
                         class="dropdown-item dropdown-footer">{{ __('See All Approvals') }}</a>
                 </div>
             </li>
+            <li class="nav-item dropdown d-flex justify-content-center align-items-center">
+                <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown" title="{{ __("Today's Stock Opname History") }}"
+                    role="button">
+                    <i class="fas fa-solid fa-cubes"></i>
+                    @if (getStockOpnames()->count() > 0)
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ getStockOpnames()->count() }}
+                        </span>
+                    @endif
+                </a>
+                <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
+                    <span class="dropdown-header">{{ getStockOpnames()->count() }}
+                        {{ __("Today's Stock Opname History") }} </span>
+                    <div class="dropdown-divider"></div>
+                    @foreach (getStockOpnames() as $so)
+                        <div class="dropdown-item d-flex justify-content-between mb-2">
+                            <div>
+                                <strong>{{ $so->invoice_number }}</strong><br>
+                                <small> {{ Str::limit($so->supplier->name, 15, '...') }}</small> -
+                                <small> {{ Str::limit($so->item->name, 15, '...') }}</small><br>
+                                <small> {{ $so->item->brand->name }}</small><br>
+                            </div>
+                            <span class="float-right text-muted text-sm">
+                                {{ $so->created_at->diffForHumans() }}<br>
+                                {!! $so->icon !!}
+                            </span>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                    @endforeach
+                    <a href="{{ route('laporan.so') }}"
+                        class="dropdown-item dropdown-footer">{{ __('See All Stock Opnames') }}</a>
+                </div>
+            </li>
         @endcan
 
 
 
         <li class="nav-item dropdown">
-            <div class="user-panel mt-3 pb-3 mb-3 d-flex justify-content-center align-items-center" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="cursor:pointer;">
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex justify-content-center align-items-center"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="cursor:pointer;">
                 <div class="info font-weight-bold" style="text-transform:capitalize;">
-                    {{-- <a href="{{ route('settings.profile') }}"> --}}
-                    <span class="d-block" style="color:gray !important;" id="user">{{ Auth::user()->name }}</span>
-
+                    <span class="d-none d-md-block" style="color:gray !important;" id="user">{{ Auth::user()->name }}</span>
                 </div>
                 <div class="image">
-                        <img src="{{ empty(Auth::user()->image) ? asset('user.png') : asset('storage/profile/' . Auth::user()->image) }}"
-                            class="img-circle elevation-2"
-                            style="width:100% !important;max-width:35px !important;aspect-ratio:1 !important;object-fit:cover !important;"
-                            id="img_profile" alt="User Image">
+                    <img src="{{ empty(Auth::user()->image) ? asset('user.png') : asset('storage/profile/' . Auth::user()->image) }}"
+                        class="img-circle elevation-2"
+                        style="width:100% !important;max-width:35px !important;aspect-ratio:1 !important;object-fit:cover !important;"
+                        id="img_profile" alt="User Image">
                 </div>
-                {{-- </a> --}}
             </div>
             <div class="dropdown-menu dropdown-menu-right">
-
                 <a href="{{ route('settings.profile') }}" class="dropdown-item">Profile</a>
                 <div class="dropdown-divider"></div>
                 <a href="{{ route('login.delete') }}" class="dropdown-item">{{ __('messages.logout') }}</a>
             </div>
-                {{-- <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <div class="dropdown-divider"></div>
-                    <a onclick="window.location.href=`{{ route('settings.profile') }}`" class="dropdown-item w-100">
-                        <i class="fas fa-user mr-2"></i> Profile
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a onclick="window.location.href=`{{ route('login.delete') }}`" class="dropdown-item w-100">
-                        <i class="fas fa-sign-out-alt mr-2"></i> LogOut
-                    </a>
-                </div> --}}
         </li>
     </ul>
 </nav>

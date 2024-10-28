@@ -10,19 +10,30 @@
                     <div class="row w-100">
                         <div class="col-lg-6  w-100">
                             <div class="row">
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="date_start">{{ __("start date") }}: </label>
                                         <input type="date" name="start_date" class="form-control w-100">
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
                                     <div class="form-group">
                                         <label for="date_start">{{ __("end date") }}: </label>
                                          <input type="date" name="end_date" class="form-control w-100">
                                     </div>
                                 </div>
-                                <div class="col-sm-4 pt-4">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label for="date_start">{{ __('supplier') }}: </label>
+                                        <select name="supplier_id" id="supplier_id" class="form-control w-100">
+                                            <option value="">-- {{ __('select supplier') }} --</option>
+                                            @foreach ($suppliers as $supplier)
+                                                <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 pt-4">
                                     <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i class="fas fa-filter m-1"></i>{{ __("Filter") }}</button>
                                 </div>
                             </div>
@@ -45,6 +56,7 @@
                                     <th class="border-bottom-0">{{__('item code')}}</th>
                                     <th class="border-bottom-0">{{__('supplier')}}</th>
                                     <th class="border-bottom-0">{{__('item')}}</th>
+                                    <th class="border-bottom-0">{{__('brand')}}</th>
                                     <th class="border-bottom-0">{{__('first stock')}}</th>
                                     <th class="border-bottom-0">{{__('incoming amount')}}</th>
                                     <th class="border-bottom-0">{{__('outgoing amount')}}</th>
@@ -69,6 +81,11 @@
     });
 
     $(document).ready(function(){
+        $('#supplier_id').select2({
+                theme: 'bootstrap4',
+                allowClear: true,
+                minimumInputLength: 0 // Set this to enable search after 1 character
+            });
         // Define language settings
         const langID = {
                 decimal: "",
@@ -136,6 +153,7 @@
                 data:function(d){
                     d.start_date = $("input[name='start_date']").val();
                     d.end_date = $("input[name='end_date']").val();
+                    d.supplier = $("#supplier_id").val();
                 }
             },
             columns:[
@@ -156,6 +174,10 @@
                {
                 data:"nama_barang",
                 name:"nama_barang"
+               },
+               {
+                data:"brand",
+                name:"brand"
                },
                {
                 data:"stok_awal",

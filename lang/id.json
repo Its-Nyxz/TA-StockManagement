@@ -156,5 +156,10 @@
   "Stock Increases" : "Stok Bertambah",
   "Stock Decreases" : "Stok Berkurang",
   "Stock is Correct" : "Stok Sesuai",
-  "stock opname item code" : "stock opname kode barang"
+  "stock opname item code" : "stok opname kode barang",
+  "Today's Stock Opname History" : "Histori Stok Opname Hari ini",
+  "See All Stock Opnames" : "Lihat Semua Stok Opname ",
+  "Notifications" : " Notifikasi",
+  "Edit Profile User" : "Edit Profil Pengguna",
+  "Add user" : "Tambah Pengguna"
 }

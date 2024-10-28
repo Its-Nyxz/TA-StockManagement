@@ -48,8 +48,8 @@ class DashboardController extends Controller
             ->filter(function ($item) {
                 $total_stok = $item->quantity + $item->goodsIns->sum('quantity')
                     - $item->goodsOuts->sum('quantity')
-                    - $item->goodsBacks->sum('quantity');
-                    - $item->stockOpnames->sum('quantity');
+                    - $item->goodsBacks->sum('quantity')
+                    + $item->stockOpnames->sum('quantity');
                 return $total_stok >= 10 && $total_stok <= 50;;
             });
         $get_goodsIns = GoodsIn::with('item', 'user', 'supplier');

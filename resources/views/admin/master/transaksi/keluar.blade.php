@@ -203,6 +203,7 @@
                                         <th class="border-bottom-0">{{ __('item code') }}</th>
                                         <th class="border-bottom-0">{{ __('supplier') }}</th>
                                         <th class="border-bottom-0">{{ __('item') }}</th>
+                                        <th class="border-bottom-0">{{ __('brand') }}</th>
                                         <th class="border-bottom-0">{{ __('outgoing amount') }}</th>
                                         <th class="border-bottom-0" width="1%">{{ __('action') }}</th>
                                     </tr>
@@ -654,6 +655,10 @@
                         name: "item_name"
                     },
                     {
+                        data: "brand",
+                        name: "brand"
+                    },
+                    {
                         data: "quantity",
                         name: "quantity"
                     },
@@ -701,6 +706,7 @@
                 $("input[name='id']").val(null);
                 $("input[name='id_barang']").val(null);
                 $("select[name='customer']").val('-- Pilih Customer --');
+                $("select[name='supplier']").val(null).trigger('change');
                 $("input[name='nama_barang']").val(null);
                 $("input[name='tanggal_keluar']").val(null);
                 $("input[name='kode_barang']").val(null);

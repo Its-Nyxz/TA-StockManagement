@@ -39,10 +39,13 @@ class ReportGoodsBackController extends Controller
                 return $data -> item -> code;
             })
             ->addColumn("supplier_name",function($data){
-                return $data -> supplier -> name;
+                return $data -> item-> supplier -> name;
             })
             ->addColumn("item_name",function($data){
                 return $data -> item -> name;
+            })
+            ->addColumn("brand",function($data){
+                return $data -> item ->brand -> name;
             })
             -> make(true);
         }

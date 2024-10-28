@@ -21,9 +21,9 @@ class ReportGoodsOutController extends Controller
     {
         if($request->ajax()){
             if( empty($request->start_date) && empty($request->end_date)){
-                $goodsouts = GoodsOut::with('item','user','customer');
+                $goodsouts = GoodsOut::with('item','user','customer','supplier');
             }else{
-                $goodsouts = GoodsOut::with('item','user','customer');
+                $goodsouts = GoodsOut::with('item','user','customer','customer');
                 $goodsouts -> whereBetween('date_out',[$request->start_date,$request->end_date]);
             }
             $goodsouts -> latest() -> get();
@@ -38,8 +38,11 @@ class ReportGoodsOutController extends Controller
             ->addColumn("kode_barang",function($data){
                 return $data -> item -> code;
             })
-            ->addColumn("brand_name",function($data){
+            ->addColumn("brand",function($data){
                 return $data -> item -> brand -> name;
+            })
+            ->addColumn("supplier",function($data){
+                return $data -> supplier -> name;
             })
             ->addColumn("item_name",function($data){
                 return $data -> item -> name;

@@ -19,14 +19,17 @@ class ReportGoodsInController extends Controller
 
     public function list(Request $request):JsonResponse
     {
+        $goodsins = GoodsIn::with('item','user','supplier');
+        if (!empty($request->start_date) && !empty($request->end_date)) {
+            $goodsins->whereBetween('date_received', [$request->start_date, $request->end_date]);
+        }
+
+        if (isset($request->status)) {
+            $goodsins->where('status', $request->status);
+        }
+
+        $goodsins -> latest() -> get();
         if($request->ajax()){
-            if( empty($request->start_date) && empty($request->end_date)){
-                $goodsins = GoodsIn::with('item','user','supplier');
-            }else{
-                $goodsins = GoodsIn::with('item','user','supplier');
-                $goodsins -> whereBetween('date_received',[$request->start_date,$request->end_date]);
-            }
-            $goodsins -> latest() -> get();
             return DataTables::of($goodsins)
             ->addColumn('quantity',function($data){
                 $item = Item::with("unit")->find($data -> item -> id);

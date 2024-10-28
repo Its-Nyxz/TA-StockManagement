@@ -22,7 +22,18 @@
                                             <input type="date" name="end_date" class="form-control w-100">
                                         </div>
                                     </div>
-                                    <div class="col-sm-4 pt-4">
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                            <label for="status">{{ __('status') }}: </label>
+                                            <select name="status" id="status" class="form-control w-100">
+                                                <option value="">-- {{ __('status') }} -- </option>
+                                                <option value="0">Pending</option>
+                                                <option value="1">Approved</option>
+                                                <option value="2">Retur</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2 pt-4">
                                         <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
                                                 class="fas fa-filter m-1"></i>{{ __('Filter') }}</button>
                                     </div>
@@ -141,6 +152,7 @@
                     data: function(d) {
                         d.start_date = $("input[name='start_date']").val();
                         d.end_date = $("input[name='end_date']").val();
+                        d.status = $("#status").val();
                     }
                 },
                 columns: [{

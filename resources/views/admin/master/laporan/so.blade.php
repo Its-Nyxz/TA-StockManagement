@@ -10,19 +10,19 @@
                         <div class="row w-100">
                             <div class="col-lg-12  w-100">
                                 <div class="row">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-2 col-12">
                                         <div class="form-group">
                                             <label for="date_start">{{ __('start date') }}: </label>
                                             <input type="date" name="start_date" class="form-control w-100">
                                         </div>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-2 col-12">
                                         <div class="form-group">
                                             <label for="date_start">{{ __('end date') }}: </label>
                                             <input type="date" name="end_date" class="form-control w-100">
                                         </div>
                                     </div>
-                                    <div class="col-sm-1">
+                                    <div class="col-sm-2 col-12">
                                         <div class="form-group">
                                             <label for="date_start">{{ __('users') }}: </label>
                                             <select name="inputer" id="inputer" class="form-control w-100">
@@ -33,29 +33,27 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-2 col-12">
                                         <div class="form-group">
                                             <label for="date_start">{{ __('supplier') }}: </label>
                                             <select name="supplier_id" id="supplier_id" class="form-control w-100">
-                                                <option value="">-- {{ __('select user responsible') }} --</option>
+                                                <option value="">-- {{ __('select supplier') }} --</option>
                                                 @foreach ($suppliers as $supplier)
                                                     <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-1 pt-4">
-                                        <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
-                                                class="fas fa-filter m-1"></i>{{ __('Filter') }}</button>
-                                    </div>
-                                    <div class="text-end col-sm-4 pt-4">
+                                    </div> 
+                                    <div class="text-end col-sm-4 col-12 pt-4">
                                         <div class = "d-flex justify-content-end">
+                                            <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
+                                                class="fas fa-filter m-1"></i><span
+                                                class="d-none d-lg-block d-xl-inline"></span></button>
                                             <button class="btn {{ $in_status != 0 ? 'btn-success' : 'btn-info' }} m-1 mt-1"
                                                 type="button" data-toggle="modal"
                                                 {{ $in_status != 0 ? 'data-target="#TambahData"' : 'data-target="alert"' }}
                                                 id="modal-button"><i class="fas fa-plus m-1"></i><span
-                                                    class="d-none d-lg-block d-xl-inline">
-                                                    {{ __('Add data') }}</span></button>
+                                                    class="d-none d-lg-block d-xl-inline"></span></button>
                                             <button class="btn btn-outline-primary font-weight-bold m-1 mt-1" id="print"><i
                                                     class="fas fa-print m-1"></i><span
                                                     class="d-none d-lg-block d-xl-inline"></span></button>
@@ -553,11 +551,11 @@
                 }
 
             })
-            // .then(() => {
-            //     setTimeout(function() {
-            //         location.reload(); // Reloads the page after 1500ms
-            //     }, 1000);
-            // });
+            .then(() => {
+                setTimeout(function() {
+                    location.reload(); // Reloads the page after 1500ms
+                }, 1000);
+            });
         }
 
         function ubah() {
@@ -614,11 +612,11 @@
                     console.log(err);
                 },
             })
-            // .then(() => {
-            //     setTimeout(function() {
-            //         location.reload();
-            //     }, 1000);
-            // });
+            .then(() => {
+                setTimeout(function() {
+                    location.reload();
+                }, 1000);
+            });
         }
 
         $(document).ready(function() {
@@ -647,7 +645,7 @@
                 $('#status').val(status);
             });
 
-            $('#supplier,#inputer').select2({
+            $('#supplier,#inputer,#supplier_id').select2({
                 theme: 'bootstrap4',
                 allowClear: true,
                 minimumInputLength: 0 // Set this to enable search after 1 character
@@ -932,9 +930,10 @@
                 $("input[name='satuan_barang']").val(null);
                 $("input[name='jumlah']").val(null);
                 $("textarea[name='description']").val(null);
-                $("select[name='supplier'").val(null);
+                $("select[name='supplier'").val(null).trigger('change');
                 $("input[name='stock_sistem']").val(null);
                 $("input[name='stock_fisik']").val(null);
+                $("input[name='status']").val(null);
                 $("#simpan").data('action', 'simpan');
             });
 

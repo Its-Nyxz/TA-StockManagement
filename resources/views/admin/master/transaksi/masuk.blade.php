@@ -52,7 +52,7 @@
                                         <div class = "d-flex justify-content-end">
                                             <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
                                                     class="fas fa-filter m-1"></i><span
-                                                    class="d-none d-lg-block d-xl-inline">{{ __('filter') }}</span></button>
+                                                    class="d-none d-lg-block d-xl-inline">{{ __('Filter') }}</span></button>
                                             @can('super&admin')
                                                 <button class="btn btn-info m-1 mt-1 position-relative" type="button"
                                                     data-toggle="modal" data-target="#modal_approve"
@@ -775,13 +775,7 @@
                 $('#tanggal_masuk').val(today);
             });
 
-            $('#supplier').select2({
-                theme: 'bootstrap4',
-                allowClear: true,
-                minimumInputLength: 0 // Set this to enable search after 1 character
-            });
-
-            $('#inputer').select2({
+            $('#supplier, #inputer').select2({
                 theme: 'bootstrap4',
                 allowClear: true,
                 minimumInputLength: 0 // Set this to enable search after 1 character
@@ -959,7 +953,7 @@
                 $("input[name='kode']").val("BRGTRX-" + id);
                 $("input[name='id']").val(null);
                 $("input[name='id_barang']").val(null);
-                $("select[name='supplier'").val("-- {{ __('choose a supplier') }} --");
+                $("select[name='supplier'").val(null).trigger('change');
                 $("input[name='nama_barang']").val(null);
                 $("input[name='tanggal_masuk']").val(null);
                 $("input[name='kode_barang']").val(null);

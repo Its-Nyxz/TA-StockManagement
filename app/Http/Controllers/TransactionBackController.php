@@ -64,6 +64,9 @@ class TransactionBackController extends Controller
             ->addColumn("item_name",function($data){
                 return $data -> item -> name;
             })
+            ->addColumn("brand",function($data){
+                return $data -> item -> brand -> name;
+            })
             ->addColumn('tindakan',function($data){
                 $button = "<button class='ubah btn btn-success m-1' id='".$data->id."'><i class='fas fa-pen m-1'></i>".__("Edit")."</button>";
                 $button .= "<button class='hapus btn btn-danger m-1' id='".$data->id."'><i class='fas fa-trash m-1'></i>".__("Delete")."</button>";

@@ -51,6 +51,7 @@
                                         <th class="border-bottom-0">{{ __('date') }}</th>
                                         <th class="border-bottom-0">{{ __('code') }}</th>
                                         <th class="border-bottom-0">{{ __('code of goods') }}</th>
+                                        <th class="border-bottom-0">{{ __('supplier') }}</th>
                                         {{-- <th class="border-bottom-0">{{ __("customer") }}</th> --}}
                                         <th class="border-bottom-0">{{ __('goods') }}</th>
                                         <th class="border-bottom-0">{{ __('brand') }}</th>
@@ -166,12 +167,16 @@
                     //     name:"customer_name"
                     //    },
                     {
+                        data: "supplier",
+                        name: "supplier"
+                    },
+                    {
                         data: "item_name",
                         name: "item_name"
                     },
                     {
-                        data: "brand_name",
-                        name: "brand_name"
+                        data: "brand",
+                        name: "brand"
                     },
                     {
                         data: "quantity",

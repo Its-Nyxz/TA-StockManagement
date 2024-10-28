@@ -9,7 +9,7 @@
                 <div class="card-header row">
                     <div class="d-flex justify-content-end align-items-center w-100">
                         @can('super')    
-                        <button class="btn btn-success" type="button"  data-toggle="modal" data-target="#TambahData" id="modal-button"><i class="fas fa-plus m-1"></i>{{ __("add data") }}</button>
+                        <button class="btn btn-success" type="button"  data-toggle="modal" data-target="#TambahData" id="modal-button"><i class="fas fa-plus m-1"></i>{{ __("Add data") }}</button>
                         @endcan
                         
                     </div>
@@ -21,7 +21,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="TambahDataModalLabel">{{ __("add data") }}</h5>
+                            <h5 class="modal-title" id="TambahDataModalLabel">{{ __("Add user") }}</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true" onclick="clear()" >&times;</span>
                             </button>
@@ -200,7 +200,7 @@
             $("#password").val(null);
             $("#role").val(null);
             $("#simpan").text("{{__('save')}}");
-            $("#TambahDataModalLabel").text("{{__('add data')}}");
+            $("#TambahDataModalLabel").text("{{__('Add user')}}");
         });
 
 
@@ -213,7 +213,7 @@
         $("#modal-button").click();
         $("#TambahData").modal('show'); 
         $("#simpan").text("{{__('update')}}");
-        $("#TambahDataModalLabel").text("Ubah Profile Staff");
+        $("#TambahDataModalLabel").text("{{ __('Edit Profile User') }}");
         $.ajax({
             url:"{{route('settings.employee.detail')}}",
             type:"post",

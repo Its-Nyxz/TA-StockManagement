@@ -684,8 +684,7 @@
 
                 // Check if all values are 0
                 if (goodsInToday === 0 && goodsOutToday === 0 && goodsBackToday === 0 && goodsSoToday ===
-                    0 && goodsTotalToday ===
-                    0) {
+                    0 && goodsTotalToday === 0) {
                     // return false;
                     document.getElementById('daily-transactions-card').style.display = 'none';
                 }
@@ -701,8 +700,7 @@
                         datasets: [{
                             label: 'Goods Transactions Today',
                             data: [goodsInToday, goodsOutToday, goodsBackToday,
-                                goodsSoToday,
-                                goodsTotalToday
+                                goodsSoToday, goodsTotalToday
                             ],
                             backgroundColor: [
                                 'rgba(75, 192, 192, 0.4)',

@@ -64,7 +64,7 @@ class TransactionOutController extends Controller
             ->addColumn("pemasok",function($data){
                 return $data -> supplier -> name;
             })
-            ->addColumn("brand_name",function($data){
+            ->addColumn("brand",function($data){
                 return $data -> item -> brand -> name;
             })
 

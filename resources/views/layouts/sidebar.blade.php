@@ -1,7 +1,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar bg-blue elevation-4">
       <!-- Brand Logo -->
-      <a href="index3.html" class="brand-link">
+      <a href="{{ route('dashboard') }}" class="brand-link">
           <img src="{{ asset('icon.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
               style="opacity: .8">
           <span class="brand-text font-weight-bold">{{ config('app.name') }}</span>
@@ -113,7 +113,7 @@
                   @can('super&admin')
                       <li class="nav-item">
                           <a href="javascript:void(0)" class="nav-link text-white">
-                              <i class="nav-icon fas fa-paste"></i>
+                              <i class="nav-icon fas fa-file-signature"></i>
                               <p>
                                   {{ __('item report') }}
                                   <i class="right fas fa-angle-down"></i>

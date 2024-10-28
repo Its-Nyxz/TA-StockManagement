@@ -2,42 +2,57 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
+use Carbon\Carbon;
 use App\Models\Item;
 use App\Models\GoodsIn;
 use App\Models\GoodsOut;
+use App\Models\Supplier;
 use App\Models\GoodsBack;
+use Illuminate\View\View;
 use App\Models\StockOpname;
+use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
-use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 
 class ReportStockController extends Controller
 {
     public function index(): View
     {
-        return view('admin.master.laporan.stok');
+        $suppliers = Supplier::all();
+        return view('admin.master.laporan.stok', compact('suppliers'));
     }
 
     public function list(Request $request): JsonResponse
     {
-        if ($request->ajax()) {
-            if (empty($request->start_date) && empty($request->end_date)) {
-                $data = Item::with('goodsOuts', 'goodsIns', 'goodsBacks','stockOpnames');
-            } else {
-                $data = Item::with(['goodsOuts' => function ($query) use ($request) {
-                    $query->whereBetween('date_out', [$request->start_date, $request->end_date]);
-                }, 'goodsIns'  => function ($query) use ($request) {
-                    $query->whereBetween('date_received', [$request->start_date, $request->end_date]);
-                }, 'goodsBacks'  => function ($query) use ($request) {
-                    $query->whereBetween('date_backs', [$request->start_date, $request->end_date]);
-                }, 'stockOpnames'  => function ($query) use ($request) {
-                    $query->whereBetween('date_so', [$request->start_date, $request->end_date]);
-                },
-            ]);
+        $data = Item::with(['goodsOuts', 'goodsIns', 'goodsBacks', 'stockOpnames']);
+
+        if (!empty($request->start_date) || !empty($request->end_date)) {
+            $dateFilters = [
+                'goodsOuts' => 'date_out',
+                'goodsIns' => 'date_received',
+                'goodsBacks' => 'date_backs',
+                'stockOpnames' => 'date_so',
+            ];
+        
+            foreach ($dateFilters as $relation => $dateColumn) {
+                $data->with([$relation => function ($query) use ($request, $dateColumn) {
+                    if (!empty($request->start_date) && !empty($request->end_date)) {
+                        $query->whereBetween($dateColumn, [$request->start_date, $request->end_date]);
+                    } elseif (!empty($request->start_date)) {
+                        $query->where($dateColumn, '>=', $request->start_date);
+                    } elseif (!empty($request->end_date)) {
+                        $query->where($dateColumn, '<=', $request->end_date);
+                    }
+                }]);
             }
-            $data->latest()->get();
+        }   
+
+        if (!empty($request->supplier)) {
+            $data->where('supplier_id', $request->supplier);
+        }
+        
+        $data->latest()->get();
+        if ($request->ajax()) {
             return DataTables::of($data)
                 ->addColumn('jumlah_masuk', function ($item) {
                     $totalQuantity = $item->goodsIns->sum('quantity');
@@ -62,10 +77,10 @@ class ReportStockController extends Controller
                         $formatted = '<span style="color:red; font-weight:bold">-' . abs($totalQuantity) . ' / ' . $data->unit->name . '</span>';
                     } else if ($totalQuantity > 0) {
                         $formatted = '<span style="color:#44d744; font-weight:bold">+' . $totalQuantity . ' / ' . $data->unit->name . '</span>';
-                    }else {
+                    } else {
                         $formatted = '<span>' . $totalQuantity . ' / ' . $data->unit->name . '</span>';
                     }
-                
+
                     return $formatted;
                 })
                 ->addColumn("kode_barang", function ($item) {
@@ -81,6 +96,9 @@ class ReportStockController extends Controller
                 ->addColumn("pemasok", function ($item) {
                     return $item->supplier->name;
                 })
+                ->addColumn("brand", function ($item) {
+                    return $item->brand->name;
+                })
                 ->addColumn("total", function ($item) {
                     $totalQuantityIn = $item->goodsIns->sum('quantity');
                     $totalQuantityOut = $item->goodsOuts->sum('quantity');
@@ -95,18 +113,17 @@ class ReportStockController extends Controller
                     //     $count = $item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur;
                     // }
                     $count = ($item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur) + $totalQuantitySO;
-                    $result = $count. "/" . $data->unit->name;
+                    $result = $count . "/" . $data->unit->name;
                     $result = max(0, $result);
                     if ($count <= 0) {
                         return "<span class='text-red font-weight-bold'>" . $result . "</span>" . ' ' . "<span class='badge badge-danger'>" . __("Stock Empty") . "</span>";
-                    }else if ($count <= 10) {
+                    } else if ($count <= 10) {
                         return "<span class='text-red font-weight-bold'>" . $result . "</span>" . ' ' . "<span class='badge badge-danger'>" . __("Stock Running Low") . "</span>";
-                    }else{
+                    } else {
                         return  "<span class='text-success font-weight-bold'>" . $result . "</span>";
                     }
-
                 })
-                ->rawColumns(['total','jumlah_selisih'])
+                ->rawColumns(['total', 'jumlah_selisih'])
                 ->make(true);
         }
     }
@@ -151,7 +168,7 @@ class ReportStockController extends Controller
         $goodsBackToday = GoodsBack::whereDate('date_backs', $today)->sum('quantity') ?? 0;
         $goodsSoToday = StockOpname::whereDate('date_so', $today)->sum('quantity') ?? 0;
         $totalStockToday = max(0, $goodsInToday - $goodsOutToday - $goodsBackToday + $goodsSoToday);
-
+        
         return response()->json([
             'goods_in_today' => $goodsInToday,
             'goods_out_today' => $goodsOutToday,

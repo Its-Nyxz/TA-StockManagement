@@ -55,6 +55,7 @@
                                         <th class="border-bottom-0">{{ __('item code') }}</th>
                                         <th class="border-bottom-0">{{ __('supplier') }}</th>
                                         <th class="border-bottom-0">{{ __('item') }}</th>
+                                        <th class="border-bottom-0">{{ __('brand') }}</th>
                                         <th class="border-bottom-0">{{ __('returned amount') }}</th>
                                         <th class="border-bottom-0">{{ __('description') }}</th>
                                     </tr>
@@ -169,6 +170,10 @@
                     }, {
                         data: "item_name",
                         name: "item_name"
+                    },
+                    {
+                        data: "brand",
+                        name: "brand"
                     },
                     {
                         data: "quantity",
