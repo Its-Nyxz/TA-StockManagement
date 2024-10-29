@@ -43,25 +43,25 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                    </div> 
+                                    </div>
                                     <div class="text-end col-sm-4 col-12 pt-4">
                                         <div class = "d-flex justify-content-end">
                                             <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
-                                                class="fas fa-filter m-1"></i><span
-                                                class="d-none d-lg-block d-xl-inline"></span></button>
+                                                    class="fas fa-filter m-1"></i><span
+                                                    class="d-none d-lg-block d-xl-inline"></span></button>
                                             <button class="btn {{ $in_status != 0 ? 'btn-success' : 'btn-info' }} m-1 mt-1"
                                                 type="button" data-toggle="modal"
                                                 {{ $in_status != 0 ? 'data-target="#TambahData"' : 'data-target="alert"' }}
                                                 id="modal-button"><i class="fas fa-plus m-1"></i><span
                                                     class="d-none d-lg-block d-xl-inline"></span></button>
-                                            <button class="btn btn-outline-primary font-weight-bold m-1 mt-1" id="print"><i
-                                                    class="fas fa-print m-1"></i><span
+                                            <button class="btn btn-outline-primary font-weight-bold m-1 mt-1"
+                                                id="print"><i class="fas fa-print m-1"></i><span
                                                     class="d-none d-lg-block d-xl-inline"></span></button>
-                                            <button class="btn btn-outline-danger font-weight-bold m-1 mt-1" id="export-pdf"><i
-                                                    class="fas fa-file-pdf m-1"></i><span
+                                            <button class="btn btn-outline-danger font-weight-bold m-1 mt-1"
+                                                id="export-pdf"><i class="fas fa-file-pdf m-1"></i><span
                                                     class="d-none d-lg-block d-xl-inline"></span></button>
-                                            <button class="btn btn-outline-success font-weight-bold m-1 mt-1" id="export-excel"><i
-                                                    class="fas fa-file-excel m-1"></i><span
+                                            <button class="btn btn-outline-success font-weight-bold m-1 mt-1"
+                                                id="export-excel"><i class="fas fa-file-excel m-1"></i><span
                                                     class="d-none d-lg-block d-xl-inline"></span></button>
                                         </div>
                                     </div>
@@ -505,57 +505,57 @@
             Form.append('stock_fisik', stock_fisik);
 
             $.ajax({
-                url: `{{ route('laporan.so.save') }}`,
-                type: "post",
-                processData: false,
-                contentType: false,
-                dataType: 'json',
-                data: Form,
-                success: function(res) {
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: res.message,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    $('#kembali').click();
-                    $("input[name='id_barang']").val(null);
-                    $("input[name='tanggal_so']").val(null);
-                    $("input[name='nama_barang']").val(null);
-                    $("input[name='kode_barang']").val(null);
-                    $("input[name='status']").val(null);
-                    $("select[name='jenis_barang']").val(null);
-                    $("select[name='satuan_barang']").val(null);
-                    $("input[name='jumlah']").val(0);
-                    $("textarea[name='description']").val(null);
-                    $("select[name='supplier'").val("-- {{ __('choose a supplier') }} --");
-                    $("input[name='stock_sistem']").val(0);
-                    $("input[name='stock_fisik']").val(0);
-                    $('#data-tabel').DataTable().ajax.reload();
-                },
-                statusCode: {
-                    400: function(res) {
-                        const {
-                            message
-                        } = res.responseJSON;
+                    url: `{{ route('laporan.so.save') }}`,
+                    type: "post",
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    data: Form,
+                    success: function(res) {
                         Swal.fire({
                             position: "center",
-                            icon: "warning",
-                            title: "Oops...",
-                            text: message,
+                            icon: "success",
+                            title: res.message,
                             showConfirmButton: false,
-                            timer: 1900
+                            timer: 1500
                         });
+                        $('#kembali').click();
+                        $("input[name='id_barang']").val(null);
+                        $("input[name='tanggal_so']").val(null);
+                        $("input[name='nama_barang']").val(null);
+                        $("input[name='kode_barang']").val(null);
+                        $("input[name='status']").val(null);
+                        $("select[name='jenis_barang']").val(null);
+                        $("select[name='satuan_barang']").val(null);
+                        $("input[name='jumlah']").val(0);
+                        $("textarea[name='description']").val(null);
+                        $("select[name='supplier'").val("-- {{ __('choose a supplier') }} --");
+                        $("input[name='stock_sistem']").val(0);
+                        $("input[name='stock_fisik']").val(0);
+                        $('#data-tabel').DataTable().ajax.reload();
+                    },
+                    statusCode: {
+                        400: function(res) {
+                            const {
+                                message
+                            } = res.responseJSON;
+                            Swal.fire({
+                                position: "center",
+                                icon: "warning",
+                                title: "Oops...",
+                                text: message,
+                                showConfirmButton: false,
+                                timer: 1900
+                            });
+                        }
                     }
-                }
 
-            })
-            .then(() => {
-                setTimeout(function() {
-                    location.reload(); // Reloads the page after 1500ms
-                }, 1000);
-            });
+                })
+                .then(() => {
+                    setTimeout(function() {
+                        location.reload(); // Reloads the page after 1500ms
+                    }, 1000);
+                });
         }
 
         function ubah() {
@@ -571,52 +571,52 @@
             const stock_fisik = $("input[name='stock_fisik']").val();
 
             $.ajax({
-                url: `{{ route('laporan.so.update') }}`,
-                type: "put",
-                data: {
-                    id,
-                    item_id,
-                    user_id,
-                    date_so,
-                    description,
-                    invoice_number,
-                    supplier_id,
-                    quantity,
-                    stock_sistem,
-                    stock_fisik
-                },
-                success: function(res) {
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: res.message,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    $('#kembali').click();
-                    $("input[name='id']").val(null);
-                    $("input[name='id_barang']").val(null);
-                    $("input[name='nama_barang']").val(null);
-                    $("input[name='tanggal_so']").val(null);
-                    $("input[name='kode_barang']").val(null);
-                    $("select[name='jenis_barang']").val(null);
-                    $("select[name='satuan_barang']").val(null);
-                    $("input[name='jumlah']").val(0);
-                    $("input[name='stock_sistem']").val(0);
-                    $("input[name='stock_fisik']").val(0);
-                    $("textarea[name='description']").val(null);
-                    $("select[name='supplier'").val(null).trigger('change');;
-                    $('#data-tabel').DataTable().ajax.reload();
-                },
-                error: function(err) {
-                    console.log(err);
-                },
-            })
-            .then(() => {
-                setTimeout(function() {
-                    location.reload();
-                }, 1000);
-            });
+                    url: `{{ route('laporan.so.update') }}`,
+                    type: "put",
+                    data: {
+                        id,
+                        item_id,
+                        user_id,
+                        date_so,
+                        description,
+                        invoice_number,
+                        supplier_id,
+                        quantity,
+                        stock_sistem,
+                        stock_fisik
+                    },
+                    success: function(res) {
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: res.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        $('#kembali').click();
+                        $("input[name='id']").val(null);
+                        $("input[name='id_barang']").val(null);
+                        $("input[name='nama_barang']").val(null);
+                        $("input[name='tanggal_so']").val(null);
+                        $("input[name='kode_barang']").val(null);
+                        $("select[name='jenis_barang']").val(null);
+                        $("select[name='satuan_barang']").val(null);
+                        $("input[name='jumlah']").val(0);
+                        $("input[name='stock_sistem']").val(0);
+                        $("input[name='stock_fisik']").val(0);
+                        $("textarea[name='description']").val(null);
+                        $("select[name='supplier'").val(null).trigger('change');;
+                        $('#data-tabel').DataTable().ajax.reload();
+                    },
+                    error: function(err) {
+                        console.log(err);
+                    },
+                })
+                .then(() => {
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                });
         }
 
         $(document).ready(function() {
@@ -919,7 +919,16 @@
 
                 $('#TambahData').modal('show');
 
-                id = new Date().getTime();
+                // id = new Date().getTime();
+                // Dapatkan timestamp saat ini
+                const now = new Date();
+
+                // Konversi ke timestamp Indonesia (WIB, UTC+7)
+                const indonesiaOffset = 7 * 60 * 60 * 1000; // Offset WIB dalam milidetik
+                const idTime = new Date(now.getTime() + indonesiaOffset);
+
+                // Format `idTime` sebagai timestamp atau string sesuai kebutuhan
+                const id = Math.floor(idTime.getTime() / 1000); // Dalam detik
                 $("input[name='kode']").val("SO-" + id);
                 $("input[name='id']").val(null);
                 $("input[name='id_barang']").val(null);

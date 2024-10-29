@@ -27,7 +27,7 @@
                                             <label for="date_start">{{ __('users') }}: </label>
                                             <select name="inputer" id="inputer" class="form-control w-100">
                                                 <option value="">-- {{ __('select user responsible') }} --</option>
-                                                @foreach ($users->where('role_id','<=','2') as $user)
+                                                @foreach ($users->where('role_id', '<=', '2') as $user)
                                                     <option value="{{ $user->id }}">{{ $user->name }}</option>
                                                 @endforeach
                                             </select>
@@ -141,8 +141,9 @@
                                             <label for="kode_barang" class="form-label">{{ __('item code') }} <span
                                                     class="text-danger">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" name="kode_barang" id="kode_barang" class="form-control"
-                                                            placeholder="{{ __('choose supplier first') }} ">
+                                                <input type="text" name="kode_barang" id="kode_barang"
+                                                    class="form-control"
+                                                    placeholder="{{ __('choose supplier first') }} ">
                                                 <div class="input-group-append">
                                                     <button class="btn btn-outline-primary" type="button"
                                                         id="cari-barang"><i class="fas fa-search"></i></button>
@@ -307,7 +308,7 @@
                 processing: true,
                 // responsive: true,
                 serverSide: true,
-                language:languageSettings,
+                language: languageSettings,
                 // ajax: `{{ route('barang.list') }}`,
                 ajax: {
                     url: `{{ route('barang.list.in') }}`,
@@ -383,7 +384,7 @@
                 $('#kode_barang').removeAttr('placeholder');
 
                 $('#data-barang').DataTable().ajax.reload();
-            }); 
+            });
 
             $(document).on('click', '#barang', function() {
                 let supplierId = $("select[name='supplier']").val();
@@ -464,54 +465,54 @@
             Form.append('supplier_id', supplier_id);
 
             $.ajax({
-                url: `{{ route('transaksi.kembali.save') }}`,
-                type: "post",
-                processData: false,
-                contentType: false,
-                dataType: 'json',
-                data: Form,
-                success: function(res) {
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: res.message,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    $('#kembali').click();
-                    $("input[name='id_barang']").val(null);
-                    $("input[name='tanggal_retur']").val(null);
-                    $("input[name='nama_barang']").val(null);
-                    $("input[name='kode_barang']").val(null);
-                    $("select[name='jenis_barang']").val(null);
-                    $("select[name='satuan_barang']").val(null);
-                    $("input[name='jumlah']").val(0);
-                    $("textarea[name='description']").val(null);
-                    $("select[name='supplier'").val(null);
-                    $('#data-tabel').DataTable().ajax.reload();
-                },
-                statusCode: {
-                    400: function(res) {
-                        const {
-                            message
-                        } = res.responseJSON;
+                    url: `{{ route('transaksi.kembali.save') }}`,
+                    type: "post",
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    data: Form,
+                    success: function(res) {
                         Swal.fire({
                             position: "center",
-                            icon: "warning",
-                            title: "Oops...",
-                            text: message,
+                            icon: "success",
+                            title: res.message,
                             showConfirmButton: false,
-                            timer: 1900
+                            timer: 1500
                         });
+                        $('#kembali').click();
+                        $("input[name='id_barang']").val(null);
+                        $("input[name='tanggal_retur']").val(null);
+                        $("input[name='nama_barang']").val(null);
+                        $("input[name='kode_barang']").val(null);
+                        $("select[name='jenis_barang']").val(null);
+                        $("select[name='satuan_barang']").val(null);
+                        $("input[name='jumlah']").val(0);
+                        $("textarea[name='description']").val(null);
+                        $("select[name='supplier'").val(null);
+                        $('#data-tabel').DataTable().ajax.reload();
+                    },
+                    statusCode: {
+                        400: function(res) {
+                            const {
+                                message
+                            } = res.responseJSON;
+                            Swal.fire({
+                                position: "center",
+                                icon: "warning",
+                                title: "Oops...",
+                                text: message,
+                                showConfirmButton: false,
+                                timer: 1900
+                            });
+                        }
                     }
-                }
 
-            })
-            .then(() => {
-                setTimeout(function() {
-                    location.reload(); // Reloads the page after 1500ms
-                }, 1000);
-            }); 
+                })
+                .then(() => {
+                    setTimeout(function() {
+                        location.reload(); // Reloads the page after 1500ms
+                    }, 1000);
+                });
         }
 
 
@@ -527,48 +528,48 @@
 
 
             $.ajax({
-                url: `{{ route('transaksi.kembali.update') }}`,
-                type: "put",
-                data: {
-                    id,
-                    item_id,
-                    user_id,
-                    date_retur,
-                    description,
-                    invoice_number,
-                    supplier_id,
-                    quantity
-                },
-                success: function(res) {
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: res.message,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    $('#kembali').click();
-                    $("input[name='id']").val(null);
-                    $("input[name='id_barang']").val(null);
-                    $("input[name='nama_barang']").val(null);
-                    $("input[name='tanggal_retur']").val(null);
-                    $("input[name='kode_barang']").val(null);
-                    $("select[name='jenis_barang']").val(null);
-                    $("select[name='satuan_barang']").val(null);
-                    $("input[name='jumlah']").val(0);
-                    $("textarea[name='description']").val(null);
-                    $("select[name='supplier'").val(null);
-                    $('#data-tabel').DataTable().ajax.reload();
-                },
-                error: function(err) {
-                    console.log(err);
-                },
-            })
-            .then(() => {
-                setTimeout(function() {
-                    location.reload();
-                }, 1000);
-            });
+                    url: `{{ route('transaksi.kembali.update') }}`,
+                    type: "put",
+                    data: {
+                        id,
+                        item_id,
+                        user_id,
+                        date_retur,
+                        description,
+                        invoice_number,
+                        supplier_id,
+                        quantity
+                    },
+                    success: function(res) {
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: res.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        $('#kembali').click();
+                        $("input[name='id']").val(null);
+                        $("input[name='id_barang']").val(null);
+                        $("input[name='nama_barang']").val(null);
+                        $("input[name='tanggal_retur']").val(null);
+                        $("input[name='kode_barang']").val(null);
+                        $("select[name='jenis_barang']").val(null);
+                        $("select[name='satuan_barang']").val(null);
+                        $("input[name='jumlah']").val(0);
+                        $("textarea[name='description']").val(null);
+                        $("select[name='supplier'").val(null);
+                        $('#data-tabel').DataTable().ajax.reload();
+                    },
+                    error: function(err) {
+                        console.log(err);
+                    },
+                })
+                .then(() => {
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                });
         }
 
         $(document).ready(function() {
@@ -650,7 +651,7 @@
                 processing: true,
                 serverSide: true,
                 responsive: true,
-                language:languageSettings,
+                language: languageSettings,
                 ajax: {
                     url: `{{ route('transaksi.kembali.list') }}`,
                     data: function(d) {
@@ -750,17 +751,17 @@
                 const isExpanded = button.data('expanded');
 
                 if (isExpanded) {
-                    
+
                     span.text(fullText.substr(0, 35) + '...');
                     button.text('Show More');
                     container.css('max-height', '50px');
                 } else {
                     span.text(fullText);
                     button.text('Show Less');
-                    container.css('max-height', 'none'); 
+                    container.css('max-height', 'none');
                 }
 
-                button.data('expanded', !isExpanded); 
+                button.data('expanded', !isExpanded);
             });
 
 
@@ -797,7 +798,17 @@
 
                 $('#TambahData').modal('show');
 
-                id = new Date().getTime();
+                // id = new Date().getTime();
+                // Dapatkan timestamp saat ini
+                const now = new Date();
+
+                // Konversi ke timestamp Indonesia (WIB, UTC+7)
+                const indonesiaOffset = 7 * 60 * 60 * 1000; // Offset WIB dalam milidetik
+                const idTime = new Date(now.getTime() + indonesiaOffset);
+
+                // Format `idTime` sebagai timestamp atau string sesuai kebutuhan
+                const id = Math.floor(idTime.getTime() / 1000); // Dalam detikp
+
                 $("input[name='kode']").val("BRGTRX-" + id);
                 $("input[name='id']").val(null);
                 $("input[name='id_barang']").val(null);

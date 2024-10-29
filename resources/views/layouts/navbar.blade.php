@@ -39,7 +39,7 @@
                         </span>
                     @endif
                 </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right" style="max-height: 25rem; overflow-y: auto;">
                     <span class="dropdown-header">{{ count(getLowStockNotifCount()) }}
                         {{ __('Low or Empty Stock Notifications') }}</span>
                     <div class="dropdown-divider"></div>
@@ -47,10 +47,10 @@
                         <div class="dropdown-item d-flex justify-content-between mb-2">
                             <div>
                                 <strong>{{ $stoks->item_code }}</strong><br>
-                                <small>{{ Str::limit($stoks->supplier, 10, '...') }}</small> -
-                                <small>{{ Str::limit($stoks->item_name, 10, '...') }}</small> /
-                                <small>{{ Str::limit($stoks->unit, 5, '...') }}</small><br>
-                                <small>{{ Str::limit($stoks->merk, 15, '...') }}</small>
+                                <small>{{ $stoks->supplier }}</small><br>
+                                <small>{{ Str::limit($stoks->item_name, 20, '...') }}</small> /
+                                <small>{{ $stoks->unit}}</small><br>
+                                <small>{{ $stoks->merk }}</small>
                             </div>
                             <span class="text-danger text-md">{{ $stoks->total_stock }}</span>
                             {{-- <span
@@ -72,7 +72,7 @@
                         </span>
                     @endif
                 </a>
-                <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
+                <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right" style="max-height: 25rem; overflow-y: auto;">
                     <span class="dropdown-header">{{ getGoodsInApproval()->count() }}
                         {{ __('Approval Notifications') }} </span>
                     <div class="dropdown-divider"></div>
@@ -80,9 +80,9 @@
                         <div class="dropdown-item d-flex justify-content-between mb-2">
                             <div>
                                 <strong>{{ $approval->invoice_number }}</strong><br>
-                                <small> {{ Str::limit($approval->supplier->name, 10, '...') }}</small> -
-                                <small> {{ Str::limit($approval->item->name, 10, '...') }}</small><br>
-                                <small> {{ Str::limit($approval->item->brand->name, 15, '...') }}</small><br>
+                                <small> {{ $approval->supplier->name }}</small><br>
+                                <small> {{ $approval->item->name }}</small>
+                                <small> {{ $approval->item->brand->name }}</small><br>
                             </div>
                             <span
                                 class="float-right text-muted text-sm">{{ $approval->created_at->diffForHumans() }}</span>
@@ -103,7 +103,7 @@
                         </span>
                     @endif
                 </a>
-                <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right">
+                <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right" style="max-height: 25rem; overflow-y: auto;">
                     <span class="dropdown-header">{{ getStockOpnames()->count() }}
                         {{ __("Today's Stock Opname History") }} </span>
                     <div class="dropdown-divider"></div>
@@ -111,8 +111,8 @@
                         <div class="dropdown-item d-flex justify-content-between mb-2">
                             <div>
                                 <strong>{{ $so->invoice_number }}</strong><br>
-                                <small> {{ Str::limit($so->supplier->name, 10, '...') }}</small> -
-                                <small> {{ Str::limit($so->item->name, 10, '...') }}</small><br>
+                                <small> {{ Str::limit($so->supplier->name, 20, '...') }}</small><br>
+                                <small> {{ $so->item->name }}</small><br>
                                 <small> {{ $so->item->brand->name }}</small><br>
                             </div>
                             <span class="float-right text-muted text-sm">

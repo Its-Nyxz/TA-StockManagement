@@ -35,16 +35,16 @@
                                     <div class="col-sm-2">
                                         {{-- @if (Auth::user()->role->id <= 2) --}}
                                         @can('super&admin')
-                                        <div class="form-group">
-                                            <label for="date_start">{{ __('users') }}: </label>
-                                            <select name="inputer" id="inputer" class="form-control w-100">
-                                                <option value="">-- {{ __('select user responsible') }} --
-                                                </option>
-                                                @foreach ($users as $user)
-                                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                            <div class="form-group">
+                                                <label for="date_start">{{ __('users') }}: </label>
+                                                <select name="inputer" id="inputer" class="form-control w-100">
+                                                    <option value="">-- {{ __('select user responsible') }} --
+                                                    </option>
+                                                    @foreach ($users as $user)
+                                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         @endcan
                                         {{-- @endif --}}
                                     </div>
@@ -949,7 +949,16 @@
             });
 
             $("#modal-button").on("click", function() {
-                id = new Date().getTime();
+                // id = new Date().getTime();
+                // Dapatkan timestamp saat ini
+                const now = new Date();
+
+                // Konversi ke timestamp Indonesia (WIB, UTC+7)
+                const indonesiaOffset = 7 * 60 * 60 * 1000; // Offset WIB dalam milidetik
+                const idTime = new Date(now.getTime() + indonesiaOffset);
+
+                // Format `idTime` sebagai timestamp atau string sesuai kebutuhan
+                const id = Math.floor(idTime.getTime() / 1000); // Dalam detik
                 $("input[name='kode']").val("BRGTRX-" + id);
                 $("input[name='id']").val(null);
                 $("input[name='id_barang']").val(null);

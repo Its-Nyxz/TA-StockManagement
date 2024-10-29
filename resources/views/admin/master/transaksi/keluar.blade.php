@@ -96,8 +96,7 @@
                     </div>
 
                     <!-- Modal -->
-                    <div class="modal fade" id="TambahData" aria-labelledby="TambahDataModalLabel"
-                        aria-hidden="true">
+                    <div class="modal fade" id="TambahData" aria-labelledby="TambahDataModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg modal-dialog-scrollable">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -701,7 +700,16 @@
 
                 $('#TambahData').modal('show');
 
-                id = new Date().getTime();
+                // id = new Date().getTime();
+                // Dapatkan timestamp saat ini
+                const now = new Date();
+
+                // Konversi ke timestamp Indonesia (WIB, UTC+7)
+                const indonesiaOffset = 7 * 60 * 60 * 1000; // Offset WIB dalam milidetik
+                const idTime = new Date(now.getTime() + indonesiaOffset);
+
+                // Format `idTime` sebagai timestamp atau string sesuai kebutuhan
+                const id = Math.floor(idTime.getTime() / 1000); // Dalam detik
                 $("input[name='kode']").val("BRGTRX-" + id);
                 $("input[name='id']").val(null);
                 $("input[name='id_barang']").val(null);
