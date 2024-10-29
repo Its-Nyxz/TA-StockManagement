@@ -330,7 +330,7 @@
                         <div class="card col-12">
                             <div class="card-header">
                                 <h1 class="card-title text-lg font-weight-bold text-uppercase">
-                                    {{ __("List of Incoming Transactions by Today's Users") }}</h1>
+                                    {{ __("List of Incoming Transactions by Today's Employee") }}</h1>
                                 <div class="row" style="position: relative">
                                     <div class="d-flex justify-content-end w-100">
                                         <a href="{{ route('transaksi.masuk') }}"

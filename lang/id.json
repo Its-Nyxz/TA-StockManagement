@@ -143,7 +143,7 @@
   "Login Failed !": "Login Gagal !",
   "no transactions this month !" : "tidak ada transaksi pada bulan ini !",
   "Low Stock List (10-50)" : "Daftar Stok Barang Rendah (10-50)",
-  "List of Incoming Transactions by Today's Users": "Daftar Transaksi Masuk Berdasarkan Pengguna Hari ini",
+  "List of Incoming Transactions by Today's Employee": "Daftar Transaksi Masuk Berdasarkan Karyawan Hari ini",
   "action": "aksi",
   "choose supplier first": "pilih pemasok dulu",
   "variant name": "Nama Variant",
@@ -160,6 +160,6 @@
   "Today's Stock Opname History" : "Histori Stok Opname Hari ini",
   "See All Stock Opnames" : "Lihat Semua Stok Opname ",
   "Notifications" : " Notifikasi",
-  "Edit Profile User" : "Edit Profil Pengguna",
-  "Add user" : "Tambah Pengguna"
+  "Edit Profile Employee" : "Edit Profil Karyawan",
+  "Add Employee" : "Tambah Karyawan"
 }

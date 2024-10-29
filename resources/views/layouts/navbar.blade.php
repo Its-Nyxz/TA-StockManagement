@@ -47,9 +47,9 @@
                         <div class="dropdown-item d-flex justify-content-between mb-2">
                             <div>
                                 <strong>{{ $stoks->item_code }}</strong><br>
-                                <small>{{ Str::limit($stoks->supplier, 15, '...') }}</small> -
-                                <small>{{ Str::limit($stoks->item_name, 15, '...') }}</small> /
-                                <small>{{ $stoks->unit }}</small><br>
+                                <small>{{ Str::limit($stoks->supplier, 10, '...') }}</small> -
+                                <small>{{ Str::limit($stoks->item_name, 10, '...') }}</small> /
+                                <small>{{ Str::limit($stoks->unit, 5, '...') }}</small><br>
                                 <small>{{ Str::limit($stoks->merk, 15, '...') }}</small>
                             </div>
                             <span class="text-danger text-md">{{ $stoks->total_stock }}</span>
@@ -80,8 +80,8 @@
                         <div class="dropdown-item d-flex justify-content-between mb-2">
                             <div>
                                 <strong>{{ $approval->invoice_number }}</strong><br>
-                                <small> {{ Str::limit($approval->supplier->name, 15, '...') }}</small> -
-                                <small> {{ Str::limit($approval->item->name, 15, '...') }}</small><br>
+                                <small> {{ Str::limit($approval->supplier->name, 10, '...') }}</small> -
+                                <small> {{ Str::limit($approval->item->name, 10, '...') }}</small><br>
                                 <small> {{ Str::limit($approval->item->brand->name, 15, '...') }}</small><br>
                             </div>
                             <span
@@ -111,8 +111,8 @@
                         <div class="dropdown-item d-flex justify-content-between mb-2">
                             <div>
                                 <strong>{{ $so->invoice_number }}</strong><br>
-                                <small> {{ Str::limit($so->supplier->name, 15, '...') }}</small> -
-                                <small> {{ Str::limit($so->item->name, 15, '...') }}</small><br>
+                                <small> {{ Str::limit($so->supplier->name, 10, '...') }}</small> -
+                                <small> {{ Str::limit($so->item->name, 10, '...') }}</small><br>
                                 <small> {{ $so->item->brand->name }}</small><br>
                             </div>
                             <span class="float-right text-muted text-sm">

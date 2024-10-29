@@ -1,5 +1,5 @@
     @extends('layouts.app')
-@section('title', __("messages.setting-label", ["name" => __("user")]))
+@section('title', __("messages.setting-label", ["name" => __("employee")]))
 @section('content')
 <x-head-datatable/>
 <div class="container-fluid">
@@ -200,7 +200,7 @@
             $("#password").val(null);
             $("#role").val(null);
             $("#simpan").text("{{__('save')}}");
-            $("#TambahDataModalLabel").text("{{__('Add user')}}");
+            $("#TambahDataModalLabel").text("{{__('Add Employee')}}");
         });
 
 
@@ -213,7 +213,7 @@
         $("#modal-button").click();
         $("#TambahData").modal('show'); 
         $("#simpan").text("{{__('update')}}");
-        $("#TambahDataModalLabel").text("{{ __('Edit Profile User') }}");
+        $("#TambahDataModalLabel").text("{{ __('Edit Profile Employee') }}");
         $.ajax({
             url:"{{route('settings.employee.detail')}}",
             type:"post",

@@ -52,7 +52,7 @@
                         <table id="data-tabel" width="100%" class="table table-bordered text-nowrap border-bottom dataTable no-footer dtr-inline collapsed">
                             <thead>
                                 <tr>
-                                    <th class="border-bottom-0" width="8%">{{ __("no") }}</th>
+                                    <th class="border-bottom-0" width="2%">{{ __("no") }}</th>
                                     <th class="border-bottom-0">{{__('item code')}}</th>
                                     <th class="border-bottom-0">{{__('supplier')}}</th>
                                     <th class="border-bottom-0">{{__('item')}}</th>
