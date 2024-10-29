@@ -60,9 +60,9 @@
 
     <div class="wrapper">
         <!-- Preloader -->
-        <div class="preloader flex-column justify-content-center align-items-center">
+        {{-- <div class="preloader flex-column justify-content-center align-items-center">
             <img src="{{ asset('loading.gif') }}" alt="loading" height="60" width="60">
-        </div>
+        </div> --}}
 
         @include('layouts.navbar')
         @include('layouts.sidebar')
