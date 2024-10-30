@@ -25,7 +25,7 @@
                 <div class="icon">
                     <i class="fas fa-boxes"></i>
                 </div>
-                <a href="{{ route('barang') }}" class="small-box-footer">{{ __('messages.more-info') }} <i
+                <a href="{{ route('barang.goods') }}" class="small-box-footer">{{ __('messages.more-info') }} <i
                         class="fas fa-arrow-circle-right"></i></a>
             </div>
 

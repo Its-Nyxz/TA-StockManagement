@@ -304,12 +304,12 @@
                 buttonsStyling: false
             });
             swalWithBootstrapButtons.fire({
-                title: "Anda Yakin ?",
-                text: "Data Ini Akan Di Hapus",
+                title: "{{ __('You are Sure') }} ?",
+                text: "{{ __('This data will be deleted') }}",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: "Ya,Hapus",
-                cancelButtonText: "Tidak, Kembali!",
+                confirmButtonText: "{{ __('Yes, Delete') }}",
+                cancelButtonText: "{{ __('No, Cancel') }}!",
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {

@@ -43,7 +43,7 @@ Route::middleware(['auth', "localization"])->group(function () {
 
     // barang
     Route::controller(ItemController::class)->prefix("barang")->group(function () {
-        Route::get('/', 'index')->name('barang');
+        Route::get('/', 'index')->name('barang.goods');
         Route::post('/kode', 'detailByCode')->name('barang.code');
         Route::get('/daftar-barang', 'list')->name('barang.list');
         Route::post('/info', 'detail')->name('barang.detail');

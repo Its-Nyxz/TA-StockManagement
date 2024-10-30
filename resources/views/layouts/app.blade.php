@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="aplikasi menejemen inventaris barang">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="icon" href="{{asset('icon.png')}}" type="image/x-icon" />
+    <link rel="icon" href="{{ asset('icon.png') }}" type="image/x-icon" />
     <title>{{ config('app.name') }} | @yield('title')</title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -39,7 +39,7 @@
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
         $.widget.bridge('uibutton', $.ui.button)
-        </script>
+    </script>
     <script src="{{ asset('theme/dist/js/capitalize.js') }}"></script>
     <!-- sweetalert -->
     <script src="{{ asset('theme/alert/js/sweetalert2.js') }}"></script>
@@ -53,6 +53,25 @@
     <style>
         .lang-icon {
             background-image: url('{{ asset('localizations/flags.png') }}');
+        }
+
+        .nav-link {
+            color: #ffffff;
+            /* Default white color for all nav links */
+        }
+
+        /* Style only active submenu links */
+        .nav-treeview .nav-link.active {
+            background-color: #62adff;
+            /* Background color for active submenu items */
+            color: #ffffff;
+            /* Keep text white */
+        }
+
+        /* Style for main menu link when expanded, no color change */
+        .menu-open>.nav-link {
+            color: #ffffff;
+            /* Keep main menu text color unchanged */
         }
     </style>
 
@@ -120,7 +139,7 @@
     {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script> --}}
 
     {{-- <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script> --}}
-    
+
     <script>
         function changeLanguage(lang) {
             let url = new URL(window.location.href);

@@ -241,12 +241,12 @@
             buttonsStyling: false
         });
         swalWithBootstrapButtons.fire({
-            title: "{{__('you are sure')}} ?",
-            text: "{{__('this data will be deleted')}}",
+            title: "{{__('You are Sure')}} ?",
+            text: "{{__('This data will be deleted')}}",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonText: "{{__('yes, delete')}}",
-            cancelButtonText: "{{__('no, cancel')}}!",
+            confirmButtonText: "{{__('Yes, Delete')}}",
+            cancelButtonText: "{{__('No, Cancel')}}!",
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {

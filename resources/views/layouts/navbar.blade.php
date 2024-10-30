@@ -22,11 +22,11 @@
                 </div>
             </a>
         </li>
-        <li class="nav-item d-flex justify-content-center align-items-center">
+        {{-- <li class="nav-item d-flex justify-content-center align-items-center">
             <a class="nav-link h5" data-widget="fullscreen" href="#" role="button">
                 <i class="fas fa-expand-arrows-alt"></i>
             </a>
-        </li>
+        </li> --}}
 
         @can('super&admin')
             <li class="nav-item dropdown d-flex justify-content-center align-items-center">
