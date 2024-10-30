@@ -19,7 +19,8 @@
                   data-accordion="false">
                   <li class="nav-header">{{ __('menu') }}</li>
                   <li class="nav-item">
-                      <a href="{{ route('dashboard') }}" class="nav-link text-white">
+                      <a href="{{ route('dashboard') }}"
+                          class="nav-link text-white {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                           <i class="nav-icon fas fa-tachometer-alt"></i>
                           <p>
                               {{ __('dashboard') }}
@@ -72,7 +73,8 @@
             </a>
           </li> -->
                   <li class="nav-item">
-                      <a href="{{ route('supplier') }}" class="nav-link text-white">
+                      <a href="{{ route('supplier') }}"
+                          class="nav-link text-white {{ request()->routeIs('supplier') ? 'active' : '' }}">
                           <i class="nav-icon fas fa-shipping-fast"></i>
                           <p>
                               {{ __('supplier') }}
@@ -180,8 +182,9 @@
 
 
                   <li class="nav-header">{{ __('others') }}</li>
-                  <li class="nav-item">
-                      <a href="javascript:void(0)" class="nav-link text-white">
+                  <li class="nav-item {{ request()->routeIs('settings.*') ? 'menu-open' : '' }}">
+                    <a href="javascript:void(0)"
+                        class="nav-link text-white {{ request()->routeIs('settings.*') ? 'active' : '' }}">
                           <i class="nav-icon fas fa-cog"></i>
                           <p>
                               {{ __('setting') }}
@@ -191,7 +194,7 @@
                       <ul class="nav nav-treeview">
                           @can('super&admin')
                               <li class="nav-item">
-                                  <a href="{{ route('settings.employee') }}" class="nav-link text-white">
+                                  <a href="{{ route('settings.employee') }}" class="nav-link text-white {{ request()->routeIs('settings.employee') ? 'active' : '' }}">
                                       <i class="fas fa-regular-circle"></i>
                                       <p>{{ __('employee') }}</p>
                                   </a>
@@ -204,7 +207,7 @@
                 </a>
               </li> -->
                           <li class="nav-item">
-                              <a href="{{ route('settings.profile') }}" class="nav-link text-white">
+                              <a href="{{ route('settings.profile') }}" class="nav-link text-white {{ request()->routeIs('settings.profile') ? 'active' : '' }}">
                                   <i class="fas fa-regular-circle"></i>
                                   <p>{{ __('profile') }}</p>
                               </a>

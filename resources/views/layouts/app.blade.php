@@ -57,7 +57,15 @@
 
         .nav-link {
             color: #ffffff;
-            /* Default white color for all nav links */
+        }
+
+        .nav-link.active {
+            font-weight: bold;
+        }
+
+        .nav-link.active .nav-icon {
+            color: #ffffff;
+            /* Icon color for active state */
         }
 
         /* Style only active submenu links */

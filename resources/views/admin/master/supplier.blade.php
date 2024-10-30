@@ -187,6 +187,22 @@
                             if (data == null) {
                                 return "<span class='font-weight-bold'>-</span>";
                             }
+
+                            const maxLength = 35;
+                            const containerClass = "website-container";
+
+                            if (data.length > maxLength) {
+                                const truncated = data.substr(0, maxLength) + '...';
+                                return `
+                                            <div class="${containerClass}">
+                                                <a href="${data}" target="_blank" style="text-decoration: none;" class="truncated-link">
+                                                    ${truncated}
+                                                </a>
+                                                <button class="btn btn-link show-more" style="padding: 0;" data-full-text="${data}">Show More</button>
+                                            </div>
+                                        `;
+                            }
+
                             return `<a href="${data}" target="_blank" style="text-decoration: none;">
                                         ${data}
                                     </a>`;
@@ -200,6 +216,27 @@
                     @endif
                 ]
             }).buttons().container();
+
+            $(document).on('click', '.show-more', function() {
+                const button = $(this);
+                const fullText = button.attr('data-full-text');
+                const link = button.siblings('.truncated-link');
+                const isExpanded = button.data('expanded');
+
+                if (isExpanded) {
+                    // Show truncated text
+                    link.text(fullText.substr(0, 35) + '...');
+                    button.text('Show More');
+                } else {
+                    // Show full text
+                    link.text(fullText);
+                    button.text('Show Less');
+                }
+
+                // Toggle the expanded state
+                button.data('expanded', !isExpanded);
+            });
+
         }
 
         function simpan() {
@@ -270,7 +307,6 @@
             });
         }
 
-
         function ubah() {
             $.ajax({
                 url: `{{ route('supplier.update') }}`,
@@ -329,8 +365,8 @@
                 $("#simpan").text("{{ __('save') }}");
             });
 
-
         });
+
 
 
 
