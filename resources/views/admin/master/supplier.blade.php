@@ -148,7 +148,7 @@
                 processing: true,
                 responsive: true,
                 serverSide: true,
-                language:languageSettings,
+                language: languageSettings,
                 ajax: `{{ route('supplier.list') }}`,
                 columns: [{
                         "data": null,
@@ -187,7 +187,9 @@
                             if (data == null) {
                                 return "<span class='font-weight-bold'>-</span>";
                             }
-                            return data;
+                            return `<a href="${data}" target="_blank" style="text-decoration: none;">
+                                        ${data}
+                                    </a>`;
                         }
                     },
                     @if (Auth::user()->role->name != 'staff')
