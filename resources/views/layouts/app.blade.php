@@ -57,15 +57,22 @@
 
         .nav-link {
             color: #ffffff;
+
         }
 
         .nav-link.active {
             font-weight: bold;
+
         }
 
         .nav-link.active .nav-icon {
             color: #ffffff;
             /* Icon color for active state */
+        }
+
+        .nav-treeview .nav-link {
+            padding-left: 3rem;
+            /* Adjust this value for desired indentation */
         }
 
         /* Style only active submenu links */
@@ -74,6 +81,10 @@
             /* Background color for active submenu items */
             color: #ffffff;
             /* Keep text white */
+            border-radius: 0.5rem;
+            /* Optional: ensures the box doesn't stretch full width */
+            display: inline-block;
+            /* Restricts the width to content */
         }
 
         /* Style for main menu link when expanded, no color change */

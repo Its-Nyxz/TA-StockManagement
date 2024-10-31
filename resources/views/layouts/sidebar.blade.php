@@ -117,14 +117,13 @@
                       </ul>
                   </li>
 
+                  <li class="nav-item {{ request()->routeIs('laporan.*') ? 'menu-open' : '' }}">
+                    <a href="javascript:void(0)"
+                        class="nav-link text-white {{ request()->routeIs('laporan.*') ? 'active' : '' }}">
                   @can('super&admin')
-                      <li
-                          class="nav-item {{ request()->routeIs('laporan.masuk') || request()->routeIs('laporan.keluar') || request()->routeIs('laporan.kembali') ? 'menu-open' : '' }}">
-                          <a href="javascript:void(0)"
-                              class="nav-link text-white {{ request()->routeIs('laporan.masuk') || request()->routeIs('laporan.keluar') || request()->routeIs('laporan.kembali') ? 'active' : '' }}">
-                              <i class="nav-icon fas fa-file-signature"></i>
+                              <i class="nav-icon fas fa-print"></i>
                               <p>
-                                  {{ __('item report') }}
+                                  {{ __('report') }}
                                   <i class="right fas fa-angle-down"></i>
                               </p>
                           </a>
@@ -147,39 +146,21 @@
                                       <p>{{ __('returned goods report') }}</p>
                                   </a>
                               </li>
-                          </ul>
-                      </li>
-                  @endcan
-
-                  <li
-                      class="nav-item {{ request()->routeIs('laporan.so') || request()->routeIs('laporan.stok') ? 'menu-open' : '' }}">
-                      <a href="javascript:void(0)"
-                          class="nav-link text-white {{ request()->routeIs('laporan.so') || request()->routeIs('laporan.stok') ? 'active' : '' }}">
-                          <i class="nav-icon fas fa-print"></i>
-                          <p>
-                              {{ __('report') }}
-                              <i class="right fas fa-angle-down"></i>
-                          </p>
-                      </a>
-                      <ul class="nav nav-treeview">
-                          @can('super&admin')
                               <li class="nav-item">
                                   <a href="{{ route('laporan.so') }}"
                                       class="nav-link text-white {{ request()->routeIs('laporan.so') ? 'active' : '' }}">
                                       <p>{{ __('stock opname report') }}</p>
                                   </a>
                               </li>
-                          @endcan
-
-                          <li class="nav-item">
-                              <a href="{{ route('laporan.stok') }}"
-                                  class="nav-link text-white {{ request()->routeIs('laporan.stok') ? 'active' : '' }}">
-                                  <p>{{ __('stock report') }}</p>
-                              </a>
-                          </li>
-                      </ul>
-                  </li>
-
+                              @endcan
+                              <li class="nav-item">
+                                  <a href="{{ route('laporan.stok') }}"
+                                      class="nav-link text-white {{ request()->routeIs('laporan.stok') ? 'active' : '' }}">
+                                      <p>{{ __('stock report') }}</p>
+                                  </a>
+                              </li>
+                          </ul>
+                      </li>
 
                   <li class="nav-header">{{ __('others') }}</li>
                   <li class="nav-item {{ request()->routeIs('settings.*') ? 'menu-open' : '' }}">

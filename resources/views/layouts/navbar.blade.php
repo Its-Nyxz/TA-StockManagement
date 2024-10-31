@@ -10,7 +10,7 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
 
-        <li class="nav-item d-flex justify-content-center align-items-center">
+        {{-- <li class="nav-item d-flex justify-content-center align-items-center">
             <a class="nav-link h5 dropdown" href="#" data-target="#lang" data-toggle="dropdown" role="button">
                 <div class="d-flex gap-2 align-items-center">
                     <span class="lang-icon lang-icon-{{ app()->getLocale() }}"></span>
@@ -21,7 +21,7 @@
                         style="max-height: 12rem;overflow-y: scroll;"></ul>
                 </div>
             </a>
-        </li>
+        </li> --}}
         {{-- <li class="nav-item d-flex justify-content-center align-items-center">
             <a class="nav-link h5" data-widget="fullscreen" href="#" role="button">
                 <i class="fas fa-expand-arrows-alt"></i>

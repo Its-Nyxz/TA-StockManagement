@@ -42,11 +42,9 @@
                     <img src="{{ asset('icon.png') }}" alt="icon" width="50%">
                 </div>
                 <a href="#" class="h1" style="text-transform:uppercase;">{{ config('app.name') }}</a>
-                <div class="navbar">
+                {{-- <div class="navbar">
                     <div class="dropdown" href="#" data-target="#lang" data-toggle="dropdown" role="button">
                         <div class="d-flex gap-2 align-items-center">
-                            {{-- <span class="lang-icon lang-icon-{{ app()->getLocale() }}"></span>
-              <span class="ml-2">ID</span> --}}
                             <span class="lang-icon lang-icon-{{ app()->getLocale() }}"></span>
                             <span class="ml-2 text-uppercase">{{ app()->getLocale() }}</span>
                         </div>
@@ -55,7 +53,7 @@
                                 style="max-height: 12rem;overflow-y: scroll;"></ul>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
             <div class="card-body">
                 <!-- <p class="alert alert-danger mb-3 text-center font-weight-bold">username atau password salah.</p> -->
