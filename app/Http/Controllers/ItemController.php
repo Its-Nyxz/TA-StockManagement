@@ -39,7 +39,7 @@ class ItemController extends Controller
                         ? asset('default.png')
                         : asset('storage/barang/' . $data->image);
 
-                    return "<img src='" . $imageUrl . "' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
+                    return "<img src='" . $imageUrl . "' style='width:100%;max-width:4rem;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
                 })
                 ->addColumn('category_name', function ($data) {
                     return $data->category->name;

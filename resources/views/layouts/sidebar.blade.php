@@ -105,7 +105,7 @@
                                   <p>{{ __('outbound transaction') }}</p>
                               </a>
                           </li>
-                          @if (Auth::user()->role->name != 'staff')
+                          @can('super&admin')
                               <li class="nav-item">
                                   <a href="{{ route('transaksi.kembali') }}"
                                       class="nav-link text-white {{ request()->routeIs('transaksi.kembali') ? 'active' : '' }}">
@@ -113,22 +113,22 @@
                                       <p>{{ __('return transaction') }}</p>
                                   </a>
                               </li>
-                          @endif
+                          @endcan
                       </ul>
                   </li>
 
                   <li class="nav-item {{ request()->routeIs('laporan.*') ? 'menu-open' : '' }}">
-                    <a href="javascript:void(0)"
-                        class="nav-link text-white {{ request()->routeIs('laporan.*') ? 'active' : '' }}">
-                  @can('super&admin')
-                              <i class="nav-icon fas fa-print"></i>
-                              <p>
-                                  {{ __('report') }}
-                                  <i class="right fas fa-angle-down"></i>
-                              </p>
-                          </a>
-                          <ul class="nav nav-treeview">
-                              <li class="nav-item">
+                      <a href="javascript:void(0)"
+                          class="nav-link text-white {{ request()->routeIs('laporan.*') ? 'active' : '' }}">
+                          <i class="nav-icon fas fa-print"></i>
+                          <p>
+                              {{ __('report') }}
+                              <i class="right fas fa-angle-down"></i>
+                          </p>
+                      </a>
+                      <ul class="nav nav-treeview">
+                          @can('super&admin')
+                          <li class="nav-item">
                                   <a href="{{ route('laporan.masuk') }}"
                                       class="nav-link text-white {{ request()->routeIs('laporan.masuk') ? 'active' : '' }}">
                                       <p>{{ __('incoming goods report') }}</p>
@@ -152,20 +152,20 @@
                                       <p>{{ __('stock opname report') }}</p>
                                   </a>
                               </li>
-                              @endcan
-                              <li class="nav-item">
-                                  <a href="{{ route('laporan.stok') }}"
-                                      class="nav-link text-white {{ request()->routeIs('laporan.stok') ? 'active' : '' }}">
-                                      <p>{{ __('stock report') }}</p>
-                                  </a>
-                              </li>
-                          </ul>
-                      </li>
+                          @endcan
+                          <li class="nav-item">
+                              <a href="{{ route('laporan.stok') }}"
+                                  class="nav-link text-white {{ request()->routeIs('laporan.stok') ? 'active' : '' }}">
+                                  <p>{{ __('stock report') }}</p>
+                              </a>
+                          </li>
+                      </ul>
+                  </li>
 
                   <li class="nav-header">{{ __('others') }}</li>
                   <li class="nav-item {{ request()->routeIs('settings.*') ? 'menu-open' : '' }}">
-                    <a href="javascript:void(0)"
-                        class="nav-link text-white {{ request()->routeIs('settings.*') ? 'active' : '' }}">
+                      <a href="javascript:void(0)"
+                          class="nav-link text-white {{ request()->routeIs('settings.*') ? 'active' : '' }}">
                           <i class="nav-icon fas fa-cog"></i>
                           <p>
                               {{ __('setting') }}
@@ -175,20 +175,16 @@
                       <ul class="nav nav-treeview">
                           @can('super&admin')
                               <li class="nav-item">
-                                  <a href="{{ route('settings.employee') }}" class="nav-link text-white {{ request()->routeIs('settings.employee') ? 'active' : '' }}">
+                                  <a href="{{ route('settings.employee') }}"
+                                      class="nav-link text-white {{ request()->routeIs('settings.employee') ? 'active' : '' }}">
                                       <i class="fas fa-regular-circle"></i>
                                       <p>{{ __('employee') }}</p>
                                   </a>
                               </li>
                           @endcan
-                          <!-- <li class="nav-item">
-                <a href="" class="nav-link text-white">
-                <i class="fas fa-regular-circle"></i>
-                  <p>web</p>
-                </a>
-              </li> -->
                           <li class="nav-item">
-                              <a href="{{ route('settings.profile') }}" class="nav-link text-white {{ request()->routeIs('settings.profile') ? 'active' : '' }}">
+                              <a href="{{ route('settings.profile') }}"
+                                  class="nav-link text-white {{ request()->routeIs('settings.profile') ? 'active' : '' }}">
                                   <i class="fas fa-regular-circle"></i>
                                   <p>{{ __('profile') }}</p>
                               </a>

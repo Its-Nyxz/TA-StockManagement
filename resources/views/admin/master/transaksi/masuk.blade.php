@@ -522,6 +522,7 @@
                 lengthChange: true,
                 processing: true,
                 serverSide: true,
+                responsive: true,
                 language: languageSettings,
                 // ajax: `{{ route('barang.list') }}`,
                 // ajax: `{{ route('barang.list.in') }}`,
@@ -839,34 +840,8 @@
 
             $('#data-approve').DataTable({
                 lengthChange: true,
-                // autoWidth: false,
                 responsive: true,
                 language: languageSettings,
-                // language: {
-                //     decimal: "",
-                //     searchPlaceholder: "Cari Data",
-                //     emptyTable: "Tabel kosong",
-                //     info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-                //     infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
-                //     infoFiltered: "(filtered from MAX total entries)",
-                //     infoPostFix: "",
-                //     thousands: ",",
-                //     lengthMenu: "Tampilkan _MENU_ data",
-                //     loadingRecords: "Loading...",
-                //     processing: "",
-                //     search: "Cari:",
-                //     zeroRecords: "Data tidak ditemukan",
-                //     paginate: {
-                //         first: "<<",
-                //         last: ">>",
-                //         next: ">",
-                //         previous: "<",
-                //     },
-                //     aria: {
-                //         orderable: "Order by this column",
-                //         orderableReverse: "Reverse order this column",
-                //     },
-                // },
             });
 
             const tabel = $('#data-tabel').DataTable({
