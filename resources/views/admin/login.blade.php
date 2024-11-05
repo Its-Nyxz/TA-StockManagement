@@ -30,9 +30,9 @@
 
 <body class="hold-transition login-page">
     <!-- Preloader -->
-    <div class="preloader flex-column justify-content-center align-items-center">
+    {{-- <div class="preloader flex-column justify-content-center align-items-center">
         <img src="{{ asset('loading.gif') }}" alt="AdminLTELogo" height="60" width="60">
-    </div>
+    </div> --}}
 
     <div class="login-box">
         <!-- /.login-logo -->
