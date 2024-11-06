@@ -8,10 +8,16 @@
                 <div class="card w-100">
                     <div class="card-header row">
                         <div class="d-flex justify-content-end align-items-center w-100">
-                            @if (Auth::user()->role->name != 'staff')
+                            @can('super')
+                                <button type="button" class="btn btn-primary m-1 mt-1" id="upload-modal-button"
+                                    data-bs-toggle="modal" data-bs-target="#uploadModal">
+                                    <i class="fas fa-file-import"></i>
+                                </button>
+                            @endcan
+                            @can('super&admin')
                                 <button class="btn btn-success" type="button" data-toggle="modal" data-target="#TambahData"
                                     id="modal-button"><i class="fas fa-plus"></i> {{ __('Add suppliers') }}</button>
-                            @endif
+                            @endcan
                         </div>
                     </div>
 
@@ -58,6 +64,50 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="uploadModalLabel">{{ __('Import Supplier') }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ route('suppliers.import') }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="file">{{ __('Choose File') }}</label>
+                                            <input type="file" name="file" class="form-control" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary mt-2">{{ __('Import') }}</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
 
                     <div class="card-body">
                         <div class="table-responsive">
@@ -365,10 +415,17 @@
                 $("#simpan").text("{{ __('save') }}");
             });
 
+            $("#upload-modal-button").on("click", function() {
+                $('#uploadModal').modal('show');
+            });
+
+            // Mengecek jika ada elemen dengan kelas .alert (success/error)
+            setTimeout(function() {
+                $(".alert").fadeOut('slow', function() {
+                    $(this).remove(); // Hapus elemen dari DOM setelah fade out selesai
+                });
+            }, 2000); // 2000 ms = 2 detik
         });
-
-
-
 
         $(document).on("click", ".ubah", function() {
             let id = $(this).attr('id');

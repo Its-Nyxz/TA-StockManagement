@@ -161,5 +161,10 @@
   "See All Stock Opnames" : "Lihat Semua Stok Opname ",
   "Notifications" : " Notifikasi",
   "Edit Profile Employee" : "Edit Profil Karyawan",
-  "Add Employee" : "Tambah Karyawan"
+  "Add Employee" : "Tambah Karyawan",
+  "Import" : "Import",
+  "Import Supplier" : "Import Pemasok",
+  "Choose File" : "Pilih File",
+  "Data imported successfully" : "Data Import Sukses",
+  "Failed to import data" : "Gagal Menginport Data"
 }

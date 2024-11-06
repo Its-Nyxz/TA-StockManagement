@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Supplier;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use App\Imports\SupplierImport;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\JsonResponse;
-use App\Models\Supplier;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SupplierController extends Controller
 {
@@ -93,4 +95,21 @@ class SupplierController extends Controller
             "message"=>__("data deleted successfully")
         ]) -> setStatusCode(200);
     }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv',
+        ]);
+    
+        try {
+            Excel::import(new SupplierImport, $request->file('file'));
+    
+            return redirect()->back()->with('success', __('Data imported successfully'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', __('Failed to import data'). $e->getMessage());
+            // . $e->getMessage()
+        }
+    }
+    
 }

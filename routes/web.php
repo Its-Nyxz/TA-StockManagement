@@ -113,6 +113,7 @@ Route::middleware(['auth', "localization"])->group(function () {
             Route::post('/info', 'detail')->name('supplier.detail');
             Route::put('/ubah', 'update')->name('supplier.update');
             Route::delete('/hapus', 'delete')->name('supplier.delete');
+            Route::post('/suppliers/import', [SupplierController::class, 'import'])->name('suppliers.import');
         });
     });
 
