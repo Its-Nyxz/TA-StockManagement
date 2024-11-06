@@ -91,24 +91,6 @@
                         </div>
                     </div>
 
-                    @if (session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            {{ session('success') }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    @endif
-
-                    @if (session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            {{ session('error') }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    @endif
-
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="data-tabel" width="100%"
@@ -495,5 +477,26 @@
 
 
         });
+    </script>
+    <script>
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+        @endif
+
+        @if (session('error') || $errors->has('file'))
+            Swal.fire({
+                icon: 'error',
+                title: '{{ session('error') ? 'Gagal' : 'File Tidak Cocok' }}',
+                text: '{{ session('error') ?? $errors->first('file') }}',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            });
+        @endif
     </script>
 @endsection

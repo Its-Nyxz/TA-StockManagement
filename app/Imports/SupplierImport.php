@@ -16,9 +16,14 @@ class SupplierImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
-        // Memastikan semua kolom yang dibutuhkan memiliki nilai sebelum (tidak NULL)
+        // Check for missing columns
         if (!isset($row['name']) || !isset($row['address']) || !isset($row['phone_number']) || !isset($row['email']) || !isset($row['website'])) {
-            return null; // Skip row jika ada kolom penting yang kosong
+            throw new \Exception("Kolom yang diperlukan tidak ada dalam file yang diimpor.");
+        }
+
+        // Check if a supplier with the same name already exists
+        if (Supplier::where('name', $row['name'])->exists()) {
+            throw new \Exception("Terdapat Nama Pemasok yang sudah ada.");
         }
 
         return new Supplier([

@@ -107,7 +107,7 @@ class SupplierController extends Controller
     
             return redirect()->back()->with('success', __('Data imported successfully'));
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', __('Failed to import data'). $e->getMessage());
+            return redirect()->back()->with('error', __('Failed to import data'). '. ' . $e->getMessage());
             // . $e->getMessage()
         }
     }
