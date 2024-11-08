@@ -17,11 +17,11 @@ class SupplierImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         // Check for missing columns
-        if (!isset($row['name']) || !isset($row['address']) || !isset($row['phone_number']) || !isset($row['email']) || !isset($row['website'])) {
-            throw new \Exception("Kolom yang diperlukan tidak ada dalam file yang diimpor.");
-        }
+        // if (!isset($row['name']) || !isset($row['address']) || !isset($row['phone_number']) || !isset($row['email']) || !isset($row['website'])) {
+        //     throw new \Exception("Kolom yang diperlukan tidak ada dalam file yang diimpor.");
+        // }
 
-        // Check if a supplier with the same name already exists
+        // // Check if a supplier with the same name already exists
         if (Supplier::where('name', $row['name'])->exists()) {
             throw new \Exception("Terdapat Nama Pemasok yang sudah ada.");
         }
@@ -30,8 +30,8 @@ class SupplierImport implements ToModel, WithHeadingRow
             'name' => $row['name'],
             'address' => $row['address'],
             'phone_number' => $row['phone_number'],
-            'email' => $row['email'],
-            'website' => $row['website'],
+            'email' => $row['email']?? null,
+            'website' => $row['website']?? null,
         ]);
     }
 }

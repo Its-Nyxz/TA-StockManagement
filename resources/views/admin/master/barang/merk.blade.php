@@ -8,10 +8,16 @@
                 <div class="card w-100">
                     <div class="card-header row">
                         <div class="d-flex justify-content-end align-items-center w-100">
-                            @if (Auth::user()->role->name != 'staff')
+                            @can('super')
+                                <button type="button" class="btn btn-primary m-1 mt-1" id="upload-modal-button"
+                                    data-bs-toggle="modal" data-bs-target="#uploadModal">
+                                    <i class="fas fa-file-import"></i>
+                                </button>
+                            @endcan
+                            @can('super&admin')
                                 <button class="btn btn-success" type="button" data-toggle="modal" data-target="#TambahData"
                                     id="modal-button"><i class="fas fa-plus"></i> {{ __('Add data') }}</button>
-                            @endif
+                            @endcan
                         </div>
                     </div>
 
@@ -43,6 +49,32 @@
                                         id="kembali">{{ __('back') }}</button>
                                     <button type="button" class="btn btn-success" id="simpan"
                                         data-action="simpan">{{ __('save') }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Import-->
+                    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="uploadModalLabel">Import Merk Barang</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ route('barang.merk.import') }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="file">{{ __('Choose File') }}</label>
+                                            <input type="file" name="file" class="form-control" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary mt-2">{{ __('Import') }}</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -134,7 +166,7 @@
                 autoWidth: false,
                 processing: true,
                 serverSide: true,
-                language:languageSettings,
+                language: languageSettings,
                 ajax: `{{ route('barang.merk.list') }}`,
                 columns: [{
                         "data": null,
@@ -259,6 +291,9 @@
                 $("#simpan").data('action', 'simpan');
             });
 
+            $("#upload-modal-button").on("click", function() {
+                $('#uploadModal').modal('show');
+            });
 
         });
 
@@ -328,5 +363,26 @@
 
 
         });
+    </script>
+    <script>
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+        @endif
+
+        @if (session('error') || $errors->has('file'))
+            Swal.fire({
+                icon: 'error',
+                title: '{{ session('error') ? 'Gagal' : 'File Tidak Cocok' }}',
+                text: '{{ session('error') ?? $errors->first('file') }}',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            });
+        @endif
     </script>
 @endsection
