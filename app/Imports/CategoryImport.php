@@ -4,8 +4,9 @@ namespace App\Imports;
 
 use App\Models\Category;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class CategoryImport implements ToModel
+class CategoryImport implements ToModel, WithHeadingRow
 {
     /**
     * @param array $row
@@ -14,8 +15,13 @@ class CategoryImport implements ToModel
     */
     public function model(array $row)
     {
-        return new Category([
-            //
-        ]);
+    // Check if a supplier with the same name already exists
+    if (Category::where('name', $row['name'])->exists()) {
+        throw new \Exception("Terdapat Nama Jenis yang sudah ada.");
+    }
+    return new Category([
+        'name' => $row['name'],
+        'description' => $row['description']?? null,
+    ]);
     }
 }

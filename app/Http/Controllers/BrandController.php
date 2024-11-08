@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
+use Illuminate\View\View;
+use App\Imports\BrandImport;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+use Illuminate\Http\JsonResponse;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\CreateBrandRequest;
+use App\Http\Requests\DeleteBrandRequest;
 use App\Http\Requests\DetailBrandRequest;
 use App\Http\Requests\UpdateBrandRequest;
-use App\Http\Requests\DeleteBrandRequest;
-use Illuminate\Http\JsonResponse;
-use Yajra\DataTables\DataTables;
-use Illuminate\View\View;
-use App\Models\Brand;
 
 // Represetation Class Controller Brand
 
@@ -99,5 +101,21 @@ class BrandController extends Controller
         return response()->json([
             "message"=>__("data deleted successfully")
         ]) -> setStatusCode(200);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv',
+        ]);
+    
+        try {
+            Excel::import(new BrandImport, $request->file('file'));
+    
+            return redirect()->back()->with('success', __('Data imported successfully'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', __('Failed to import data'). '. ' . $e->getMessage());
+            // . $e->getMessage()
+        }
     }
 }

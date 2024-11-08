@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Yajra\DataTables\DataTables;
-use Illuminate\View\View;
 use App\Models\Unit;
+use Illuminate\View\View;
+use App\Imports\UnitImport;
+use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+use Illuminate\Http\JsonResponse;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UnitController extends Controller
 {
@@ -89,4 +91,19 @@ class UnitController extends Controller
         ]) -> setStatusCode(200);
     }
 
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv',
+        ]);
+    
+        try {
+            Excel::import(new UnitImport, $request->file('file'));
+    
+            return redirect()->back()->with('success', __('Data imported successfully'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', __('Failed to import data'). '. ' . $e->getMessage());
+            // . $e->getMessage()
+        }
+    }
 }

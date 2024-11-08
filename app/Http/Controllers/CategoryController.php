@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Requests\CreateCategoryRequest;
-use App\Http\Requests\DetailCategoryRequest;
-use App\Http\Requests\UpdateCategoryRequest;
-use App\Http\Requests\DeleteCategoryRequest;
+use App\Models\Category;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use App\Imports\CategoryImport;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\JsonResponse;
-use App\Models\Category;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\CreateCategoryRequest;
+use App\Http\Requests\DeleteCategoryRequest;
+use App\Http\Requests\DetailCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -93,4 +95,19 @@ class CategoryController extends Controller
         ]) -> setStatusCode(200);
     }
 
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv',
+        ]);
+    
+        try {
+            Excel::import(new CategoryImport, $request->file('file'));
+    
+            return redirect()->back()->with('success', __('Data imported successfully'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', __('Failed to import data'). '. ' . $e->getMessage());
+            // . $e->getMessage()
+        }
+    }
 }
