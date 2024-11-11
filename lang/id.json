@@ -166,5 +166,7 @@
   "Import Supplier" : "Import Pemasok",
   "Choose File" : "Pilih File",
   "Data imported successfully" : "Data Import Sukses",
-  "Failed to import data" : "Gagal Mengimport Data"
+  "Failed to import data" : "Gagal Mengimport Data",
+  "The uploaded file is empty. Please upload a file with data." : " File yang diunggah kosong. Silakan unggah file dengan data.",
+  "Download Template" : "Unduh Template"
 }

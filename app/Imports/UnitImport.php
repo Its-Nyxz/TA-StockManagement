@@ -5,23 +5,44 @@ namespace App\Imports;
 use App\Models\Unit;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
-class UnitImport implements ToModel,WithHeadingRow
+class UnitImport implements ToModel, WithHeadingRow, WithValidation
 {
-    /**
-     * @param array $row
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
     public function model(array $row)
     {
-        // Check if a supplier with the same name already exists
-        if (Unit::where('name', $row['name'])->exists()) {
-            throw new \Exception("Terdapat Nama Jenis yang sudah ada.");
+        // Menghapus spasi berlebihan dan mengonversi ke huruf kecil
+        $row = array_map(function ($value) {
+            return strtolower(preg_replace('/\s+/', ' ', trim($value)));
+        }, $row);
+
+        // Normalisasi nama untuk cek duplikasi
+        $normalizedName = $row['name'];
+
+        if (Unit::whereRaw('LOWER(TRIM(REPLACE(name, " ", ""))) = ?', [str_replace(' ', '', $normalizedName)])->exists()) {
+            throw new \Exception("Terdapat Nama Satuan yang sudah ada, yaitu " . ucwords($normalizedName));
         }
+
+        // Mengembalikan model Unit dengan data yang telah dinormalisasi
         return new Unit([
-            'name' => $row['name'],
-            'description' => $row['description']?? null,
+            'name' => ucwords($normalizedName), // Menyimpan nama dalam format kapitalisasi kata
+            'description' => $row['description'] ?? null,
         ]);
     }
+
+    public function rules(): array
+    {
+        return [
+            'name' => 'required|string|max:255',
+        ];
+    }
+
+    public function customValidationMessages()
+    {
+        return [
+            'name.required' => 'Nama satuan wajib diisi.',
+            'name.unique' => 'Terdapat Nama Satuan yang sudah ada.',
+        ];
+    }
 }
+

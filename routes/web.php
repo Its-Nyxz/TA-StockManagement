@@ -63,7 +63,8 @@ Route::middleware(['auth', "localization"])->group(function () {
             Route::post('/info', 'detail')->name('barang.jenis.detail');
             Route::put('/ubah', 'update')->name('barang.jenis.update');
             Route::delete('/hapus', 'delete')->name('barang.jenis.delete');
-        Route::post('/import', 'import')->name('barang.jenis.import');
+            Route::post('/import', 'import')->name('barang.jenis.import');
+            Route::get('/template', 'template')->name('barang.jenis.template');
         });
     });
 
@@ -77,6 +78,7 @@ Route::middleware(['auth', "localization"])->group(function () {
             Route::put('/ubah', 'update')->name('barang.satuan.update');
             Route::delete('/hapus', 'delete')->name('barang.satuan.delete');
             Route::post('/import', 'import')->name('barang.satuan.import');
+            Route::get('/template', 'template')->name('barang.satuan.template');
         });
     });
 
@@ -90,6 +92,7 @@ Route::middleware(['auth', "localization"])->group(function () {
             Route::put('/ubah', 'update')->name('barang.merk.update');
             Route::delete('/hapus', 'delete')->name('barang.merk.delete');
             Route::post('/import', 'import')->name('barang.merk.import');
+            Route::get('/template', 'template')->name('barang.merk.template');
         });
     });
 
@@ -117,6 +120,7 @@ Route::middleware(['auth', "localization"])->group(function () {
             Route::put('/ubah', 'update')->name('supplier.update');
             Route::delete('/hapus', 'delete')->name('supplier.delete');
             Route::post('/import', 'import')->name('suppliers.import');
+            Route::get('/template', 'template')->name('suppliers.template');
         });
     });
 

@@ -86,6 +86,9 @@
                                         </div>
                                         <button type="submit" class="btn btn-primary mt-2">{{ __('Import') }}</button>
                                     </form>
+                                    <hr>
+                                    <a href="{{ route('suppliers.template') }}"
+                                        class="btn btn-success mt-2">{{ __('Download Template') }}</a>
                                 </div>
                             </div>
                         </div>

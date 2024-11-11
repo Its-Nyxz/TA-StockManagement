@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <form action="{{ route('barang.jenis.import') }}" method="POST"
-                                        enctype="multipart/form-data">s
+                                        enctype="multipart/form-data">
                                         @csrf
                                         <div class="form-group">
                                             <label for="file">{{ __('Choose File') }}</label>
@@ -76,6 +76,9 @@
                                         </div>
                                         <button type="submit" class="btn btn-primary mt-2">{{ __('Import') }}</button>
                                     </form>
+                                    <hr>
+                                    <a href="{{ route('barang.jenis.template') }}"
+                                        class="btn btn-success mt-2">{{ __('Download Template') }}</a>
                                 </div>
                             </div>
                         </div>

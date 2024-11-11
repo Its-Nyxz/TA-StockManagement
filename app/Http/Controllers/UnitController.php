@@ -8,6 +8,7 @@ use App\Imports\UnitImport;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\JsonResponse;
+use App\Exports\UnitTemplateExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UnitController extends Controller
@@ -20,15 +21,15 @@ class UnitController extends Controller
     public function list(Request $request): JsonResponse
     {
         $units = Unit::latest()->get();
-        if($request -> ajax()){
+        if ($request->ajax()) {
             return DataTables::of($units)
-            ->addColumn('tindakan',function($data){
-                $button = "<button class='ubah btn btn-success m-1' id='".$data->id."'><i class='fas fa-pen m-1'></i>".__("Edit")."</button>";
-                $button .= "<button class='hapus btn btn-danger m-1' id='".$data->id."'><i class='fas fa-trash m-1'></i>".__("Delete")."</button>";
-                return $button;
-            })
-            ->rawColumns(['tindakan'])
-            -> make(true);
+                ->addColumn('tindakan', function ($data) {
+                    $button = "<button class='ubah btn btn-success m-1' id='" . $data->id . "'><i class='fas fa-pen m-1'></i>" . __("Edit") . "</button>";
+                    $button .= "<button class='hapus btn btn-danger m-1' id='" . $data->id . "'><i class='fas fa-trash m-1'></i>" . __("Delete") . "</button>";
+                    return $button;
+                })
+                ->rawColumns(['tindakan'])
+                ->make(true);
         }
     }
 
@@ -36,59 +37,59 @@ class UnitController extends Controller
     {
 
         $units = new Unit();
-        $units -> name = $request->name;
-        if($request -> has('description')){
-            $units -> description = $request -> description;
+        $units->name = $request->name;
+        if ($request->has('description')) {
+            $units->description = $request->description;
         }
-        $status = $units -> save();
-        if(!$status){
+        $status = $units->save();
+        if (!$status) {
             return response()->json(
-                ["message"=>__("failed to save")]
+                ["message" => __("failed to save")]
             )->setStatusCode(400);
         }
-        return response() -> json([
-            "message"=>__("saved successfully")
-        ]) -> setStatusCode(200);
+        return response()->json([
+            "message" => __("saved successfully")
+        ])->setStatusCode(200);
     }
 
     public function detail(Request $request): JsonResponse
     {
-        $id = $request -> id;
+        $id = $request->id;
         $data = Unit::find($id);
         return response()->json(
-            ["data"=>$data]
+            ["data" => $data]
         )->setStatusCode(200);
     }
 
     public function update(Request $request): JsonResponse
     {
-        $id = $request -> id;
+        $id = $request->id;
         $data = Unit::find($id);
-        $data -> fill($request->all());
-        $status = $data -> save();
-        if(!$status){
+        $data->fill($request->all());
+        $status = $data->save();
+        if (!$status) {
             return response()->json(
-                ["message"=>__("data failed to change")]
+                ["message" => __("data failed to change")]
             )->setStatusCode(400);
         }
-        return response() -> json([
-            "message"=>__("data changed successfully")
-        ]) -> setStatusCode(200);
+        return response()->json([
+            "message" => __("data changed successfully")
+        ])->setStatusCode(200);
     }
 
     public function delete(Request $request)
     {
-        $id = $request -> id;
+        $id = $request->id;
         $units = Unit::find($id);
-        $status = $units -> delete();
-        if(!$status){
+        $status = $units->delete();
+        if (!$status) {
             return response()->json(
-                ["message"=>__("data failed to delete")]
+                ["message" => __("data failed to delete")]
             )->setStatusCode(400);
         }
         return response()->json([
-            "message"=>__("data deleted successfully")
-        ]) -> setStatusCode(200);
+            "message" => __("data deleted successfully")
+        ])->setStatusCode(200);
     }
 
     public function import(Request $request)
@@ -96,14 +97,28 @@ class UnitController extends Controller
         $request->validate([
             'file' => 'required|mimes:xlsx,csv',
         ]);
-    
+
         try {
+            // Memuat data dari file untuk memeriksa apakah kosong
+            $file = $request->file('file');
+            $excelData = Excel::toArray(new UnitImport, $file);
+
+            // Memeriksa apakah ada data atau tidak
+            if (empty($excelData) || empty($excelData[0])) {
+                return redirect()->back()->with('error', __('The uploaded file is empty. Please upload a file with data.'));
+            }
+            
             Excel::import(new UnitImport, $request->file('file'));
-    
+
             return redirect()->back()->with('success', __('Data imported successfully'));
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', __('Failed to import data'). '. ' . $e->getMessage());
+            return redirect()->back()->with('error', __('Failed to import data') . '. ' . $e->getMessage());
             // . $e->getMessage()
         }
+    }
+
+    public function template()
+    {
+        return Excel::download(new UnitTemplateExport, 'unit_template.xlsx');
     }
 }
