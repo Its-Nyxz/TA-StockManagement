@@ -51,6 +51,8 @@ Route::middleware(['auth', "localization"])->group(function () {
             Route::post('/simpan', 'save')->name('barang.save');
             Route::post('/ubah', 'update')->name('barang.update');
             Route::delete('/hapus', 'delete')->name('barang.delete');
+            Route::post('/import', 'import')->name('barang.import');
+            Route::get('/template', 'template')->name('barang.template');
         });
     });
 

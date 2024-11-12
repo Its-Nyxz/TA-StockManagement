@@ -1,9 +1,6 @@
 @extends('layouts.app')
 @section('title', __('goods'))
 @section('content')
-    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" /> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> -->
-
     <x-head-datatable />
     <div class="container-fluid">
         <div class="row">
@@ -11,10 +8,16 @@
                 <div class="card w-100">
                     <div class="card-header row">
                         <div class="d-flex justify-content-end align-items-center w-100">
-                            @if (Auth::user()->role->name != 'staff')
+                            @can('super')
+                                <button type="button" class="btn btn-primary m-1 mt-1" id="upload-modal-button"
+                                    data-bs-toggle="modal" data-bs-target="#uploadModal">
+                                    <i class="fas fa-file-import"></i>
+                                </button>
+                            @endcan
+                            @can('super&admin')
                                 <button class="btn btn-success" type="button" data-toggle="modal" data-target="#TambahData"
                                     id="modal-button"><i class="fas fa-plus"></i> {{ __('Add data') }}</button>
-                            @endif
+                            @endcan
                         </div>
                     </div>
                     <!-- Modal -->
@@ -88,9 +91,9 @@
                                                 <input type="number" value="0" name="jumlah" class="form-control">
                                             </div>
                                             <!-- <div class="form-group">
-                                                        <label for="harga" class="form-label">{{ __('price of goods') }} <span class="text-danger">*</span></label>
-                                                        <input type="text"  id="harga" name="harga" class="form-control" placeholder="RP. 0">
-                                                    </div> -->
+                                                                    <label for="harga" class="form-label">{{ __('price of goods') }} <span class="text-danger">*</span></label>
+                                                                    <input type="text"  id="harga" name="harga" class="form-control" placeholder="RP. 0">
+                                                                </div> -->
                                         </div>
                                         <div class="col-md-5">
                                             <div class="form-group">
@@ -112,6 +115,36 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Modal Import-->
+                    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="uploadModalLabel">Import Barang</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="{{ route('barang.import') }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="file">{{ __('Choose File') }}</label>
+                                            <input type="file" name="file" class="form-control" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary mt-2">{{ __('Import') }}</button>
+                                    </form>
+                                    <hr>
+                                    <a href="{{ route('barang.template') }}"
+                                        class="btn btn-success mt-2">{{ __('Download Template') }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="data-tabel" width="100%"
@@ -475,6 +508,9 @@
                 $("input[name='kode']").val("BRG-" + id);
             });
 
+            $("#upload-modal-button").on("click", function() {
+                $('#uploadModal').modal('show');
+            });
 
         });
 
@@ -560,5 +596,25 @@
 
         });
     </script>
+    <script>
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+        @endif
 
+        @if (session('error') || $errors->has('file'))
+            Swal.fire({
+                icon: 'error',
+                title: '{{ session('error') ? 'Gagal' : 'File Tidak Cocok' }}',
+                text: '{{ session('error') ?? $errors->first('file') }}',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            });
+        @endif
+    </script>
 @endsection

@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\View\View;
-use Yajra\DataTables\DataTables;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Storage;
 use App\Models\Item;
-use App\Models\Category;
 use App\Models\Unit;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Supplier;
+use Illuminate\View\View;
+use App\Imports\ItemsImport;
+use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+use Illuminate\Http\JsonResponse;
+use App\Exports\ItemTemplateExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
@@ -184,5 +187,37 @@ class ItemController extends Controller
         return response()->json([
             "message" => __("data deleted successfully")
         ])->setStatusCode(200);
+    }
+
+    public function import(Request $request)
+    {
+        // Validate that a file is uploaded and it is in the correct format
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv',
+        ]);
+
+        try {
+            // Load data from the file to check if it contains any rows
+            $file = $request->file('file');
+            $excelData = Excel::toArray(new ItemsImport, $file);
+
+            // Check if the file is empty
+            if (empty($excelData) || empty($excelData[0])) {
+                return redirect()->back()->with('error', __('The uploaded file is empty. Please upload a file with data.'));
+            }
+
+            // Proceed with import if file has data
+            Excel::import(new ItemsImport, $file);
+
+            return redirect()->back()->with('success', 'Data imported successfully');
+        } catch (\Exception $e) {
+            // Log and return error if import fails
+            return redirect()->back()->with('error', 'Failed to import data. ' . $e->getMessage());
+        }
+    }
+
+    public function template()
+    {
+        return Excel::download(new ItemTemplateExport, 'item_template.xlsx');
     }
 }
