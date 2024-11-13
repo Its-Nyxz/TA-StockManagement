@@ -31,7 +31,7 @@ class CategoryImport implements ToModel, WithHeadingRow, WithValidation
         // Mengembalikan model Category dengan data yang telah dinormalisasi
         return new Category([
             'name' => ucwords($normalizedName), // Menyimpan nama dalam format kapitalisasi kata
-            'description' => $row['description'] ?? null,
+            'description' => $row['keterangan'] ?? null,
         ]);
     }
 

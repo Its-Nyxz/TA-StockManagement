@@ -26,7 +26,7 @@ class UnitImport implements ToModel, WithHeadingRow, WithValidation
         // Mengembalikan model Unit dengan data yang telah dinormalisasi
         return new Unit([
             'name' => ucwords($normalizedName), // Menyimpan nama dalam format kapitalisasi kata
-            'description' => $row['description'] ?? null,
+            'description' => $row['keterangan'] ?? null,
         ]);
     }
 

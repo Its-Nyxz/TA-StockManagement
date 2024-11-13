@@ -13,20 +13,20 @@ class BrandSeeder extends Seeder
      */
     public function run(): void
     {
-        $brands = [
-            'Dulux',
-            'Nippon Paint',
-            'KIA',
-            'Broco',
-            'Philips',
-            'Wavin',
-            'HWI (Hyundai Welding Indonesia)',
-            'Makita',
-            'Semen Gresik'
-        ];
+        // $brands = [
+        //     'Dulux',
+        //     'Nippon Paint',
+        //     'KIA',
+        //     'Broco',
+        //     'Philips',
+        //     'Wavin',
+        //     'HWI (Hyundai Welding Indonesia)',
+        //     'Makita',
+        //     'Semen Gresik'
+        // ];
 
-        foreach($brands as $brand){
-            Brand::create(['name'=>$brand]);
-        }
+        // foreach($brands as $brand){
+        //     Brand::create(['name'=>$brand]);
+        // }
     }
 }

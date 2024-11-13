@@ -33,7 +33,10 @@ class BrandController extends Controller
             return DataTables::of($brands)
                 ->addColumn('tindakan', function ($data) {
                     $button = "<button class='ubah btn btn-success m-1' id='" . $data->id . "'><i class='fas fa-pen m-1'></i>" . __("Edit") . "</button>";
-                    $button .= "<button class='hapus btn btn-danger m-1' id='" . $data->id . "'><i class='fas fa-trash m-1'></i>" . __("Delete") . "</button>";
+                    // Mengecek apakah brand ini memiliki relasi di tabel item_barang
+                    if ($data->items()->count() == 0) {
+                        $button .= "<button class='hapus btn btn-danger m-1' id='" . $data->id . "'><i class='fas fa-trash m-1'></i>" . __("Delete") . "</button>";
+                    }
                     return $button;
                 })
                 ->rawColumns(['tindakan'])
@@ -131,6 +134,6 @@ class BrandController extends Controller
 
     public function template()
     {
-        return Excel::download(new BrandTemplateExport, 'brand_template.xlsx');
+        return Excel::download(new BrandTemplateExport, 'merk_template.xlsx');
     }
 }

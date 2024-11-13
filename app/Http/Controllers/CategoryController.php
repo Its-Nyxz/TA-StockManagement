@@ -29,7 +29,9 @@ class CategoryController extends Controller
             return DataTables::of($category)
                 ->addColumn('tindakan', function ($data) {
                     $button = "<button class='ubah btn btn-success m-1' id='" . $data->id . "'><i class='fas fa-pen m-1'></i>" . __("Edit") . "</button>";
-                    $button .= "<button class='hapus btn btn-danger m-1' id='" . $data->id . "'><i class='fas fa-trash m-1'></i>" . __("Delete") . "</button>";
+                    if ($data->items()->count() == 0) {
+                        $button .= "<button class='hapus btn btn-danger m-1' id='" . $data->id . "'><i class='fas fa-trash m-1'></i>" . __("Delete") . "</button>";
+                    }
                     return $button;
                 })
                 ->rawColumns(['tindakan'])
@@ -123,6 +125,6 @@ class CategoryController extends Controller
 
     public function template()
     {
-        return Excel::download(new CategoryTemplateExport, 'category_template.xlsx');
+        return Excel::download(new CategoryTemplateExport, 'jenis_template.xlsx');
     }
 }

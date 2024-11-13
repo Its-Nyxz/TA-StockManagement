@@ -218,6 +218,6 @@ class ItemController extends Controller
 
     public function template()
     {
-        return Excel::download(new ItemTemplateExport, 'item_template.xlsx');
+        return Excel::download(new ItemTemplateExport, 'barang_template.xlsx');
     }
 }
