@@ -13,8 +13,6 @@
                                 data-bs-toggle="modal" data-bs-target="#uploadModal">
                                 <i class="fas fa-file-import"></i>
                             </button>
-                        @endcan
-                            @can('super&admin')
                             <button class="btn btn-success" type="button" data-toggle="modal" data-target="#TambahData"
                                 id="modal-button"><i class="fas fa-plus"></i> {{ __('Add data') }}</button>
                             @endcan
