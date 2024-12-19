@@ -10,10 +10,20 @@ class Unit extends Model
 {
     use HasFactory;
     protected $table = 'units';
-    protected $fillable = ['name','description'];
+    protected $fillable = ['name', 'description'];
 
-    public function items():HasMany
+    public function items(): HasMany
     {
-        return $this -> hasMany(Item::class);
+        return $this->hasMany(Item::class);
+    }
+
+    public function fromConversions()
+    {
+        return $this->hasMany(UnitConversion::class, 'from_unit_id');
+    }
+
+    public function toConversions()
+    {
+        return $this->hasMany(UnitConversion::class, 'to_unit_id');
     }
 }

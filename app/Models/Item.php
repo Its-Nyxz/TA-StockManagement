@@ -12,51 +12,61 @@ class Item extends Model
     use HasFactory;
     protected $table = 'items';
     protected $fillable = [
-        'name','image','code',
-        'price','quantity','category_id','brand_id',
+        'name',
+        'image',
+        'code',
+        'price',
+        'quantity',
+        'category_id',
+        'brand_id',
         'unit_id',
-        'active','supplier_id'
+        'active',
+        'supplier_id'
     ];
 
     public function category(): BelongsTo
     {
-        return $this -> belongsTo(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
 
-    public function goodsIns():HasMany
+    public function goodsIns(): HasMany
     {
-        return $this -> hasMany(GoodsIn::class);
+        return $this->hasMany(GoodsIn::class);
     }
 
-    public function goodsOuts():HasMany
+    public function goodsOuts(): HasMany
     {
-        return $this -> hasMany(GoodsOut::class);
+        return $this->hasMany(GoodsOut::class);
     }
 
     public function unit(): BelongsTo
     {
-        return $this -> belongsTo(Unit::class);
+        return $this->belongsTo(Unit::class);
     }
 
     public function brand(): BelongsTo
     {
-        return $this -> belongsTo(Brand::class);
+        return $this->belongsTo(Brand::class);
     }
 
-    public function goodsBacks():HasMany
+    public function goodsBacks(): HasMany
     {
-        return $this -> hasMany(GoodsBack::class);
+        return $this->hasMany(GoodsBack::class);
     }
 
     public function supplier(): BelongsTo
     {
-        return $this -> belongsTo(Supplier::class);
+        return $this->belongsTo(Supplier::class);
     }
 
     public function stockOpnames(): HasMany
     {
-        return $this -> hasMany(StockOpname::class);
+        return $this->hasMany(StockOpname::class);
     }
 
+    public function conversions()
+    {
+        return $this->hasMany(UnitConversion::class, 'item_id');
+    }
 }

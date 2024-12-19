@@ -24,13 +24,13 @@ class AppServiceProvider extends ServiceProvider
     {
         Carbon::setLocale('ID');
 
-        Gate::define('super&admin', function(){
+        Gate::define('super&admin', function () {
             return Auth::user()->role_id != 3;
         });
-        Gate::define('user', function(){
+        Gate::define('user', function () {
             return Auth::user()->role_id == 3;
         });
-        Gate::define('super', function(){
+        Gate::define('super', function () {
             return Auth::user()->role_id == 1;
         });
     }

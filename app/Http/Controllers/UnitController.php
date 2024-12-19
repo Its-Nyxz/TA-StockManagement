@@ -25,7 +25,10 @@ class UnitController extends Controller
             return DataTables::of($units)
                 ->addColumn('tindakan', function ($data) {
                     $button = "<button class='ubah btn btn-success m-1' id='" . $data->id . "'><i class='fas fa-pen m-1'></i>" . __("Edit") . "</button>";
-                    if ($data->items()->count() == 0) {
+                    if (
+                        $data->items()->count() == 0  && $data->fromConversions()->count() == 0 &&
+                        $data->toConversions()->count() == 0
+                    ) {
                         $button .= "<button class='hapus btn btn-danger m-1' id='" . $data->id . "'><i class='fas fa-trash m-1'></i>" . __("Delete") . "</button>";
                     }
                     return $button;
@@ -109,7 +112,7 @@ class UnitController extends Controller
             if (empty($excelData) || empty($excelData[0])) {
                 return redirect()->back()->with('error', __('The uploaded file is empty. Please upload a file with data.'));
             }
-            
+
             Excel::import(new UnitImport, $request->file('file'));
 
             return redirect()->back()->with('success', __('Data imported successfully'));

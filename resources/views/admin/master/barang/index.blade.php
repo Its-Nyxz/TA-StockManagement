@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
-                                        <div class="col-md-7">
+                                        <div class="col-md-8">
                                             <div class="form-group">
                                                 <label for="kode" class="form-label">{{ __('code of goods') }} <span
                                                         class="text-danger">*</span></label>
@@ -64,6 +64,29 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+                                            <div id="conversion-section">
+                                                <div class="form-group">
+                                                    <label for="konversi_unit"
+                                                        class="form-label">{{ __('Tambah Konversi Satuan Barang') }}</label>
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>{{ __('Dari Satuan') }}</th>
+                                                                <th>{{ __('Ke Satuan') }}</th>
+                                                                <th>{{ __('Jumlah Konversi') }}</th>
+                                                                <th>{{ __('Aksi') }}</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="conversion-rows">
+                                                            <!-- Rows for dynamic conversion units -->
+                                                        </tbody>
+                                                    </table>
+                                                    <button type="button" class="btn btn-sm btn-primary"
+                                                        id="add-conversion-row">
+                                                        {{ __('Tambah Konversi') }}
+                                                    </button>
+                                                </div>
+                                            </div>
                                             <div class="form-group">
                                                 <label for="merk" class="form-label">{{ __('brand of goods') }} <span
                                                         class="text-danger">*</span></label>
@@ -85,17 +108,23 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="stock_limit">Batas Bawah Stok</label>
+                                                <input type="number" name="stock_limit" class="form-control"
+                                                    value="{{ $item->stock_limit ?? 0 }}">
+                                            </div>
                                             <div class="form-group item-count" id="item-count">
                                                 <label for="harga" class="form-label">{{ __('initial amount') }} <span
                                                         class="text-danger">*</span></label>
-                                                <input type="number" value="0" name="jumlah" class="form-control">
+                                                <input type="number" value="0" name="jumlah"
+                                                    class="form-control">
                                             </div>
                                             <!-- <div class="form-group">
-                                                                    <label for="harga" class="form-label">{{ __('price of goods') }} <span class="text-danger">*</span></label>
-                                                                    <input type="text"  id="harga" name="harga" class="form-control" placeholder="RP. 0">
-                                                                </div> -->
+                                                                                                                                                                                                                                    <label for="harga" class="form-label">{{ __('price of goods') }} <span class="text-danger">*</span></label>
+                                                                                                                                                                                                                                    <input type="text"  id="harga" name="harga" class="form-control" placeholder="RP. 0">
+                                                                                                                                                                                                                                </div> -->
                                         </div>
-                                        <div class="col-md-5">
+                                        <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="title" class="form-label">{{ __('photo') }}</label>
                                                 <img src="{{ asset('default.png') }}" width="80%" alt="profile-user"
@@ -162,6 +191,7 @@
                                         <th class="border-bottom-0">{{ __('initial stock') }}</th>
                                         <!-- <th class="border-bottom-0">{{ __('price') }}</th> -->
                                         {{-- @if (Auth::user()->role->name != 'staff') --}}
+                                        <th class="border-bottom-0">{{ __('Konversi') }}</th>
                                         @can('super&admin')
                                             <th class="border-bottom-0" width="1%">{{ __('action') }}</th>
                                         @endcan
@@ -314,6 +344,14 @@
                     //     data:'price',
                     //     name:'price'
                     // },
+                    {
+                        data: 'conversions',
+                        name: 'conversions',
+                        render: function(data) {
+                            // Data backend sudah dirender sebagai HTML, tidak perlu memproses ulang
+                            return data;
+                        }
+                    },
                     @if (Auth::user()->role->name != 'staff')
                         {
                             data: 'tindakan',
@@ -327,6 +365,7 @@
         function simpan() {
             const name = $("input[name='nama']").val();
             const code = $("input[name='kode']").val();
+            const stock_limit = $("input[name='stock_limit']").val();
             const image = $("#GetFile")[0].files;
             const category_id = $("select[name='jenisbarang']").val();
             const unit_id = $("select[name='satuan']").val();
@@ -338,10 +377,31 @@
             Form.append('image', image[0]);
             Form.append('code', code);
             Form.append('name', name);
+            Form.append('stock_limit', stock_limit);
             Form.append('category_id', category_id);
             Form.append('unit_id', unit_id);
             Form.append('brand_id', brand_id);
             Form.append('supplier_id', supplier_id);
+            // Handle conversions
+            const fromUnits = $("select[name='from_unit[]']").map(function() {
+                return $(this).val();
+            }).get();
+
+            const toUnits = $("select[name='to_unit[]']").map(function() {
+                return $(this).val();
+            }).get();
+
+            const factors = $("input[name='conversion_factor[]']").map(function() {
+                return $(this).val();
+            }).get();
+
+            fromUnits.forEach((fromUnit, index) => {
+                Form.append(`conversions[${index}][from_unit_id]`, fromUnit);
+                Form.append(`conversions[${index}][to_unit_id]`, toUnits[index]);
+                Form.append(`conversions[${index}][conversion_factor]`, factors[index]);
+            });
+
+            // console.log([...Form.entries()]);
             // Form.append('price', price);
             if (name.length == 0 || category_id.length == 0 || unit_id.length == 0 || brand_id.length == 0 || supplier_id
                 .length == 0) {
@@ -380,6 +440,7 @@
                     $('#kembali').click();
                     $("input[name='nama']").val(null);
                     $("input[name='kode']").val(null);
+                    $("input[name='stock_limit']").val(null);
                     $("#GetFile")[0].files = null;
                     $("select[name='jenisbarang']").val(null);
                     $("select[name='satuan']").val(null);
@@ -403,6 +464,7 @@
 
         function ubah() {
             const name = $("input[name='nama']").val();
+            const stock_limit = $("input[name='stock_limit']").val();
             const code = $("input[name='kode']").val();
             const image = $("#GetFile")[0].files;
             const category_id = $("select[name='jenisbarang']").val();
@@ -422,6 +484,20 @@
             Form.append('brand_id', brand_id);
             Form.append('supplier_id', supplier_id);
             Form.append('quantity', quantity);
+
+            // Tambahkan data konversi
+            $("select[name='from_unit[]']").each(function(index, element) {
+                Form.append(`from_unit[${index}]`, $(element).val());
+            });
+
+            $("select[name='to_unit[]']").each(function(index, element) {
+                Form.append(`to_unit[${index}]`, $(element).val());
+            });
+
+            $("input[name='conversion_factor[]']").each(function(index, element) {
+                Form.append(`conversion_factor[${index}]`, $(element).val());
+            });
+
             // Form.append('price', price);
             $.ajax({
                 url: `{{ route('barang.update') }}`,
@@ -441,6 +517,7 @@
                     $('#kembali').click();
                     $("input[name='id']").val(null);
                     $("input[name='nama']").val(null);
+                    $("input[name='stock_limit']").val(null);
                     $("input[name='kode']").val(null);
                     $("#GetFile").val(null);
                     $("select[name='jenisbarang']").val(null);
@@ -482,12 +559,28 @@
                 }
             });
 
+            // Awalnya sembunyikan #conversion-section
+            $("#conversion-section").hide();
+
+            // Pantau perubahan pada select#satuan
+            $("#satuan").on("change", function() {
+                const selectedUnit = $(this).val(); // Ambil nilai yang dipilih
+                if (selectedUnit) {
+                    // Jika ada nilai yang dipilih, tampilkan conversion-section
+                    $("#conversion-section").fadeIn();
+                } else {
+                    // Jika tidak ada nilai yang dipilih, sembunyikan conversion-section
+                    $("#conversion-section").fadeOut();
+                }
+            });
+
             $("#modal-button").on("click", function() {
                 $("#TambahDataModalLabel").text("{{ __('Add goods') }}");
                 $("#item-count").hide();
                 $("input[name='nama']").val(null);
                 $("input[name='id']").val(null);
                 $("input[name='kode']").val(null);
+                $("input[name='stock_limit']").val(null);
                 $("#GetFile").val(null);
                 $("#outputImg").attr("src", "{{ asset('default.png') }}");
                 $("select[name='jenisbarang'], select[name='satuan'], select[name='merk'], select[name='supplier']")
@@ -511,7 +604,57 @@
             $("#upload-modal-button").on("click", function() {
                 $('#uploadModal').modal('show');
             });
+            // Event listener untuk mendeteksi perubahan satuan barang
+            $("select[name='satuan']").on("change", function() {
+                const selectedUnit = $(this).val(); // Ambil nilai satuan barang yang dipilih
+                $("select[name='from_unit[]']").val(selectedUnit).trigger(
+                    'change'); // Update semua from_unit
+                $("select[name='to_unit[]']").val(selectedUnit).trigger('change'); // Update semua to_unit
+            });
 
+            // Tambah baris konversi baru
+            $("#add-conversion-row").on("click", function() {
+                const selectedUnit = $("select[name='satuan']").val() ||
+                    ''; // Ambil satuan barang yang dipilih
+
+                const newRow = `
+                        <tr>
+                        <td>
+                            <select name="from_unit[]" class="form-control from-unit">
+                                @foreach ($satuan as $s)
+                                    <option value="{{ $s->id }}" ${selectedUnit == {{ $s->id }} ? 'selected' : ''}>
+                                        {{ $s->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td>
+                            <select name="to_unit[]" class="form-control to-unit">
+                                @foreach ($satuan as $s)
+                                    <option value="{{ $s->id }}" ${selectedUnit == {{ $s->id }} ? 'selected' : ''}>
+                                        {{ $s->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" name="conversion_factor[]" class="form-control" placeholder="Jumlah">
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-sm btn-danger remove-row">Hapus</button>
+                        </td>
+                    </tr>
+                    `;
+                $("#conversion-rows").append(newRow);
+                $('.from-unit, .to-unit').select2({
+                    theme: 'bootstrap4',
+                    allowClear: true
+                });
+            });
+
+            $(document).on('click', '.remove-row', function() {
+                $(this).closest('tr').remove();
+            });
         });
 
 
@@ -533,6 +676,7 @@
                 }) {
                     $("input[name='id']").val(data.id);
                     $("input[name='nama']").val(data.name);
+                    $("input[name='stock_limit']").val(data.stock_limit);
                     $("input[name='kode']").val(data.code);
                     $("select[name='jenisbarang']").val(data.category_id).trigger(
                         'change'); // Set nilai dan trigger
@@ -547,6 +691,42 @@
                         `{{ asset('default.png') }}`;
                     $("#outputImg").attr("src", imageUrl); // Set gambar pada elemen img
                     // $("input[name='harga']").val(data.price);
+                    // Clear conversion rows and populate with existing data
+                    $('#conversion-rows').empty();
+                    if (data.conversions && Array.isArray(data.conversions)) {
+                        data.conversions.forEach(function(conv) {
+                            $('#conversion-rows').append(`
+                <tr>
+                    <td>
+                        <select name="from_unit[]" class="form-control">
+                            @foreach ($satuan as $s)
+                                <option value="{{ $s->id }}" ${conv.from_unit_id == {{ $s->id }} ? 'selected' : ''}>
+                                    {{ $s->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>
+                        <select name="to_unit[]" class="form-control">
+                            @foreach ($satuan as $s)
+                                <option value="{{ $s->id }}" ${conv.to_unit_id == {{ $s->id }} ? 'selected' : ''}>
+                                    {{ $s->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" name="conversion_factor[]" value="${conv.conversion_factor}" class="form-control">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-danger remove-row">{{ __('Hapus') }}</button>
+                    </td>
+                </tr>
+            `);
+                        });
+                    } else {
+                        console.warn("No conversions available");
+                    }
                 }
             });
 

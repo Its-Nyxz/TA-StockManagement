@@ -10,6 +10,7 @@ use App\Models\Supplier;
 use Illuminate\View\View;
 use App\Imports\ItemsImport;
 use Illuminate\Http\Request;
+use App\Models\UnitConversion;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\JsonResponse;
 use App\Exports\ItemTemplateExport;
@@ -28,7 +29,7 @@ class ItemController extends Controller
     }
     public function list(Request $request): JsonResponse
     {
-        $items = Item::with('category', 'unit', 'brand', 'supplier', 'goodsIns', 'goodsOuts', 'goodsBacks', 'stockOpnames')->latest()->get();
+        $items = Item::with('category', 'unit', 'brand', 'supplier', 'goodsIns', 'goodsOuts', 'goodsBacks', 'stockOpnames', 'conversions.fromUnit', 'conversions.toUnit')->latest()->get();
         if ($request->ajax()) {
             return DataTables::of($items)
                 // ->addColumn('img',function($data){
@@ -71,44 +72,91 @@ class ItemController extends Controller
                     return $result;
                 })
                 ->rawColumns(['total'])
+                ->addColumn('conversions', function ($data) {
+                    if ($data->conversions->isEmpty()) {
+                        return 'No conversions available';
+                    }
 
+                    return $data->conversions->map(function ($conv) {
+                        $fromUnit = optional($conv->fromUnit)->name ?? 'N/A';
+                        $toUnit = optional($conv->toUnit)->name ?? 'N/A';
+                        return "{$fromUnit} → {$toUnit}: {$conv->conversion_factor}";
+                    })->join(' || ');
+                })
+                ->rawColumns(['conversions']) // Tambahkan ini agar HTML dirender
                 ->addColumn('tindakan', function ($data) {
                     $button = "<button class='ubah btn btn-success m-1' id='" . $data->id . "'><i class='fas fa-pen m-1'></i>" . __("Edit") . "</button>";
                     $button .= "<button class='hapus btn btn-danger m-1' id='" . $data->id . "'><i class='fas fa-trash m-1'></i>" . __("Delete") . "</button>";
                     return $button;
                 })
                 ->rawColumns(['img', 'tindakan'])
-                ->make(true);
+                ->make(mDataSupport: true);
         }
     }
 
     public function save(Request $request): JsonResponse
     {
-        $data = [
-            'name' => $request->name,
-            'code' => $request->code,
-            'price' => 0,
-            'category_id' => $request->category_id,
-            'brand_id' => $request->brand_id,
-            'unit_id' => $request->unit_id,
-            'supplier_id' => $request->supplier_id,
-        ];
-        if ($request->file('image') != null) {
-            $image = $request->file('image');
-            $image->storeAs('public/barang/', $image->hashName());
-            $img = $image->hashName();
-            $data['image'] = $img;
+        // dd($request->all()); // Debug: hentikan proses dan tampilkan data
+        try {
+            // Data barang
+            $data = [
+                'name' => $request->name,
+                'code' => $request->code,
+                'price' => 0,
+                'category_id' => $request->category_id,
+                'brand_id' => $request->brand_id,
+                'unit_id' => $request->unit_id,
+                'supplier_id' => $request->supplier_id,
+                'stock_limit' => $request->stock_limit,
+            ];
+
+            // Upload gambar jika ada
+            if ($request->hasFile('image')) {
+                $data['image'] = $this->uploadImage($request->file('image'));
+            }
+
+            // Simpan barang
+            $item = Item::create($data);
+            // Simpan data konversi satuan
+            if ($request->has('conversions')) {
+                foreach ($request->conversions as $conversion) {
+                    UnitConversion::create([
+                        'item_id' => $item->id,
+                        'from_unit_id' => $conversion['from_unit_id'],
+                        'to_unit_id' => $conversion['to_unit_id'],
+                        'conversion_factor' => $conversion['conversion_factor'],
+                    ]);
+                }
+            }
+
+            return response()->json([
+                'message' => __('Saved successfully')
+            ])->setStatusCode(200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => __('Failed to save'),
+                'error' => $e->getMessage(),
+            ])->setStatusCode(500);
         }
-        Item::create($data);
-        return response()->json([
-            "message" => __("saved successfully")
-        ])->setStatusCode(200);
+    }
+
+    /**
+     * Upload image to storage
+     *
+     * @param \Illuminate\Http\UploadedFile $image
+     * @return string $imageName
+     */
+    private function uploadImage($image): string
+    {
+        $imageName = $image->hashName();
+        $image->storeAs('public/barang/', $imageName);
+        return $imageName;
     }
 
     public function detail(Request $request): JsonResponse
     {
         $id = $request->id;
-        $data = Item::with('category', 'unit', 'brand', 'supplier', 'goodsIns', 'goodsOuts', 'goodsBacks', 'stockOpnames')->find($id);
+        $data = Item::with('category', 'unit', 'brand', 'supplier', 'goodsIns', 'goodsOuts', 'goodsBacks', 'stockOpnames', 'conversions.fromUnit', 'conversions.toUnit')->find($id);
         $data['category_name'] = $data->category->name;
         $data['unit_name'] = $data->unit->name;
         $stok_awal = $data['quantity'];
@@ -118,6 +166,17 @@ class ItemController extends Controller
         $stok_opname = $data->stockOpnames->sum('quantity');
         $total_stok = ($stok_awal + $stok_masuk - $stok_keluar - $stok_retur) + $stok_opname;
         $data['total_stok'] = $total_stok;
+
+        // Tambahkan conversions dalam format array
+        $data['conversions'] = $data->conversions->map(function ($conv) {
+            return [
+                'from_unit_id' => $conv->from_unit_id,
+                'to_unit_id' => $conv->to_unit_id,
+                'conversion_factor' => $conv->conversion_factor,
+                'from_unit_name' => optional($conv->fromUnit)->name ?? 'N/A',
+                'to_unit_name' => optional($conv->toUnit)->name ?? 'N/A',
+            ];
+        });
         // $data ['brand_name'] = $data -> brand -> name;
         // $data ['supplier_name'] = $data -> supplier -> name;
         return response()->json(
@@ -157,7 +216,8 @@ class ItemController extends Controller
             'category_id' => $request->category_id,
             'brand_id' => $request->brand_id,
             'unit_id' => $request->unit_id,
-            'supplier_id' => $request->supplier_id
+            'supplier_id' => $request->supplier_id,
+            'stock_limit' => $request->stock_limit,
         ];
         if ($request->file('image') != null) {
             Storage::delete('public/barang/' . $item->image);
@@ -168,6 +228,22 @@ class ItemController extends Controller
         }
         $item->fill($data);
         $item->save();
+
+        // Update conversions
+        if ($request->has('from_unit') && $request->has('to_unit') && $request->has('conversion_factor')) {
+            // Hapus konversi lama
+            $item->conversions()->delete();
+
+            // Tambahkan konversi baru
+            foreach ($request->from_unit as $index => $fromUnit) {
+                UnitConversion::create([
+                    'item_id' => $item->id,
+                    'from_unit_id' => $fromUnit,
+                    'to_unit_id' => $request->to_unit[$index],
+                    'conversion_factor' => $request->conversion_factor[$index],
+                ]);
+            }
+        }
         return response()->json([
             "message" => __("data changed successfully")
         ])->setStatusCode(200);
