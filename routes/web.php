@@ -198,6 +198,7 @@ Route::middleware(['auth', "localization"])->group(function () {
         Route::get('/list', 'list')->name('laporan.stok.list');
         Route::get('/grafik', 'grafik')->name('laporan.stok.grafik');
         Route::get('/pietoday', 'pietoday')->name('laporan.stok.pietoday');
+        Route::get('/detail',  'getDetail')->name('laporan.stok.detail');
     });
 
     // laporan penghasilan

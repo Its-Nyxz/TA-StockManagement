@@ -102,12 +102,12 @@ class ItemController extends Controller
             $data = [
                 'name' => $request->name,
                 'code' => $request->code,
+                'stock_limit' => $request->stock_limit,
                 'price' => 0,
                 'category_id' => $request->category_id,
                 'brand_id' => $request->brand_id,
                 'unit_id' => $request->unit_id,
                 'supplier_id' => $request->supplier_id,
-                'stock_limit' => $request->stock_limit,
             ];
 
             // Upload gambar jika ada
@@ -228,6 +228,7 @@ class ItemController extends Controller
         }
         $item->fill($data);
         $item->save();
+        // dd($item);
 
         // Update conversions
         if ($request->has('from_unit') && $request->has('to_unit') && $request->has('conversion_factor')) {

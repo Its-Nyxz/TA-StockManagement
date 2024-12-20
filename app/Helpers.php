@@ -16,34 +16,30 @@ class Notification
         // Mendefinisikan array untuk menyimpan data stok rendah
         $lowStockData = [];
 
-        // Mengambil semua ID produk yang unik
-        // $productIds = GoodsIn::distinct()->pluck('item_id')->toArray();
-        $productIds = Item::pluck('id')->toArray();
+        // Mengambil semua data item beserta informasi relasinya dalam satu query
+        $items = Item::with(['brand', 'supplier', 'unit'])
+            ->whereNotNull('stock_limit') // Hanya mengambil item dengan stock_limit yang ditentukan
+            ->get();
 
-        // Mengambil semua nama item dalam satu query untuk efisiensi
-        $items = Item::whereIn('id', $productIds)->get()->keyBy('id');
+        foreach ($items as $item) {
+            // Menghitung total stok untuk setiap item
+            $totalStock = $item->quantity
+                + GoodsIn::where('item_id', $item->id)->sum('quantity')
+                - GoodsOut::where('item_id', $item->id)->sum('quantity')
+                - GoodsBack::where('item_id', $item->id)->sum('quantity')
+                + StockOpname::where('item_id', $item->id)->sum('quantity');
 
-        foreach ($productIds as $productId) {
-            // Menghitung total stok untuk setiap ID produk
-            $totalStock = Item::where('id', $productId)->sum('quantity') + GoodsIn::where('item_id', $productId)->sum('quantity')
-                - GoodsOut::where('item_id', $productId)->sum('quantity')
-                - GoodsBack::where('item_id', $productId)->sum('quantity')
-                + StockOpname::where('item_id', $productId)->sum('quantity');
-
-            // Mendapatkan nama item dari koleksi
-            $item_name = $items->get($productId);
-
-            // Memeriksa apakah total stok kurang dari 10
-            if ($totalStock <= 10) {
+            // Memeriksa apakah total stok kurang dari stock_limit
+            if ($totalStock <= $item->stock_limit) {
                 $lowStockData[] = (object) [
-                    'item_id' => $productId,
-                    'total_stock' => max(0, $totalStock),
-                    'item_name' => $item_name ? $item_name->name : 'Unknown',
-                    'item_code' => $item_name ? $item_name->code : ' ',
-                    'merk' => $item_name ? $item_name->brand->name : '',
-                    'supplier' => $item_name ? $item_name->supplier->name : '',
-                    'unit' => $item_name ? $item_name->unit->name : '',
-                    // 'created_at' => GoodsIn::where('item_id', $productId)->first()? GoodsIn::where('item_id', $productId)->first()->created_at : null,
+                    'item_id' => $item->id,
+                    'total_stock' => max(0, $totalStock), // Menghindari nilai negatif
+                    'item_name' => $item->name,
+                    'item_code' => $item->code,
+                    'merk' => $item->brand ? $item->brand->name : '',
+                    'supplier' => $item->supplier ? $item->supplier->name : '',
+                    'unit' => $item->unit ? $item->unit->name : '',
+                    // 'created_at' => GoodsIn::where('item_id', $item->id)->first()?->created_at, // Jika perlu menampilkan waktu
                 ];
             }
         }
@@ -58,19 +54,23 @@ function getLowStockNotifCount()
     // Mendefinisikan array untuk menyimpan ID stok rendah
     $lowStockIds = [];
 
-    // Mengambil semua ID produk yang unik
-    // $productIds = GoodsIn::distinct()->pluck('item_id')->toArray();
-    $productIds = Item::pluck('id')->toArray();
+    // Mengambil semua produk (termasuk ID dan stock_limit)
+    $products = Item::all();
 
-    foreach ($productIds as $productId) {
+    foreach ($products as $product) {
+        // Mendapatkan ID produk dan stock_limit
+        $productId = $product->id;
+        $stockLimit = $product->stock_limit;
+
         // Menghitung total stok untuk setiap ID produk
-        $totalStock = Item::where('id', $productId)->sum('quantity') + GoodsIn::where('item_id', $productId)->sum('quantity')
+        $totalStock = Item::where('id', $productId)->sum('quantity')
+            + GoodsIn::where('item_id', $productId)->sum('quantity')
             - GoodsOut::where('item_id', $productId)->sum('quantity')
             - GoodsBack::where('item_id', $productId)->sum('quantity')
             + StockOpname::where('item_id', $productId)->sum('quantity');
 
-        // Memeriksa apakah total stok kurang dari 10
-        if ($totalStock <= 10 || $totalStock == 0) {
+        // Memeriksa apakah total stok kurang dari stock_limit
+        if ($totalStock <= $stockLimit) {
             $lowStockIds[] = $productId;
         }
     }
@@ -78,6 +78,7 @@ function getLowStockNotifCount()
     // Mengembalikan jumlah notifikasi stok rendah
     return $lowStockIds;
 }
+
 
 function getGoodsInApproval()
 {

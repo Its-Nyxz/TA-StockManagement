@@ -109,20 +109,21 @@
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="stock_limit">Batas Bawah Stok</label>
+                                                <label for="stock_limit">Batas Bawah Stok<span
+                                                        class="text-danger">*</span></label>
                                                 <input type="number" name="stock_limit" class="form-control"
                                                     value="{{ $item->stock_limit ?? 0 }}">
                                             </div>
                                             <div class="form-group item-count" id="item-count">
-                                                <label for="harga" class="form-label">{{ __('initial amount') }} <span
+                                                <label for="harga" class="form-label">{{ __('Stok Awal') }} <span
                                                         class="text-danger">*</span></label>
                                                 <input type="number" value="0" name="jumlah"
                                                     class="form-control">
                                             </div>
                                             <!-- <div class="form-group">
-                                                                                                                                                                                                                                    <label for="harga" class="form-label">{{ __('price of goods') }} <span class="text-danger">*</span></label>
-                                                                                                                                                                                                                                    <input type="text"  id="harga" name="harga" class="form-control" placeholder="RP. 0">
-                                                                                                                                                                                                                                </div> -->
+                                                                                                                                                                                                                                                                    <label for="harga" class="form-label">{{ __('price of goods') }} <span class="text-danger">*</span></label>
+                                                                                                                                                                                                                                                                    <input type="text"  id="harga" name="harga" class="form-control" placeholder="RP. 0">
+                                                                                                                                                                                                                                                                </div> -->
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
@@ -189,6 +190,7 @@
                                         <th class="border-bottom-0">{{ __('brand') }}</th>
                                         <th class="border-bottom-0">{{ __('supplier') }}</th>
                                         <th class="border-bottom-0">{{ __('initial stock') }}</th>
+                                        <th class="border-bottom-0">{{ __('minim') }}</th>
                                         <!-- <th class="border-bottom-0">{{ __('price') }}</th> -->
                                         {{-- @if (Auth::user()->role->name != 'staff') --}}
                                         <th class="border-bottom-0">{{ __('Konversi') }}</th>
@@ -340,6 +342,10 @@
                         data: 'quantity',
                         name: 'quantity'
                     },
+                    {
+                        data: 'stock_limit',
+                        name: 'stock_limit'
+                    },
                     // {
                     //     data:'price',
                     //     name:'price'
@@ -404,7 +410,7 @@
             // console.log([...Form.entries()]);
             // Form.append('price', price);
             if (name.length == 0 || category_id.length == 0 || unit_id.length == 0 || brand_id.length == 0 || supplier_id
-                .length == 0) {
+                .length == 0 || stock_limit.length == 0) {
                 return Swal.fire({
                     position: "center",
                     icon: "warning",
@@ -484,6 +490,7 @@
             Form.append('brand_id', brand_id);
             Form.append('supplier_id', supplier_id);
             Form.append('quantity', quantity);
+            Form.append('stock_limit', stock_limit);
 
             // Tambahkan data konversi
             $("select[name='from_unit[]']").each(function(index, element) {

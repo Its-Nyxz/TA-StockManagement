@@ -13,25 +13,25 @@ class UnitSeeder extends Seeder
      */
     public function run(): void
     {
-        // $units = [
-        //     'Unit',
-        //     'Rim',
-        //     'Psc',
-        //     'Kilogram (kg)',
-        //     'Meter (m)',
-        //     'Meter Persegi (m²)',
-        //     'Meter Kubik (m³)',
-        //     'Liter (L)',
-        //     'Sak',
-        //     'Lembar',
-        //     'Batang',
-        //     'Roll'
-        // ];
-        // foreach($units as $unit){
-        //     Unit::create([
-        //         'name'=>$unit
-        //     ]);
-        // }
+        $units = [
+            'Unit',
+            'Rim',
+            'Psc',
+            'Kilogram (kg)',
+            'Meter (m)',
+            'Meter Persegi (m²)',
+            'Meter Kubik (m³)',
+            'Liter (L)',
+            'Sak',
+            'Lembar',
+            'Batang',
+            'Roll'
+        ];
+        foreach($units as $unit){
+            Unit::create([
+                'name'=>$unit
+            ]);
+        }
         
     }
 }

@@ -21,6 +21,7 @@ class Item extends Model
         'brand_id',
         'unit_id',
         'active',
+        'stock_limit',
         'supplier_id'
     ];
 

@@ -33,7 +33,7 @@ class ReportStockController extends Controller
                 'goodsBacks' => 'date_backs',
                 'stockOpnames' => 'date_so',
             ];
-        
+
             foreach ($dateFilters as $relation => $dateColumn) {
                 $data->with([$relation => function ($query) use ($request, $dateColumn) {
                     if (!empty($request->start_date) && !empty($request->end_date)) {
@@ -45,12 +45,12 @@ class ReportStockController extends Controller
                     }
                 }]);
             }
-        }   
+        }
 
         if (!empty($request->supplier)) {
             $data->where('supplier_id', $request->supplier);
         }
-        
+
         $data->latest()->get();
         if ($request->ajax()) {
             return DataTables::of($data)
@@ -105,22 +105,29 @@ class ReportStockController extends Controller
                     $totalQuantityRetur = $item->goodsBacks->sum('quantity');
                     $totalQuantitySO = $item->stockOpnames->sum('quantity');
                     $data = Item::with("unit")->find($item->id);
-                    // if ($item->stockOpnames->status === 'plus') {
-                    //     $count = $item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur + $totalQuantitySO;
-                    // }elseif($item->stockOpnames->status === 'min'){
-                    //     $count = $item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur - $totalQuantitySO;
-                    // }else{
-                    //     $count = $item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur;
-                    // }
+
+                    // Hitung total stok
                     $count = ($item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur) + $totalQuantitySO;
-                    $result = $count . "/" . $data->unit->name;
-                    $result = max(0, $result);
+
+                    // Pastikan nilai tidak negatif
+                    $count = max(0, $count);
+
+                    // Ambil unit nama dan stock_limit
+                    $unitName = $data->unit->name ?? '';
+                    $stockLimit = $data->stock_limit ?? 10; // Default ke 10 jika stock_limit null
+
+                    // Buat string hasil dengan total stok dan unit
+                    $result = $count . "/" . $unitName;
+
+                    // Tampilkan berdasarkan stock_limit
                     if ($count <= 0) {
-                        return "<span class='text-red font-weight-bold'>" . $result . "</span>" . ' ' . "<span class='badge badge-danger'>" . __("Stock Empty") . "</span>";
-                    } else if ($count <= 10) {
-                        return "<span class='text-red font-weight-bold'>" . $result . "</span>" . ' ' . "<span class='badge badge-danger'>" . __("Stock Running Low") . "</span>";
+                        return "<span class='text-red font-weight-bold'>" . $result . "</span>" . ' ' .
+                            "<span class='badge badge-danger'>" . __("Stock Empty") . "</span>";
+                    } elseif ($count <= $stockLimit) {
+                        return "<span class='text-red font-weight-bold'>" . $result . "</span>" . ' ' .
+                            "<span class='badge badge-warning'>" . __("Stock Running Low") . "</span>";
                     } else {
-                        return  "<span class='text-success font-weight-bold'>" . $result . "</span>";
+                        return "<span class='text-success font-weight-bold'>" . $result . "</span>";
                     }
                 })
                 ->rawColumns(['total', 'jumlah_selisih'])
@@ -168,13 +175,50 @@ class ReportStockController extends Controller
         $goodsBackToday = GoodsBack::whereDate('date_backs', $today)->sum('quantity') ?? 0;
         $goodsSoToday = StockOpname::whereDate('date_so', $today)->sum('quantity') ?? 0;
         $totalStockToday = max(0, $goodsInToday - $goodsOutToday - $goodsBackToday + $goodsSoToday);
-        
+
         return response()->json([
             'goods_in_today' => $goodsInToday,
             'goods_out_today' => $goodsOutToday,
             'goods_back_today' => $goodsBackToday,
             'goods_so_today' => $goodsSoToday,
             'goods_total_today' => $totalStockToday,
+        ]);
+    }
+
+    public function getDetail(Request $request)
+    {
+        $id = $request->id;
+
+        // Ambil data item dan relasi terkait
+        $item = Item::with(['goodsIns', 'goodsOuts', 'goodsBacks', 'stockOpnames'])
+            ->find($id);
+
+        if (!$item) {
+            return response()->json(['message' => 'Item not found'], 404);
+        }
+
+        // Ambil nama satuan
+        $satuan = $item->unit ? $item->unit->name : '';
+
+        // Hitung data detail
+        $stokAwal = $item->quantity . ($satuan ? " / $satuan" : '');
+        $jumlahMasuk = $item->goodsIns->sum('quantity') . ($satuan ? " / $satuan" : '');
+        $jumlahKeluar = $item->goodsOuts->sum('quantity') . ($satuan ? " / $satuan" : '');
+        $jumlahRetur = $item->goodsBacks->sum('quantity') . ($satuan ? " / $satuan" : '');
+        $jumlahSelisih = $item->stockOpnames->sum('quantity') . ($satuan ? " / $satuan" : '');
+
+        // Hitung total stok
+        $totalQuantity = ($item->quantity + $item->goodsIns->sum('quantity') - $item->goodsOuts->sum('quantity') - $item->goodsBacks->sum('quantity')) + $item->stockOpnames->sum('quantity');
+        $totalStock = $totalQuantity . ($satuan ? " / $satuan" : '');
+
+        return response()->json([
+            'kode_barang' => $item->code, // Kode barang
+            'stok_awal' => $stokAwal,
+            'jumlah_masuk' => $jumlahMasuk,
+            'jumlah_keluar' => $jumlahKeluar,
+            'jumlah_retur' => $jumlahRetur,
+            'jumlah_selisih' => $jumlahSelisih,
+            'total_stock' => $totalStock,
         ]);
     }
 }
