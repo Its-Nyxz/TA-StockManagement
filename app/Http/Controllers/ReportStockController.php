@@ -190,8 +190,14 @@ class ReportStockController extends Controller
         $id = $request->id;
 
         // Ambil data item dan relasi terkait
-        $item = Item::with(['goodsIns', 'goodsOuts', 'goodsBacks', 'stockOpnames'])
-            ->find($id);
+        $item = Item::with([
+            'goodsIns',
+            'goodsOuts',
+            'goodsBacks',
+            'stockOpnames',
+            'conversions.fromUnit',
+            'conversions.toUnit'
+        ])->find($id);
 
         if (!$item) {
             return response()->json(['message' => 'Item not found'], 404);
@@ -201,24 +207,35 @@ class ReportStockController extends Controller
         $satuan = $item->unit ? $item->unit->name : '';
 
         // Hitung data detail
-        $stokAwal = $item->quantity . ($satuan ? " / $satuan" : '');
-        $jumlahMasuk = $item->goodsIns->sum('quantity') . ($satuan ? " / $satuan" : '');
-        $jumlahKeluar = $item->goodsOuts->sum('quantity') . ($satuan ? " / $satuan" : '');
-        $jumlahRetur = $item->goodsBacks->sum('quantity') . ($satuan ? " / $satuan" : '');
-        $jumlahSelisih = $item->stockOpnames->sum('quantity') . ($satuan ? " / $satuan" : '');
+        $stokAwal = $item->quantity;
+        $jumlahMasuk = $item->goodsIns->sum('quantity');
+        $jumlahKeluar = $item->goodsOuts->sum('quantity');
+        $jumlahRetur = $item->goodsBacks->sum('quantity');
+        $jumlahSelisih = $item->stockOpnames->sum('quantity');
 
         // Hitung total stok
-        $totalQuantity = ($item->quantity + $item->goodsIns->sum('quantity') - $item->goodsOuts->sum('quantity') - $item->goodsBacks->sum('quantity')) + $item->stockOpnames->sum('quantity');
-        $totalStock = $totalQuantity . ($satuan ? " / $satuan" : '');
+        $totalQuantity = ($item->quantity + $jumlahMasuk - $jumlahKeluar - $jumlahRetur) + $jumlahSelisih;
+
+        // Ambil daftar unit konversi
+        $unitConversions = $item->conversions->map(function ($conversion) {
+            return [
+                'from_unit' => $conversion->fromUnit->name,
+                'to_unit' => $conversion->toUnit->name,
+                'factor' => $conversion->conversion_factor,
+            ];
+        });
 
         return response()->json([
             'kode_barang' => $item->code, // Kode barang
-            'stok_awal' => $stokAwal,
-            'jumlah_masuk' => $jumlahMasuk,
-            'jumlah_keluar' => $jumlahKeluar,
-            'jumlah_retur' => $jumlahRetur,
-            'jumlah_selisih' => $jumlahSelisih,
-            'total_stock' => $totalStock,
+            'stok_awal' => $stokAwal, // Jumlah mentah
+            'stok_awal_unit' => $satuan, // Nama satuan
+            'jumlah_masuk' => $jumlahMasuk, // Jumlah mentah
+            'jumlah_keluar' => $jumlahKeluar, // Jumlah mentah
+            'jumlah_retur' => $jumlahRetur, // Jumlah mentah
+            'jumlah_selisih' => $jumlahSelisih, // Jumlah mentah
+            'total_stock' => $totalQuantity, // Jumlah mentah
+            'total_stock_unit' => $satuan, // Nama satuan
+            'units' => $unitConversions, // Daftar unit konversi
         ]);
     }
 }

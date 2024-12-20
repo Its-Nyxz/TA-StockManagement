@@ -91,6 +91,13 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
+                                    <!-- Dropdown for Unit Conversion -->
+                                    <div class="form-group">
+                                        <label for="unit-conversion">{{ __('Pilih Satuan Konversi') }}</label>
+                                        <select id="unit-conversion" class="form-control">
+                                            <option value="1">{{ __('Pilih Satuan') }}</option>
+                                        </select>
+                                    </div>
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
@@ -125,7 +132,10 @@
                                             </tr>
                                         </tbody>
                                     </table>
+
+
                                 </div>
+
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-dismiss="modal">{{ __('Close') }}</button>
@@ -366,7 +376,7 @@
                 },
                 success: function(response) {
                     // Isi data modal dengan response dari server
-                    $('#modal-item-code').text(response.kode_barang || '-'); // Tampilkan kode barang
+                    $('#modal-item-code').text(response.kode_barang || '-');
                     $('#modal-stok-awal').text(response.stok_awal || '0');
                     $('#modal-jumlah-masuk').text(response.jumlah_masuk || '0');
                     $('#modal-jumlah-keluar').text(response.jumlah_keluar || '0');
@@ -374,13 +384,57 @@
                     $('#modal-jumlah-selisih').text(response.jumlah_selisih || '0');
                     $('#modal-total-stock').text(response.total_stock || '0');
 
+                    // Kosongkan dropdown konversi
+                    const $unitConversion = $('#unit-conversion');
+                    $unitConversion.empty();
+                    $unitConversion.append(
+                        `<option value="1">{{ __('Pilih Satuan') }}</option>`);
+
+                    // Simpan data asli untuk referensi
+                    const originalData = {
+                        stok_awal: parseFloat(response.stok_awal) || 0,
+                        jumlah_masuk: parseFloat(response.jumlah_masuk) || 0,
+                        jumlah_keluar: parseFloat(response.jumlah_keluar) || 0,
+                        jumlah_retur: parseFloat(response.jumlah_retur) || 0,
+                        jumlah_selisih: parseFloat(response.jumlah_selisih) || 0,
+                        total_stock: parseFloat(response.total_stock) || 0,
+                    };
+
+                    // Tambahkan opsi unit konversi ke dropdown
+                    if (response.units && response.units.length > 0) {
+                        response.units.forEach((unit, index) => {
+                            $unitConversion.append(
+                                `<option value="${unit.factor}">${unit.from_unit} Ke ${unit.to_unit} (Jumlah: ${unit.factor})</option>`
+                            );
+                        });
+                    }
+
+                    // Event listener untuk perubahan dropdown
+                    $unitConversion.on('change', function() {
+                        const factor = parseFloat($(this).val()) || 1;
+
+                        // Update data jumlah berdasarkan faktor konversi
+                        $('#modal-stok-awal').text((originalData.stok_awal * factor).toFixed(
+                            2));
+                        $('#modal-jumlah-masuk').text((originalData.jumlah_masuk * factor)
+                            .toFixed(2));
+                        $('#modal-jumlah-keluar').text((originalData.jumlah_keluar * factor)
+                            .toFixed(2));
+                        $('#modal-jumlah-retur').text((originalData.jumlah_retur * factor)
+                            .toFixed(2));
+                        $('#modal-jumlah-selisih').text((originalData.jumlah_selisih * factor)
+                            .toFixed(2));
+                        $('#modal-total-stock').text((originalData.total_stock * factor)
+                            .toFixed(2));
+                    });
+
                     // Tampilkan modal
                     $('#detailModal').modal('show');
                 },
                 error: function(error) {
                     console.error('Error fetching details:', error);
                     alert('{{ __('Failed to load details. Please try again later.') }}');
-                }
+                },
             });
         });
     </script>
