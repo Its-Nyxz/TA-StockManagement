@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->integer('quantity');
+            $table->integer('conversion_factor');
             $table->string('invoice_number');
             $table->date('date_out');
             $table->timestamps();

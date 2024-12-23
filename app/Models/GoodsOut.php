@@ -14,6 +14,7 @@ class GoodsOut extends Model
         'item_id',
         'user_id',
         'quantity',
+        'conversion_factor',
         'invoice_number',
         'date_out',
         'customer_id',
@@ -22,21 +23,21 @@ class GoodsOut extends Model
 
     public function item(): BelongsTo
     {
-        return $this -> belongsTo(Item::class);
+        return $this->belongsTo(Item::class);
     }
 
     public function user(): BelongsTo
     {
-        return $this -> belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function customer(): BelongsTo
     {
-        return $this -> belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class);
     }
 
     public function supplier(): BelongsTo
     {
-        return $this -> belongsTo(Supplier::class);
+        return $this->belongsTo(Supplier::class);
     }
 }

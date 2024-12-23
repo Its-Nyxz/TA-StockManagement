@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->integer('quantity');
             $table->string('invoice_number');
+            $table->string('customer_id')->nullable();
             $table->string('description')->nullable();
             $table->date('date_backs');
             $table->timestamps();

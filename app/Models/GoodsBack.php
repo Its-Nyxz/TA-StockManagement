@@ -15,6 +15,7 @@ class GoodsBack extends Model
         'user_id',
         'quantity',
         'date_backs',
+        'customer_id',
         'description',
         'invoice_number',
         'supplier_id',
@@ -22,16 +23,21 @@ class GoodsBack extends Model
 
     public function item(): BelongsTo
     {
-        return $this -> belongsTo(Item::class);
+        return $this->belongsTo(Item::class);
     }
 
     public function user(): BelongsTo
     {
-        return $this -> belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function supplier(): BelongsTo
     {
-        return $this -> belongsTo(Supplier::class);
+        return $this->belongsTo(Supplier::class);
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
     }
 }

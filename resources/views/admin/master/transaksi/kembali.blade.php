@@ -118,6 +118,24 @@
                                                 <input type="date" id="tanggal_retur" name="tanggal_retur"
                                                     class="form-control">
                                             </div>
+
+                                            <div class="form-group">
+                                                <label for="return_type">{{ __('Tipe') }}</label>
+                                                <select id="return_type" name="return_type" class="form-control">
+                                                    <option value="supplier">{{ __('Untuk Pemasok') }}</option>
+                                                    <option value="customer">{{ __('Dari Pembeli') }}</option>
+                                                </select>
+                                            </div>
+
+                                            <div id="customer-section" style="display: none;">
+                                                <div class="form-group">
+                                                    <label for="customer_name">{{ __('Nama Pembeli') }}</label>
+                                                    <input type="text" id="customer_name" name="customer_name"
+                                                        class="form-control"
+                                                        placeholder="{{ __('Masukan Nama Pembeli') }}">
+                                                </div>
+                                            </div>
+
                                             <div class="form-group">
                                                 <label for="supplier"
                                                     class="form-label">{{ __('choose a supplier') }}<span
@@ -413,6 +431,23 @@
                     }
                 });
             });
+
+            // Show/hide customer section based on return type
+            $('#return_type').on('change', function() {
+                const returnType = $(this).val();
+                if (returnType === 'customer') {
+                    $('#customer-section').show();
+                } else {
+                    $('#customer-section').hide();
+                    $('#customer_name').val('');
+                }
+            });
+
+            // Inisialisasi jika sedang dalam mode edit
+            // const currentType = $('#return_type').val();
+            // if (currentType === 'customer') {
+            //     $('#customer-section').show();
+            // }
         });
     </script>
     <script>
@@ -442,6 +477,8 @@
             const date_retur = $("input[name='tanggal_retur']").val();
             const invoice_number = $("input[name='kode'").val();
             const quantity = $("input[name='jumlah'").val();
+            const customer_name = $("input[name='customer_name'").val();
+            const return_type = $("select[name='return_type'").val();
             const description = $("textarea[name='description'").val();
             const supplier_id = $("select[name='supplier'").val();
 
@@ -460,6 +497,8 @@
             Form.append('item_id', item_id);
             Form.append('date_retur', date_retur);
             Form.append('quantity', quantity);
+            Form.append('customer_name', customer_name);
+            Form.append('return_type', return_type);
             Form.append('invoice_number', invoice_number);
             Form.append('description', description);
             Form.append('supplier_id', supplier_id);
@@ -484,7 +523,9 @@
                         $("input[name='tanggal_retur']").val(null);
                         $("input[name='nama_barang']").val(null);
                         $("input[name='kode_barang']").val(null);
+                        $("input[name='customer_name']").val(null);
                         $("select[name='jenis_barang']").val(null);
+                        $("select[name='return_type']").val(null);
                         $("select[name='satuan_barang']").val(null);
                         $("input[name='jumlah']").val(0);
                         $("textarea[name='description']").val(null);
@@ -525,7 +566,10 @@
             const quantity = $("input[name='jumlah']").val();
             const description = $("textarea[name='description']").val();
             const supplier_id = $("select[name='supplier']").val();
-
+            // const customer_name = $("input[name='costumer_name']").val();
+            const return_type = $("select[name='return_type']").val();
+            // Hanya kirim nama pelanggan jika tipe retur adalah customer
+            const customer_name = return_type === "customer" ? $("input[name='customer_name']").val() : null;
 
             $.ajax({
                     url: `{{ route('transaksi.kembali.update') }}`,
@@ -537,6 +581,8 @@
                         date_retur,
                         description,
                         invoice_number,
+                        customer_name,
+                        return_type,
                         supplier_id,
                         quantity
                     },
@@ -557,8 +603,10 @@
                         $("select[name='jenis_barang']").val(null);
                         $("select[name='satuan_barang']").val(null);
                         $("input[name='jumlah']").val(0);
+                        $("input[name='customer_name']").val(null);
                         $("textarea[name='description']").val(null);
                         $("select[name='supplier'").val(null);
+                        $("select[name='return_type'").val(null);
                         $('#data-tabel').DataTable().ajax.reload();
                     },
                     error: function(err) {
@@ -817,6 +865,7 @@
                 $("input[name='kode_barang']").val(null);
                 $("input[name='jenis_barang']").val(null);
                 $("input[name='satuan_barang']").val(null);
+                $("input[name='customer_name']").val(null);
                 $("input[name='jumlah']").val(null);
                 $("textarea[name='description']").val(null);
                 $("select[name='supplier'").val(null).trigger('change');
@@ -839,21 +888,38 @@
                 data: {
                     id: id,
                 },
-                success: function({
-                    data
-                }) {
+                success: function(res) {
+                    const data = res.data;
+
+                    // Set nilai return_type ke dropdown
+                    $("select[name='return_type']").val(data.customer_name ? "customer" : "supplier")
+                        .trigger("change");
+
+                    // Tampilkan atau sembunyikan customer section berdasarkan tipe
+                    if (data.customer_name) {
+                        $("#customer-section").show();
+                        $("#customer_name").val(data.customer_name);
+                    } else {
+                        $("#customer-section").hide();
+                        $("#customer_name").val("");
+                    }
+
+                    // Set nilai field lainnya
+                    $("#tanggal_retur").val(data.date_backs);
                     $("input[name='id']").val(data.id);
                     $("input[name='kode']").val(data.invoice_number);
                     $("input[name='id_barang']").val(data.id_barang);
                     $("input[name='nama_barang']").val(data.nama_barang);
-                    $("input[name='tanggal_retur']").val(data.date_retur);
                     $("input[name='kode_barang']").val(data.kode_barang);
                     $("input[name='jenis_barang']").val(data.jenis_barang);
                     $("input[name='satuan_barang']").val(data.satuan_barang);
                     $("input[name='jumlah']").val(data.quantity);
                     $("textarea[name='description']").val(data.description);
-                    $("select[name='supplier']").val(data.supplier_id).trigger('change');;
-                }
+                    $("select[name='supplier']").val(data.supplier_id).trigger("change");
+                },
+                error: function(err) {
+                    console.log(err);
+                },
             });
 
         });
