@@ -12,42 +12,42 @@ use Carbon\Carbon;
 
 class ReportGoodsOutController extends Controller
 {
-    public function index():View 
+    public function index(): View
     {
         return view('admin.master.laporan.keluar');
     }
 
-    public function list(Request $request):JsonResponse
+    public function list(Request $request): JsonResponse
     {
-        if($request->ajax()){
-            if( empty($request->start_date) && empty($request->end_date)){
-                $goodsouts = GoodsOut::with('item','user','customer','supplier');
-            }else{
-                $goodsouts = GoodsOut::with('item','user','customer','customer');
-                $goodsouts -> whereBetween('date_out',[$request->start_date,$request->end_date]);
+        if ($request->ajax()) {
+            if (empty($request->start_date) && empty($request->end_date)) {
+                $goodsouts = GoodsOut::with('item', 'user', 'supplier');
+            } else {
+                $goodsouts = GoodsOut::with('item', 'user', 'supplier');
+                $goodsouts->whereBetween('date_out', [$request->start_date, $request->end_date]);
             }
-            $goodsouts -> latest() -> get();
+            $goodsouts->latest()->get();
             return DataTables::of($goodsouts)
-            ->addColumn('quantity',function($data){
-                $item = Item::with("unit")->find($data -> item -> id);
-                return $data -> quantity ."/".$item -> unit -> name;
-            })
-            ->addColumn("date_out",function($data){
-                return Carbon::parse($data->date_out)->format('d F Y');
-            })
-            ->addColumn("kode_barang",function($data){
-                return $data -> item -> code;
-            })
-            ->addColumn("brand",function($data){
-                return $data -> item -> brand -> name;
-            })
-            ->addColumn("supplier",function($data){
-                return $data -> supplier -> name;
-            })
-            ->addColumn("item_name",function($data){
-                return $data -> item -> name;
-            })
-            -> make(true);
+                ->addColumn('quantity', function ($data) {
+                    $item = Item::with("unit")->find($data->item->id);
+                    return $data->quantity . "/" . $item->unit->name;
+                })
+                ->addColumn("date_out", function ($data) {
+                    return Carbon::parse($data->date_out)->format('d F Y');
+                })
+                ->addColumn("kode_barang", function ($data) {
+                    return $data->item->code;
+                })
+                ->addColumn("brand", function ($data) {
+                    return $data->item->brand->name;
+                })
+                ->addColumn("supplier", function ($data) {
+                    return $data->supplier->name;
+                })
+                ->addColumn("item_name", function ($data) {
+                    return $data->item->name;
+                })
+                ->make(true);
         }
     }
 }

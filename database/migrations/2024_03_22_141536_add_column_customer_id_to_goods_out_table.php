@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('goods_out', function (Blueprint $table) {
-            $table -> unsignedBigInteger('customer_id');
-            $table -> foreign('customer_id')->references('id')->on('customers');
-        });
+        // Schema::table('goods_out', function (Blueprint $table) {
+        //     $table -> unsignedBigInteger('customer_id');
+        //     $table -> foreign('customer_id')->references('id')->on('customers');
+        // });
     }
 
     /**
@@ -22,8 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('goods_out', function (Blueprint $table) {
-            $table -> dropColumn('customer_id');
-        });
+        // Schema::table('goods_out', function (Blueprint $table) {
+        //     $table -> dropColumn('customer_id');
+        // });
     }
 };

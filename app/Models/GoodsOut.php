@@ -14,10 +14,9 @@ class GoodsOut extends Model
         'item_id',
         'user_id',
         'quantity',
-        'conversion_factor',
         'invoice_number',
         'date_out',
-        'customer_id',
+        // 'customer_id',
         'supplier_id',
     ];
 
@@ -31,10 +30,10 @@ class GoodsOut extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function customer(): BelongsTo
-    {
-        return $this->belongsTo(Customer::class);
-    }
+    // public function customer(): BelongsTo
+    // {
+    //     return $this->belongsTo(Customer::class);
+    // }
 
     public function supplier(): BelongsTo
     {

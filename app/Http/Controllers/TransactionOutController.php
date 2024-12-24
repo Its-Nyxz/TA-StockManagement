@@ -85,88 +85,40 @@ class TransactionOutController extends Controller
     public function save(Request $request): JsonResponse
     {
 
-        // Ambil barang dan konversi satuan
-        // $item = Item::find($request->item_id);
-        $conversion = UnitConversion::where('item_id', $request->item_id)
-            ->where(function ($query) use ($request) {
-                $query->where('to_unit_id', $request->to_unit_id)
-                    ->orWhere('from_unit_id', $request->to_unit_id);
-            })
-            ->first();
-
-        if (!$conversion) {
+        // Konversi jumlah input ke base unit (sak)
+        $requestedQuantityInBaseUnit = $request->quantity / $request->conversion_factor;
+        // dd($requestedQuantityInBaseUnit);
+        // Hitung total stok dalam base unit (sak)
+        $totalStockInBaseUnit = (
+            (Item::where('id', $request->item_id)->sum('quantity') +
+                GoodsIn::where('item_id', $request->item_id)->sum('quantity') -
+                GoodsOut::where('item_id', $request->item_id)->sum('quantity') -
+                GoodsBack::where('item_id', $request->item_id)->sum('quantity')) +
+            StockOpname::where('item_id', $request->item_id)->sum('quantity')
+        );
+        // dd($totalStockInBaseUnit);
+        // Validasi stok
+        if ($requestedQuantityInBaseUnit > $totalStockInBaseUnit) {
             return response()->json([
-                "message" => __("Conversion factor not found for the selected unit")
+                "message" => __("Insufficient stock for this month")
             ])->setStatusCode(400);
         }
-
-        // Tentukan conversion_factor
-        if ($conversion->to_unit_id == $request->to_unit_id) {
-            $conversionFactor = $conversion->conversion_factor;
-        } elseif ($conversion->from_unit_id == $request->to_unit_id) {
-            $conversionFactor = 1 / $conversion->conversion_factor;
-        } else {
-            return response()->json([
-                "message" => __("Invalid unit conversion")
-            ])->setStatusCode(400);
-        }
-
-        // // Konversikan stok awal ke satuan terkecil (Kg)
-        // $stokAwalKg = $item->quantity * $conversion->conversion_factor;
-
-        // // Hitung jumlah transaksi dalam Kg
-        // $transaksiKg = $request->quantity;
-
-        // // Validasi stok
-        // if ($transaksiKg > $stokAwalKg) {
-        //     return response()->json([
-        //         "message" => __("Insufficient stock for this transaction")
-        //     ])->setStatusCode(400);
-        // }
-
-        // // Kurangi stok dalam Kg
-        // $stokSisaKg = $stokAwalKg - $transaksiKg;
-
-        // // Konversikan stok sisa kembali ke Sak
-        // $stokSisaSak = $stokSisaKg / $conversion->conversion_factor;
-
-        // // Perbarui stok barang
-        // $item->quantity = $stokSisaSak; // Simpan dalam satuan Sak
-        // $item->save();
-
-        $item = Item::where('id', $request->item_id)->sum('quantity') * $conversionFactor;
-        $goodsIn = GoodsIn::where('item_id', $request->item_id)->sum('quantity') * $conversion->conversion_factor;
-        $goodsOut = GoodsOut::where('item_id', $request->item_id)->sum('quantity') * $conversion->conversion_factor;
-        $goodsBack = GoodsBack::where('item_id', $request->item_id)->sum('quantity') * $conversion->conversion_factor;
-        $stockOpname = StockOpname::where('item_id', $request->item_id)->sum('quantity') * $conversion->conversion_factor;
-        // dd($conversion->conversion_factor);
         // $totalStock = max(0, $item + $goodsIn - $goodsOut - $goodsBack + $stockOpname);
-        $totalStockSmallestUnit = max(0, $item + $goodsIn - $goodsOut - $goodsBack + $stockOpname);
 
-        // Hitung jumlah dalam satuan terkecil
-        $requestedQuantityInSmallestUnit = $request->quantity * $conversion->conversion_factor;
         // if ($request->quantity > $totalStock || $totalStock === 0) {
         //     return  response()->json([
         //         "message" => __("insufficient stock this month")
         //     ])->setStatusCode(400);
         // }
-        // Validasi stok
-        if ($requestedQuantityInSmallestUnit > $totalStockSmallestUnit) {
-            return response()->json([
-                "message" => __("Insufficient stock for this month")
-            ])->setStatusCode(400);
-        }
         $data = [
             'item_id' => $request->item_id,
             'user_id' => $request->user_id,
             // 'quantity' => $request->quantity,
-            'quantity' => $request->quantity, // Jumlah dalam satuan input
-            'conversion_factor' => $conversion->conversion_factor,
-            'to_unit_id' => $request->to_unit_id, // Satuan tujuan
+            'quantity' => $requestedQuantityInBaseUnit, // Jumlah dalam satuan input
             'date_out' => $request->date_out,
             'invoice_number' => $request->invoice_number ?? null,
             'supplier_id' => $request->supplier_id,
-            'customer_id' => 0
+            // 'customer_id' => 0
         ];
         GoodsOut::create($data);
         return response()->json([
@@ -177,15 +129,24 @@ class TransactionOutController extends Controller
     public function detail(Request $request): JsonResponse
     {
         $id = $request->id;
-        $data = GoodsOut::with('Customer')->where('id', $id)->first();
-        $barang = Item::with('category', 'unit')->find($data->item_id);
+        $data = GoodsOut::with('supplier')->where('id', $id)->first();
+        $barang = Item::with('category', 'unit', 'conversions.fromUnit', 'conversions.toUnit')->find($data->item_id);
         $data['kode_barang'] = $barang->code;
         $data['satuan_barang'] = $barang->unit->name;
         $data['jenis_barang'] = $barang->category->name;
         $data['nama_barang'] = $barang->name;
-        $data['customer_id'] = $data->customer_id;
         $data['supplier_id'] = $data->supplier_id;
         $data['id_barang'] = $barang->id;
+        // Tambahkan conversions dalam format array
+        $data['conversions'] = $barang->conversions->map(function ($conv) {
+            return [
+                'from_unit_id' => $conv->from_unit_id,
+                'to_unit_id' => $conv->to_unit_id,
+                'conversion_factor' => $conv->conversion_factor,
+                'from_unit_name' => optional($conv->fromUnit)->name ?? 'N/A',
+                'to_unit_name' => optional($conv->toUnit)->name ?? 'N/A',
+            ];
+        });
         return response()->json(
             ["data" => $data]
         )->setStatusCode(200);
@@ -195,11 +156,32 @@ class TransactionOutController extends Controller
     {
         $id = $request->id;
         $data = GoodsOut::find($id);
+
+        // Konversi quantity ke base unit
+        $requestedQuantityInBaseUnit = $request->quantity / $request->conversionFactor;
+
+        // Hitung total stok dalam base unit (sak)
+        $totalStockInBaseUnit = (
+            (Item::where('id', $request->item_id)->sum('quantity') +
+                GoodsIn::where('item_id', $request->item_id)->sum('quantity') -
+                GoodsOut::where('item_id', $request->item_id)->where('id', '!=', $id)->sum('quantity') - // Exclude current GoodsOut
+                GoodsBack::where('item_id', $request->item_id)->sum('quantity')) +
+            StockOpname::where('item_id', $request->item_id)->sum('quantity')
+        );
+
+        // Validasi stok
+        if ($requestedQuantityInBaseUnit > $totalStockInBaseUnit) {
+            return response()->json([
+                "message" => __("Insufficient stock for this month")
+            ])->setStatusCode(400);
+        }
+
+
         $data->user_id = $request->user_id;
-        $data->customer_id = $request->customer_id;
         $data->supplier_id = $request->supplier_id;
         $data->date_out = $request->date_out;
-        $data->quantity = $request->quantity;
+        // $data->quantity = $request->quantity;
+        $data->quantity = $requestedQuantityInBaseUnit; // Simpan dalam base unit
         $data->item_id = $request->item_id;
         $status = $data->save();
         if (!$status) {

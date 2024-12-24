@@ -375,7 +375,6 @@
                 let supplierId = $("select[name='supplier']").val();
             });
 
-
             // pilih data barang
             $(document).on("click", ".pilih-data-barang", function() {
                 id = $(this).data("id");
@@ -494,8 +493,6 @@
             const to_unit_id = $("#satuan_barang").val(); // Satuan tujuan
             const conversionFactor = $("#conversion_factor").val();
             const convertedQuantity = quantity * conversionFactor;
-            console.log(conversionFactor);
-            console.log(convertedQuantity);
 
 
             if (!item_id || !date_out || !quantity || !supplier_id) {
@@ -512,12 +509,12 @@
             Form.append('user_id', user_id);
             Form.append('item_id', item_id);
             Form.append('date_out', date_out);
-            // Form.append('quantity', quantity);
+            Form.append('quantity', quantity);
             Form.append('supplier_id', supplier_id);
             Form.append('customer_id', customer_id);
             Form.append('invoice_number', invoice_number);
             Form.append('to_unit_id', to_unit_id);
-            Form.append('quantity', convertedQuantity); // Simpan dalam satuan asli
+            // Form.append('quantity', convertedQuantity); // Simpan dalam satuan asli
             Form.append('conversion_factor', conversionFactor); // Kirim faktor konversi
             $.ajax({
                     url: `{{ route('transaksi.keluar.save') }}`,
@@ -576,9 +573,9 @@
             const user_id = `{{ Auth::user()->id }}`;
             const date_out = $("input[name='tanggal_keluar']").val();
             const supplier_id = $("select[name='supplier'").val();
-            const customer_id = 1;
             const invoice_number = $("input[name='kode']").val();
             const quantity = $("input[name='jumlah'").val();
+            const conversionFactor = $("#conversion_factor").val();
             $.ajax({
                 url: `{{ route('transaksi.keluar.update') }}`,
                 type: "put",
@@ -588,9 +585,9 @@
                     user_id,
                     date_out,
                     supplier_id,
-                    customer_id,
                     invoice_number,
-                    quantity
+                    quantity,
+                    conversionFactor
                 },
                 success: function(res) {
                     Swal.fire({
@@ -832,8 +829,26 @@
                     $("input[name='tanggal_keluar']").val(data.date_out);
                     $("input[name='kode_barang']").val(data.kode_barang);
                     $("input[name='jenis_barang']").val(data.jenis_barang);
-                    $("input[name='satuan_barang']").val(data.satuan_barang);
                     $("input[name='jumlah']").val(data.quantity);
+                    // $("input[name='satuan_barang']").val(data.satuan_barang);
+                    // Populasi dropdown satuan
+                    const satuanSelect = $("#satuan_barang");
+                    satuanSelect.empty(); // Hapus opsi sebelumnya
+                    satuanSelect.append(
+                        `<option value="default" data-conversion-factor="1" selected>${data.satuan_barang}</option>`
+                    );
+
+                    data.conversions.forEach(function(conv) {
+                        satuanSelect.append(
+                            `<option value="${conv.to_unit_id}" data-conversion-factor="${conv.conversion_factor}">${conv.to_unit_name}</option>`
+                        );
+                    });
+
+                    // Update conversion factor saat dropdown berubah
+                    satuanSelect.on("change", function() {
+                        const factor = $(this).find(":selected").data("conversion-factor");
+                        $("#conversion_factor").val(factor || 1); // Update conversion factor
+                    });
                 }
             });
 

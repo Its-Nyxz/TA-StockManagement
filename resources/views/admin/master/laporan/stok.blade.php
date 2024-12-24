@@ -304,7 +304,7 @@
                                 month: 'long',
                                 year: 'numeric'
                             });
-                            const title = '{{ __('Incoming Report') }}';
+                            const title = '{{ __('Report') }}';
                             if (startDate && endDate) {
                                 return `${title} (${startDate}_{{ __('to') }}_${endDate})`;
                             }
@@ -322,7 +322,7 @@
                                 month: 'long',
                                 year: 'numeric'
                             });
-                            const title = '{{ __('Incoming Report') }}';
+                            const title = '{{ __('Report') }}';
                             if (startDate && endDate) {
                                 return `${title} (${startDate}_{{ __('to') }}_${endDate})`;
                             }
@@ -340,7 +340,7 @@
                                 month: 'long',
                                 year: 'numeric'
                             });
-                            const title = '{{ __('Incoming Report') }}';
+                            const title = '{{ __('Report') }}';
                             if (startDate && endDate) {
                                 return `${title} (${startDate}_{{ __('to') }}_${endDate})`;
                             }
