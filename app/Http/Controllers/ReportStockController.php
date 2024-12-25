@@ -104,27 +104,25 @@ class ReportStockController extends Controller
                     $totalQuantityOut = $item->goodsOuts->sum('quantity');
                     $totalQuantityRetur = $item->goodsBacks->sum('quantity');
                     $totalQuantitySO = $item->stockOpnames->sum('quantity');
-                    $data = Item::with("unit")->find($item->id);
 
                     // Hitung total stok
                     $count = ($item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur) + $totalQuantitySO;
+                    $count = max(0, $count); // Pastikan stok tidak negatif
 
-                    // Pastikan nilai tidak negatif
-                    $count = max(0, $count);
-
-                    // Ambil unit nama dan stock_limit
+                    // Ambil data unit dan stock_limit
+                    $data = Item::with("unit")->find($item->id);
                     $unitName = $data->unit->name ?? '';
-                    $stockLimit = $data->stock_limit ?? 10; // Default ke 10 jika stock_limit null
+                    $stockLimit = $data->stock_limit ?? 10; // Default jika stock_limit null
 
-                    // Buat string hasil dengan total stok dan unit
-                    $result = $count . "/" . $unitName;
+                    // Buat hasil stok dengan unit
+                    $result = number_format($count, 2) . " / " . $unitName; // Format dengan 2 desimal
 
-                    // Tampilkan berdasarkan stock_limit
+                    // Tentukan status berdasarkan stok
                     if ($count <= 0) {
-                        return "<span class='text-red font-weight-bold'>" . $result . "</span>" . ' ' .
+                        return "<span class='text-red font-weight-bold'>" . $result . "</span> " .
                             "<span class='badge badge-danger'>" . __("Stock Empty") . "</span>";
                     } elseif ($count <= $stockLimit) {
-                        return "<span class='text-red font-weight-bold'>" . $result . "</span>" . ' ' .
+                        return "<span class='text-red font-weight-bold'>" . $result . "</span> " .
                             "<span class='badge badge-warning'>" . __("Stock Running Low") . "</span>";
                     } else {
                         return "<span class='text-success font-weight-bold'>" . $result . "</span>";
@@ -187,36 +185,40 @@ class ReportStockController extends Controller
 
     public function getDetail(Request $request)
     {
+        $request->validate(['id' => 'required|integer']);
         $id = $request->id;
 
-        // Ambil data item dan relasi terkait
         $item = Item::with([
-            'goodsIns',
-            'goodsOuts',
-            'goodsBacks',
-            'stockOpnames',
-            'conversions.fromUnit',
-            'conversions.toUnit'
+            'goodsIns:quantity,item_id',
+            'goodsOuts:quantity,item_id',
+            'goodsBacks:quantity,item_id',
+            'stockOpnames:quantity,item_id',
+            'conversions.fromUnit:id,name',
+            'conversions.toUnit:id,name',
+            'unit:id,name'
         ])->find($id);
 
         if (!$item) {
             return response()->json(['message' => 'Item not found'], 404);
         }
 
-        // Ambil nama satuan
-        $satuan = $item->unit ? $item->unit->name : '';
-
-        // Hitung data detail
+        $satuan = $item->unit->name ?? '';
         $stokAwal = $item->quantity;
         $jumlahMasuk = $item->goodsIns->sum('quantity');
         $jumlahKeluar = $item->goodsOuts->sum('quantity');
         $jumlahRetur = $item->goodsBacks->sum('quantity');
         $jumlahSelisih = $item->stockOpnames->sum('quantity');
 
-        // Hitung total stok
-        $totalQuantity = ($item->quantity + $jumlahMasuk - $jumlahKeluar - $jumlahRetur) + $jumlahSelisih;
+        $totalQuantity = ($stokAwal + $jumlahMasuk - $jumlahKeluar - $jumlahRetur) + $jumlahSelisih;
 
-        // Ambil daftar unit konversi
+        // Format semua angka dengan 2 desimal
+        $formattedStokAwal = number_format($stokAwal, 2);
+        $formattedJumlahMasuk = number_format($jumlahMasuk, 2);
+        $formattedJumlahKeluar = number_format($jumlahKeluar, 2);
+        $formattedJumlahRetur = number_format($jumlahRetur, 2);
+        $formattedJumlahSelisih = number_format($jumlahSelisih, 2);
+        $formattedTotalQuantity = number_format($totalQuantity, 2);
+
         $unitConversions = $item->conversions->map(function ($conversion) {
             return [
                 'from_unit' => $conversion->fromUnit->name,
@@ -226,16 +228,16 @@ class ReportStockController extends Controller
         });
 
         return response()->json([
-            'kode_barang' => $item->code, // Kode barang
-            'stok_awal' => $stokAwal, // Jumlah mentah
-            'stok_awal_unit' => $satuan, // Nama satuan
-            'jumlah_masuk' => $jumlahMasuk, // Jumlah mentah
-            'jumlah_keluar' => $jumlahKeluar, // Jumlah mentah
-            'jumlah_retur' => $jumlahRetur, // Jumlah mentah
-            'jumlah_selisih' => $jumlahSelisih, // Jumlah mentah
-            'total_stock' => $totalQuantity, // Jumlah mentah
-            'total_stock_unit' => $satuan, // Nama satuan
-            'units' => $unitConversions, // Daftar unit konversi
+            'kode_barang' => $item->code,
+            'stok_awal' => $formattedStokAwal,
+            'stok_awal_unit' => $satuan,
+            'jumlah_masuk' => $formattedJumlahMasuk,
+            'jumlah_keluar' => $formattedJumlahKeluar,
+            'jumlah_retur' => $formattedJumlahRetur,
+            'jumlah_selisih' => $formattedJumlahSelisih,
+            'total_stock' => $formattedTotalQuantity,
+            'total_stock_unit' => $satuan,
+            'units' => $unitConversions,
         ]);
     }
 }

@@ -62,14 +62,20 @@ class ItemController extends Controller
                     $totalQuantityOut = $data->goodsOuts->sum('quantity');
                     $totalQuantityRetur = $data->goodsBacks->sum('quantity');
                     $totalQuantitySO = $data->stockOpnames->sum('quantity');
+
+                    // Mengambil item dengan relasi unit
                     $item = Item::with("unit")->find($data->id);
-                    $result = ($item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur) + $totalQuantitySO
-                        . "/" . $item->unit->name;
-                    $result = max(0, $result);
-                    if ($result == 0) {
-                        return $result;
+                    if (!$item || !$item->unit) {
+                        return '0.00'; // Default jika item atau unit tidak ditemukan
                     }
-                    return $result;
+
+                    // Hitung total stok
+                    $totalStock = ($item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur) + $totalQuantitySO;
+                    $totalStock = max(0, $totalStock); // Pastikan tidak negatif
+
+                    // Format angka dan tambahkan unit
+                    $formattedTotal = number_format($totalStock, 2); // Format dengan 2 desimal
+                    return $formattedTotal . " / " . $item->unit->name;
                 })
                 ->rawColumns(['total'])
                 ->addColumn('conversions', function ($data) {

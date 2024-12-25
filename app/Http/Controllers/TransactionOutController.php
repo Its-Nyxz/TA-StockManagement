@@ -50,8 +50,9 @@ class TransactionOutController extends Controller
         if ($request->ajax()) {
             return DataTables::of($goodsouts)
                 ->addColumn('quantity', function ($data) {
-                    $item = Item::with("unit")->find($data->item->id);
-                    return $data->quantity . "/" . $item->unit->name;
+                    // Pastikan relasi unit sudah dimuat sebelumnya
+                    $unitName = $data->item->unit->name ?? '';
+                    return number_format($data->quantity, 2) . " / " . $unitName;
                 })
                 ->addColumn("date_out", function ($data) {
                     return Carbon::parse($data->date_out)->format('d F Y');
@@ -100,7 +101,7 @@ class TransactionOutController extends Controller
         // Validasi stok
         if ($requestedQuantityInBaseUnit > $totalStockInBaseUnit) {
             return response()->json([
-                "message" => __("Insufficient stock for this month")
+                "message" => __("Stok tidak mencukupi")
             ])->setStatusCode(400);
         }
         // $totalStock = max(0, $item + $goodsIn - $goodsOut - $goodsBack + $stockOpname);
@@ -172,7 +173,7 @@ class TransactionOutController extends Controller
         // Validasi stok
         if ($requestedQuantityInBaseUnit > $totalStockInBaseUnit) {
             return response()->json([
-                "message" => __("Insufficient stock for this month")
+                "message" => __("Stok tidak mencukupi")
             ])->setStatusCode(400);
         }
 

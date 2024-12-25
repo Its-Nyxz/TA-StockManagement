@@ -51,8 +51,9 @@ class TransactionInController extends Controller
         if ($request->ajax()) {
             return DataTables::of($goodsins)
                 ->addColumn('quantity', function ($data) {
-                    $item = Item::with("unit")->find($data->item->id);
-                    return $data->quantity . "/" . $item->unit->name;
+                    // Pastikan relasi unit sudah dimuat sebelumnya
+                    $unitName = $data->item->unit->name ?? '';
+                    return number_format($data->quantity, 2) . " / " . $unitName;
                 })
                 ->addColumn("date_received", function ($data) {
                     return Carbon::parse($data->date_received)->format('d F Y');
@@ -189,52 +190,58 @@ class TransactionInController extends Controller
         //         ->make(true);
         // }
 
-        $items = Item::with('category','unit','brand','supplier','goodsIns','goodsOuts','goodsBacks', 'stockOpnames')->where('supplier_id',$request->supplier_id)->latest()->get();
+        $items = Item::with('category', 'unit', 'brand', 'supplier', 'goodsIns', 'goodsOuts', 'goodsBacks', 'stockOpnames')->where('supplier_id', $request->supplier_id)->latest()->get();
         // dd($items);
-        if($request -> ajax()){
+        if ($request->ajax()) {
             return DataTables::of($items)
-            ->addColumn('img', function($data) {
-                $imageUrl = empty($data->image) 
-                    ? asset('default.png') 
-                    : asset('storage/barang/'.$data->image);
-            
-                return "<img src='".$imageUrl."' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
-            })
-            -> addColumn('category_name',function($data){
-                return $data->category->name;
-            })
-            -> addColumn('unit_name',function($data){
-                return $data->unit->name;
-            })
-            -> addColumn('brand_name',function($data){
-                return $data -> brand -> name;
-            })
-            -> addColumn('supplier_name',function($data){
-                return $data -> supplier -> name;
-            })
-            ->addColumn("total", function ($data) {
-                $totalQuantityIn = $data->goodsIns->sum('quantity');
-                $totalQuantityOut = $data->goodsOuts->sum('quantity');
-                $totalQuantityRetur = $data->goodsBacks->sum('quantity');
-                $totalQuantitySO = $data->stockOpnames->sum('quantity');
-                $item = Item::with("unit")->find($data -> id);
-                $result = ($data->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur) + $totalQuantitySO ."/". $item -> unit -> name;
-                $result = max(0, $result);
-                if($result == 0){
-                    return $result;
-                }
-                return $result;
-            })
-            ->rawColumns(['total'])
+                ->addColumn('img', function ($data) {
+                    $imageUrl = empty($data->image)
+                        ? asset('default.png')
+                        : asset('storage/barang/' . $data->image);
 
-            -> addColumn('tindakan',function($data){
-                    $button = "<button class='ubah btn btn-success m-1' id='".$data->id."'><i class='fas fa-pen m-1'></i>".__("edit")."</button>";
-                    $button .= "<button class='hapus btn btn-danger m-1' id='".$data->id."'><i class='fas fa-trash m-1'></i>".__("delete")."</button>";
+                    return "<img src='" . $imageUrl . "' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
+                })
+                ->addColumn('category_name', function ($data) {
+                    return $data->category->name;
+                })
+                ->addColumn('unit_name', function ($data) {
+                    return $data->unit->name;
+                })
+                ->addColumn('brand_name', function ($data) {
+                    return $data->brand->name;
+                })
+                ->addColumn('supplier_name', function ($data) {
+                    return $data->supplier->name;
+                })
+                ->addColumn("total", function ($data) {
+                    $totalQuantityIn = $data->goodsIns->sum('quantity');
+                    $totalQuantityOut = $data->goodsOuts->sum('quantity');
+                    $totalQuantityRetur = $data->goodsBacks->sum('quantity');
+                    $totalQuantitySO = $data->stockOpnames->sum('quantity');
+
+                    // Mengambil item dengan relasi unit
+                    $item = Item::with("unit")->find($data->id);
+                    if (!$item || !$item->unit) {
+                        return '0.00'; // Default jika item atau unit tidak ditemukan
+                    }
+
+                    // Hitung total stok
+                    $totalStock = ($item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur) + $totalQuantitySO;
+                    $totalStock = max(0, $totalStock); // Pastikan tidak negatif
+
+                    // Format angka dan tambahkan unit
+                    $formattedTotal = number_format($totalStock, 2); // Format dengan 2 desimal
+                    return $formattedTotal . " / " . $item->unit->name;
+                })
+                ->rawColumns(['total'])
+
+                ->addColumn('tindakan', function ($data) {
+                    $button = "<button class='ubah btn btn-success m-1' id='" . $data->id . "'><i class='fas fa-pen m-1'></i>" . __("edit") . "</button>";
+                    $button .= "<button class='hapus btn btn-danger m-1' id='" . $data->id . "'><i class='fas fa-trash m-1'></i>" . __("delete") . "</button>";
                     return $button;
-            })
-            ->rawColumns(['img','tindakan'])
-            -> make(true);
-
+                })
+                ->rawColumns(['img', 'tindakan'])
+                ->make(true);
         }
     }
 
@@ -259,16 +266,16 @@ class TransactionInController extends Controller
         if ($transaction) {
             $transaction->status = '2';
 
-            $item = Item::where('id',$request->item_id)->sum('quantity');
-            $goodsIn = GoodsIn::where('item_id',$request->item_id)->sum('quantity');
-            $goodsOut = GoodsOut::where('item_id',$request->item_id)->sum('quantity');
-            $goodsBack = GoodsBack::where('item_id',$request->item_id)->sum('quantity');
-            
-            $totalStock = max(0,$item + $goodsIn - $goodsOut - $goodsBack);
-            if($request->quantity > $totalStock || $totalStock === 0){
+            $item = Item::where('id', $request->item_id)->sum('quantity');
+            $goodsIn = GoodsIn::where('item_id', $request->item_id)->sum('quantity');
+            $goodsOut = GoodsOut::where('item_id', $request->item_id)->sum('quantity');
+            $goodsBack = GoodsBack::where('item_id', $request->item_id)->sum('quantity');
+
+            $totalStock = max(0, $item + $goodsIn - $goodsOut - $goodsBack);
+            if ($request->quantity > $totalStock || $totalStock === 0) {
                 return  response()->json([
-                    "message"=>__("insufficient stock this month")
-                ]) -> setStatusCode(400);
+                    "message" => __("insufficient stock this month")
+                ])->setStatusCode(400);
             }
             $transaction->save();
             $data = [
@@ -298,9 +305,9 @@ class TransactionInController extends Controller
     }
 
     public function modal(Request $request)
-{
-    session(['show_modal' => true]);
+    {
+        session(['show_modal' => true]);
 
-    return redirect()->route('transaksi.masuk');
-}
+        return redirect()->route('transaksi.masuk');
+    }
 }

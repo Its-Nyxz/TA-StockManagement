@@ -121,9 +121,9 @@
                                                     class="form-control">
                                             </div>
                                             <!-- <div class="form-group">
-                                                                                                                                                                                                                                                                    <label for="harga" class="form-label">{{ __('price of goods') }} <span class="text-danger">*</span></label>
-                                                                                                                                                                                                                                                                    <input type="text"  id="harga" name="harga" class="form-control" placeholder="RP. 0">
-                                                                                                                                                                                                                                                                </div> -->
+                                                                                                                                                                                                                                                                                                            <label for="harga" class="form-label">{{ __('price of goods') }} <span class="text-danger">*</span></label>
+                                                                                                                                                                                                                                                                                                            <input type="text"  id="harga" name="harga" class="form-control" placeholder="RP. 0">
+                                                                                                                                                                                                                                                                                                        </div> -->
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
@@ -627,7 +627,7 @@
                 const newRow = `
                         <tr>
                         <td>
-                            <select name="from_unit[]" class="form-control from-unit">
+                            <select name="from_unit[]" class="form-control from-unit" disabled>
                                 @foreach ($satuan as $s)
                                     <option value="{{ $s->id }}" ${selectedUnit == {{ $s->id }} ? 'selected' : ''}>
                                         {{ $s->name }}
@@ -703,39 +703,46 @@
                     if (data.conversions && Array.isArray(data.conversions)) {
                         data.conversions.forEach(function(conv) {
                             $('#conversion-rows').append(`
-                <tr>
-                    <td>
-                        <select name="from_unit[]" class="form-control">
-                            @foreach ($satuan as $s)
-                                <option value="{{ $s->id }}" ${conv.from_unit_id == {{ $s->id }} ? 'selected' : ''}>
-                                    {{ $s->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </td>
-                    <td>
-                        <select name="to_unit[]" class="form-control">
-                            @foreach ($satuan as $s)
-                                <option value="{{ $s->id }}" ${conv.to_unit_id == {{ $s->id }} ? 'selected' : ''}>
-                                    {{ $s->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </td>
-                    <td>
-                        <input type="number" name="conversion_factor[]" value="${conv.conversion_factor}" class="form-control">
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-sm btn-danger remove-row">{{ __('Hapus') }}</button>
-                    </td>
-                </tr>
-            `);
+                        <tr>
+                            <td>
+                                <select name="from_unit[]" class="form-control form-unit" disabled>
+                                    @foreach ($satuan as $s)
+                                        <option value="{{ $s->id }}" ${conv.from_unit_id == {{ $s->id }} ? 'selected' : ''}>
+                                            {{ $s->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td>
+                                <select name="to_unit[]" class="form-control to-unit">
+                                    @foreach ($satuan as $s)
+                                        <option value="{{ $s->id }}" ${conv.to_unit_id == {{ $s->id }} ? 'selected' : ''}>
+                                            {{ $s->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td>
+                                <input type="number" name="conversion_factor[]" value="${conv.conversion_factor}" class="form-control">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-danger remove-row">{{ __('Hapus') }}</button>
+                            </td>
+                        </tr>
+                    `);
+                        });
+                        // Inisialisasi Select2 untuk elemen "to_unit"
+                        $('.to-unit').select2({
+                            theme: 'bootstrap4',
+                            allowClear: true
                         });
                     } else {
                         console.warn("No conversions available");
                     }
                 }
+
             });
+
 
 
         });

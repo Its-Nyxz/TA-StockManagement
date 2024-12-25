@@ -29,8 +29,9 @@ class ReportGoodsOutController extends Controller
             $goodsouts->latest()->get();
             return DataTables::of($goodsouts)
                 ->addColumn('quantity', function ($data) {
-                    $item = Item::with("unit")->find($data->item->id);
-                    return $data->quantity . "/" . $item->unit->name;
+                    // Pastikan relasi unit sudah dimuat sebelumnya
+                    $unitName = $data->item->unit->name ?? '';
+                    return number_format($data->quantity, 2) . " / " . $unitName;
                 })
                 ->addColumn("date_out", function ($data) {
                     return Carbon::parse($data->date_out)->format('d F Y');

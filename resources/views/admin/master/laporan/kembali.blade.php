@@ -182,7 +182,7 @@
                     {
                         data: "description",
                         name: "description",
-                         render: function(data, type, row) {
+                        render: function(data, type, row) {
                             const formattedText = capitalizeAfterPeriod(data);
                             const maxLength = 35;
                             const containerClass =
@@ -212,9 +212,9 @@
                                 month: 'long',
                                 year: 'numeric'
                             });
-                            const title = '{{ __("Return Report") }}';
+                            const title = '{{ __('Return Report') }}';
                             if (startDate && endDate) {
-                                return `${title} (${startDate}_{{ __("to") }}_${endDate})`;
+                                return `${title} (${startDate}_{{ __('to') }}_${endDate})`;
                             }
                             return `${title} (${today})`;
                         }
@@ -230,9 +230,9 @@
                                 month: 'long',
                                 year: 'numeric'
                             });
-                            const title = '{{ __("Return Report") }}';
+                            const title = '{{ __('Return Report') }}';
                             if (startDate && endDate) {
-                                return `${title} (${startDate}_{{ __("to") }}_${endDate})`;
+                                return `${title} (${startDate}_{{ __('to') }}_${endDate})`;
                             }
                             return `${title} (${today})`;
                         }
@@ -248,9 +248,9 @@
                                 month: 'long',
                                 year: 'numeric'
                             });
-                            const title = '{{ __("Return Report") }}';
+                            const title = '{{ __('Return Report') }}';
                             if (startDate && endDate) {
-                                return `${title} (${startDate}_{{ __("to") }}_${endDate})`;
+                                return `${title} (${startDate}_{{ __('to') }}_${endDate})`;
                             }
                             return `${title} (${today})`;
                         }
@@ -266,17 +266,17 @@
                 const isExpanded = button.data('expanded');
 
                 if (isExpanded) {
-                    
+
                     span.text(fullText.substr(0, 35) + '...');
                     button.text('Show More');
                     container.css('max-height', '50px');
                 } else {
                     span.text(fullText);
                     button.text('Show Less');
-                    container.css('max-height', 'none'); 
+                    container.css('max-height', 'none');
                 }
 
-                button.data('expanded', !isExpanded); 
+                button.data('expanded', !isExpanded);
             });
 
             $("#filter").on('click', function() {

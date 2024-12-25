@@ -169,8 +169,7 @@
                                                             id="satuan_barang">
                                                             <!-- Options will be dynamically filled -->
                                                         </select>
-                                                        <input type="hidden" name="conversion_factor"
-                                                            id="conversion_factor" value="1">
+
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
@@ -182,10 +181,23 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="jumlah" class="form-label">{{ __('outgoing amount') }}<span
-                                                        class="text-danger">*</span></label>
-                                                <input type="number" name="jumlah" class="form-control">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label for="Konversi" class="form-label">Jumlah Konversi</label>
+                                                        <input type="text" name="conversion_factor"
+                                                            id="conversion_factor" class="form-control" value="1"
+                                                            disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label for="jumlah"
+                                                            class="form-label">{{ __('outgoing amount') }}<span
+                                                                class="text-danger">*</span></label>
+                                                        <input type="number" name="jumlah" class="form-control">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -333,7 +345,7 @@
                     },
                     {
                         data: 'total',
-                        name: 'total'
+                        name: 'total',
                     },
                     {
                         data: 'tindakan',
@@ -395,40 +407,44 @@
                         // Update dropdown options for satuan_barang
                         let satuanSelect = $("#satuan_barang");
                         satuanSelect.empty(); // Clear existing options
-                        // Tambahkan unit default sebagai opsi pertama
 
-                        // Lacak nama satuan yang sudah ditambahkan
-                        let addedUnits = new Set();
+                        // Tambahkan unit default sebagai opsi pertama
+                        let addedUnits = new Set(); // Lacak nama satuan yang sudah ditambahkan
                         addedUnits.add(data.unit_name); // Tambahkan unit default ke dalam set
 
                         satuanSelect.append(
                             `<option value="${data.unit.id}" data-conversion-factor="1" selected>${data.unit_name}</option>`
                         );
-                        // console.log(data.conversions); // Debugging untuk melihat isi data konversi
+
                         // Populasi unit dari data konversi
                         data.conversions.forEach(function(conv) {
-                            // Ambil nama unit dari from_unit atau to_unit
-                            let fromUnitName = conv.from_unit['name'] || 'N/A';
-                            let toUnitName = conv.to_unit['name'] || 'N/A';
-                            let conv_factor = conv.conversion_factor;
-                            // console.log(conv_factor);
+                            // Ambil data dari from_unit dan to_unit
+                            let fromUnit = conv.from_unit || {};
+                            let toUnit = conv.to_unit || {};
+                            let fromUnitName = fromUnit.name || 'N/A';
+                            let toUnitName = toUnit.name || 'N/A';
 
-                            // Tambahkan from_unit jika belum ada dan berbeda dari unit_name awal
+                            // Ambil conversion factor
+                            let convFactor = conv.conversion_factor;
+
+
+                            // Tambahkan opsi untuk from_unit jika belum ada
                             if (!addedUnits.has(fromUnitName)) {
                                 satuanSelect.append(
-                                    `<option value="${conv.from_unit_id}" data-conversion-factor="${conv_factor}">${fromUnitName}</option>`
+                                    `<option value="${fromUnit.id}" data-conversion-factor="${convFactor}">${fromUnitName} -> ${toUnitName}</option>`
                                 );
                                 addedUnits.add(fromUnitName);
                             }
 
-                            // Tambahkan to_unit jika belum ada dan berbeda dari unit_name awal
+                            // Tambahkan opsi untuk to_unit jika belum ada
                             if (!addedUnits.has(toUnitName)) {
                                 satuanSelect.append(
-                                    `<option value="${conv.to_unit_id}" data-conversion-factor="${conv_factor}">${toUnitName}</option>`
+                                    `<option value="${toUnit.id}" data-conversion-factor="${convFactor}">${fromUnitName} -> ${toUnitName} </option>`
                                 );
                                 addedUnits.add(toUnitName);
                             }
                         });
+
                         // Saat satuan berubah, update faktor konversi
                         satuanSelect.on("change", function() {
                             let factor = $(this).find(":selected").data(

@@ -17,37 +17,38 @@ class ReportGoodsBackController extends Controller
         return view('admin.master.laporan.kembali');
     }
 
-    public function list(Request $request):JsonResponse
+    public function list(Request $request): JsonResponse
     {
-        if($request->ajax()){
-            if( empty($request->start_date) && empty($request->end_date)){
-                $GoodsBacks = GoodsBack::with('item','user','supplier');
-            }else{
-                $GoodsBacks = GoodsBack::with('item','user','supplier');
-                $GoodsBacks -> whereBetween('date_backs',[$request->start_date,$request->end_date]);
+        if ($request->ajax()) {
+            if (empty($request->start_date) && empty($request->end_date)) {
+                $GoodsBacks = GoodsBack::with('item', 'user', 'supplier');
+            } else {
+                $GoodsBacks = GoodsBack::with('item', 'user', 'supplier');
+                $GoodsBacks->whereBetween('date_backs', [$request->start_date, $request->end_date]);
             }
-            $GoodsBacks -> latest() -> get();
+            $GoodsBacks->latest()->get();
             return DataTables::of($GoodsBacks)
-            ->addColumn('quantity',function($data){
-                $item = Item::with("unit")->find($data -> item -> id);
-                return $data -> quantity ."/".$item -> unit -> name;
-            })
-            ->addColumn("date_backs",function($data){
-                return Carbon::parse($data->date_backs)->format('d F Y');
-            })
-            ->addColumn("kode_barang",function($data){
-                return $data -> item -> code;
-            })
-            ->addColumn("supplier_name",function($data){
-                return $data -> item-> supplier -> name;
-            })
-            ->addColumn("item_name",function($data){
-                return $data -> item -> name;
-            })
-            ->addColumn("brand",function($data){
-                return $data -> item ->brand -> name;
-            })
-            -> make(true);
+                ->addColumn('quantity', function ($data) {
+                    // Pastikan relasi unit sudah dimuat sebelumnya
+                    $unitName = $data->item->unit->name ?? '';
+                    return number_format($data->quantity, 2) . " / " . $unitName;
+                })
+                ->addColumn("date_backs", function ($data) {
+                    return Carbon::parse($data->date_backs)->format('d F Y');
+                })
+                ->addColumn("kode_barang", function ($data) {
+                    return $data->item->code;
+                })
+                ->addColumn("supplier_name", function ($data) {
+                    return $data->item->supplier->name;
+                })
+                ->addColumn("item_name", function ($data) {
+                    return $data->item->name;
+                })
+                ->addColumn("brand", function ($data) {
+                    return $data->item->brand->name;
+                })
+                ->make(true);
         }
     }
 }

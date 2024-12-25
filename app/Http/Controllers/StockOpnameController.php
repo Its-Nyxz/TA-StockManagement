@@ -28,7 +28,7 @@ class StockOpnameController extends Controller
         $in_status = Item::where('active', 'true')->count();
         $suppliers = Supplier::all();
         $users = User::all();
-        return view('admin.master.laporan.so', compact('in_status', 'suppliers','users'));
+        return view('admin.master.laporan.so', compact('in_status', 'suppliers', 'users'));
     }
 
     public function list(Request $request): JsonResponse
@@ -54,9 +54,11 @@ class StockOpnameController extends Controller
         if ($request->ajax()) {
             return DataTables::of($so)
                 ->addColumn('quantity', function ($data) {
-                    $item = Item::with("unit")->find($data->item->id);
-                    return $data->quantity . "/" . $item->unit->name;
+                    // Pastikan relasi unit sudah dimuat sebelumnya
+                    $unitName = $data->item->unit->name ?? '';
+                    return number_format($data->quantity, 2) . " / " . $unitName;
                 })
+
                 ->addColumn('stok_sistem', function ($data) {
                     $item = Item::with("unit")->find($data->item->id);
                     return $data->stok_sistem . "/" . $item->unit->name;
@@ -139,7 +141,7 @@ class StockOpnameController extends Controller
         $stok_sistem = $data->stok_sistem;
         $stok_fisik = $data->stok_fisik;
         if ($stok_sistem < $stok_fisik) {
-            $status = __("Stock Increases") ;
+            $status = __("Stock Increases");
         } elseif ($stok_sistem > $stok_fisik) {
             $status = __("Stock Decreases");
         } else {
