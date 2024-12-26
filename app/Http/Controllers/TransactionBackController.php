@@ -11,6 +11,7 @@ use App\Models\GoodsOut;
 use App\Models\Supplier;
 use App\Models\GoodsBack;
 use Illuminate\View\View;
+use App\Models\StockOpname;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -83,15 +84,19 @@ class TransactionBackController extends Controller
 
     public function save(Request $request): JsonResponse
     {
-        $item = Item::where('id', $request->item_id)->sum('quantity');
-        $goodsIn = GoodsIn::where('item_id', $request->item_id)->sum('quantity');
-        $goodsOut = GoodsOut::where('item_id', $request->item_id)->sum('quantity');
-        $goodsBack = GoodsBack::where('item_id', $request->item_id)->sum('quantity');
+        $requestedQuantityInBaseUnit = $request->quantity / $request->conversion_factor;
 
-        $totalStock = max(0, $item + $goodsIn - $goodsOut - $goodsBack);
-        if ($request->quantity > $totalStock || $totalStock === 0) {
-            return  response()->json([
-                "message" => __("insufficient stock this month")
+        $totalStockInBaseUnit = (
+            (Item::where('id', $request->item_id)->sum('quantity') +
+                GoodsIn::where('item_id', $request->item_id)->sum('quantity') -
+                GoodsOut::where('item_id', $request->item_id)->sum('quantity') -
+                GoodsBack::where('item_id', $request->item_id)->sum('quantity')) +
+            StockOpname::where('item_id', $request->item_id)->sum('quantity')
+        );
+
+        if ($requestedQuantityInBaseUnit > $totalStockInBaseUnit) {
+            return response()->json([
+                "message" => __("Stok tidak mencukupi")
             ])->setStatusCode(400);
         }
 
@@ -99,7 +104,7 @@ class TransactionBackController extends Controller
         if ($request->return_type === 'customer') {
             if (!$request->customer_name) {
                 return response()->json([
-                    "message" => __("Customer name is required for customer return")
+                    "message" => __("Nama pelanggan diperlukan untuk pengembalian dari pelanggan")
                 ])->setStatusCode(400);
             }
 
@@ -114,7 +119,8 @@ class TransactionBackController extends Controller
         $data = [
             'user_id' => $request->user_id,
             'date_backs' => $request->date_retur,
-            'quantity' => $request->quantity,
+            // 'quantity' => $request->quantity,
+            'quantity' => $requestedQuantityInBaseUnit, // Jumlah dalam satuan input
             'description' => $request->description,
             'supplier_id' => $request->supplier_id,
             'customer_id' => $customerId,
@@ -137,16 +143,26 @@ class TransactionBackController extends Controller
         // Cari data retur dengan relasi user dan pelanggan
         $data = GoodsBack::with(['user', 'customer', 'supplier'])->where('id', $id)->first();
         // dd($data);
-        $barang = Item::with('category', 'unit')->find($data->item_id);
+        $barang = Item::with('category', 'unit', 'conversions.fromUnit', 'conversions.toUnit')->find($data->item_id);
         $data['kode_barang'] = $barang->code;
         $data['satuan_barang'] = $barang->unit->name;
         $data['jenis_barang'] = $barang->category->name;
         $data['nama_barang'] = $barang->name;
         $data['user_id'] = $data->user_id;
         $data['description'] = $data->description;
-        $data['customer_name'] = $data->customer->name;
+        $data['customer_name'] = $data->customer->name ?? null;
         $data['supplier_id'] = $data->supplier_id;
         $data['id_barang'] = $barang->id;
+        // Tambahkan conversions dalam format array
+        $data['conversions'] = $barang->conversions->map(function ($conv) {
+            return [
+                'from_unit_id' => $conv->from_unit_id,
+                'to_unit_id' => $conv->to_unit_id,
+                'conversion_factor' => $conv->conversion_factor,
+                'from_unit_name' => optional($conv->fromUnit)->name ?? 'N/A',
+                'to_unit_name' => optional($conv->toUnit)->name ?? 'N/A',
+            ];
+        });
         return response()->json(
             ["data" => $data]
         )->setStatusCode(200);
@@ -162,7 +178,7 @@ class TransactionBackController extends Controller
         if ($request->return_type === 'customer') {
             if (!$request->customer_name) {
                 return response()->json([
-                    "message" => __("Customer name is required for customer return")
+                    "message" => __("Nama pelanggan diperlukan untuk pengembalian dari pelanggan")
                 ])->setStatusCode(400);
             }
 
@@ -174,11 +190,29 @@ class TransactionBackController extends Controller
             );
             $customerId = $customer->id;
         }
+        $requestedQuantityInBaseUnit = $request->quantity / $request->conversionFactor;
+
+        // Hitung total stok dalam base unit (sak)
+        $totalStockInBaseUnit = (
+            (Item::where('id', $request->item_id)->sum('quantity') +
+                GoodsIn::where('item_id', $request->item_id)->sum('quantity') -
+                GoodsOut::where('item_id', $request->item_id)->where('id', '!=', $id)->sum('quantity') - // Exclude current GoodsOut
+                GoodsBack::where('item_id', $request->item_id)->sum('quantity')) +
+            StockOpname::where('item_id', $request->item_id)->sum('quantity')
+        );
+
+        // Validasi stok
+        if ($requestedQuantityInBaseUnit > $totalStockInBaseUnit) {
+            return response()->json([
+                "message" => __("Stok tidak mencukupi")
+            ])->setStatusCode(400);
+        }
 
 
         $data->user_id = $request->user_id;
         $data->date_backs = $request->date_retur;
-        $data->quantity = $request->quantity;
+        // $data->quantity = $request->quantity;
+        $data->quantity = $requestedQuantityInBaseUnit; // Simpan dalam base unit
         $data->item_id = $request->item_id;
         $data->description = $request->description;
         $data->supplier_id = $request->supplier_id;

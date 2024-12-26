@@ -83,7 +83,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="detailModalLabel">
-                                        {{ __('Stock Details for Item') }}: <span id="modal-item-code"
+                                        {{ __('Detail Stok untuk Barang') }}: <span id="modal-item-code"
                                             class="text-primary"></span>
                                     </h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -101,8 +101,8 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>{{ __('Category') }}</th>
-                                                <th>{{ __('Quantity') }}</th>
+                                                <th>{{ __('Kategori') }}</th>
+                                                <th>{{ __('Jumlah') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -127,7 +127,7 @@
                                                 <td id="modal-jumlah-selisih"></td>
                                             </tr>
                                             <tr>
-                                                <th>{{ __('Total Stock') }}</th>
+                                                <th>{{ __('Total Stok') }}</th>
                                                 <th id="modal-total-stock" class="text-success"></th>
                                             </tr>
                                         </tbody>
@@ -404,7 +404,7 @@
                     if (response.units && response.units.length > 0) {
                         response.units.forEach((unit, index) => {
                             $unitConversion.append(
-                                `<option value="${unit.factor}">${unit.from_unit} Ke ${unit.to_unit} (Jumlah: ${unit.factor})</option>`
+                                `<option value="${unit.factor}">${unit.from_unit} Ke ${unit.to_unit} ( ${unit.factor} ${unit.to_unit}/${unit.from_unit} )</option>`
                             );
                         });
                     }

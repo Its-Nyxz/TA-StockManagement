@@ -169,7 +169,8 @@
                                                             id="satuan_barang">
                                                             <!-- Options will be dynamically filled -->
                                                         </select>
-
+                                                        <input type="hidden" name="conversion_factor"
+                                                            id="conversion_factor" class="form-control" value="1">
                                                     </div>
                                                 </div>
                                                 <div class="col-6">
@@ -181,23 +182,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-6">
-                                                    <div class="form-group">
-                                                        <label for="Konversi" class="form-label">Jumlah Konversi</label>
-                                                        <input type="text" name="conversion_factor"
-                                                            id="conversion_factor" class="form-control" value="1"
-                                                            disabled>
-                                                    </div>
-                                                </div>
-                                                <div class="col-6">
-                                                    <div class="form-group">
-                                                        <label for="jumlah"
-                                                            class="form-label">{{ __('outgoing amount') }}<span
-                                                                class="text-danger">*</span></label>
-                                                        <input type="number" name="jumlah" class="form-control">
-                                                    </div>
-                                                </div>
+                                            <div class="form-group">
+                                                <label for="jumlah" class="form-label">{{ __('outgoing amount') }}<span
+                                                        class="text-danger">*</span></label>
+                                                <input type="number" name="jumlah" class="form-control">
                                             </div>
                                         </div>
                                     </div>
@@ -431,7 +419,7 @@
                             // Tambahkan opsi untuk from_unit jika belum ada
                             if (!addedUnits.has(fromUnitName)) {
                                 satuanSelect.append(
-                                    `<option value="${fromUnit.id}" data-conversion-factor="${convFactor}">${fromUnitName} -> ${toUnitName}</option>`
+                                    `<option value="${fromUnit.id}" data-conversion-factor="${convFactor}">${fromUnitName}</option>`
                                 );
                                 addedUnits.add(fromUnitName);
                             }
@@ -439,7 +427,7 @@
                             // Tambahkan opsi untuk to_unit jika belum ada
                             if (!addedUnits.has(toUnitName)) {
                                 satuanSelect.append(
-                                    `<option value="${toUnit.id}" data-conversion-factor="${convFactor}">${fromUnitName} -> ${toUnitName} </option>`
+                                    `<option value="${toUnit.id}" data-conversion-factor="${convFactor}">${toUnitName} </option>`
                                 );
                                 addedUnits.add(toUnitName);
                             }
@@ -450,22 +438,9 @@
                             let factor = $(this).find(":selected").data(
                                 "conversion-factor");
                             $("#conversion_factor").val(factor || 1);
-                            console.log(factor);
+                            // console.log(factor);
 
                         });
-                        $("#jumlah").on("input", function() {
-                            const quantity = $(this).val(); // Jumlah dalam satuan input
-                            const conversionFactor = $("#conversion_factor")
-                                .val(); // Faktor konversi
-
-                            // Hitung jumlah dalam satuan terkecil
-                            const convertedQuantity = quantity * conversionFactor;
-
-                            console.log(
-                                `Jumlah dalam satuan terkecil: ${convertedQuantity}`
-                            );
-                        });
-
                         $("input[name='jenis_barang']").val(data.category_name);
                         $(
                             '#modal-barang').modal('hide');
