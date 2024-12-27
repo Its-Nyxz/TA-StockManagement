@@ -56,16 +56,16 @@ class StockOpnameController extends Controller
                 ->addColumn('quantity', function ($data) {
                     // Pastikan relasi unit sudah dimuat sebelumnya
                     $unitName = $data->item->unit->name ?? '';
-                    return number_format($data->quantity, 2) . " / " . $unitName;
+                    return number_format($data->quantity, 2) . ' / ' . $unitName;
                 })
 
                 ->addColumn('stok_sistem', function ($data) {
                     $item = Item::with("unit")->find($data->item->id);
-                    return $data->stok_sistem . "/" . $item->unit->name;
+                    return $data->stok_sistem . ' / ' . $item->unit->name;
                 })
                 ->addColumn('stok_fisik', function ($data) {
                     $item = Item::with("unit")->find($data->item->id);
-                    return $data->stok_fisik . "/" . $item->unit->name;
+                    return $data->stok_fisik . ' / ' . $item->unit->name;
                 })
                 ->addColumn("date_so", function ($data) {
                     return Carbon::parse($data->date_so)->format('d F Y');
@@ -105,15 +105,22 @@ class StockOpnameController extends Controller
 
     public function save(Request $request): JsonResponse
     {
+        $requestedQuantityInBaseUnit = $request->quantity / $request->conversion_factor;
+        $requestedStockSistemInBaseUnit = $request->stock_sistem / $request->conversion_factor;
+        $requestedStockFisikInBaseUnit = $request->stock_fisik / $request->conversion_factor;
+
         $data = [
             'user_id' => $request->user_id,
             'date_so' => $request->date_so,
-            'quantity' => $request->quantity,
+            // 'quantity' => $request->quantity,
+            'quantity' => $requestedQuantityInBaseUnit, // Jumlah dalam satuan input
             'description' => $request->description,
             'supplier_id' => $request->supplier_id,
             'invoice_number' => $request->invoice_number,
-            'stok_sistem' => $request->stock_sistem,
-            'stok_fisik' => $request->stock_fisik,
+            // 'stok_sistem' => $request->stock_sistem,
+            // 'stok_fisik' => $request->stock_fisik,
+            'stok_sistem' => $requestedStockSistemInBaseUnit,
+            'stok_fisik' => $requestedStockFisikInBaseUnit,
             'item_id' => $request->item_id
         ];
         StockOpname::create($data);
@@ -129,7 +136,7 @@ class StockOpnameController extends Controller
     {
         $id = $request->id;
         $data = StockOpname::with('User')->where('id', $id)->first();
-        $barang = Item::with('category', 'unit')->find($data->item_id);
+        $barang = Item::with('category', 'unit', 'conversions.fromUnit', 'conversions.toUnit')->find($data->item_id);
         $data['kode_barang'] = $barang->code;
         $data['satuan_barang'] = $barang->unit->name;
         $data['jenis_barang'] = $barang->category->name;
@@ -148,6 +155,15 @@ class StockOpnameController extends Controller
             $status = __("Stock is Correct");
         }
         $data['status'] = $status;
+        $data['conversions'] = $barang->conversions->map(function ($conv) {
+            return [
+                'from_unit_id' => $conv->from_unit_id,
+                'to_unit_id' => $conv->to_unit_id,
+                'conversion_factor' => $conv->conversion_factor,
+                'from_unit_name' => optional($conv->fromUnit)->name ?? 'N/A',
+                'to_unit_name' => optional($conv->toUnit)->name ?? 'N/A',
+            ];
+        });
         return response()->json(
             ["data" => $data]
         )->setStatusCode(200);
@@ -157,11 +173,17 @@ class StockOpnameController extends Controller
     {
         $id = $request->id;
         $data = StockOpname::find($id);
+        $requestedQuantityInBaseUnit = $request->quantity / $request->conversionFactor;
+        $requestedStockSistemInBaseUnit = $request->stock_sistem / $request->conversion_factor;
+        $requestedStockFisikInBaseUnit = $request->stock_fisik / $request->conversion_factor;
         $data->user_id = $request->user_id;
         $data->date_so = $request->date_so;
-        $data->quantity = $request->quantity;
-        $data->stok_sistem = $request->stock_sistem;
-        $data->stok_fisik = $request->stock_fisik;
+        // $data->quantity = $request->quantity;
+        $data->quantity = $requestedQuantityInBaseUnit; // Simpan dalam base unit
+        // $data->stok_sistem = $request->stock_sistem;
+        // $data->stok_fisik = $request->stock_fisik;
+        $data->stok_sistem = $requestedStockSistemInBaseUnit;
+        $data->stok_fisik = $requestedStockFisikInBaseUnit;
         $data->item_id = $request->item_id;
         $data->description = $request->description;
         $data->supplier_id = $request->supplier_id;
