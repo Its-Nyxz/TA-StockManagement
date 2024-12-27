@@ -266,7 +266,7 @@
                         className: "text-center",
                         render: function(data, type, row, meta) {
                             return `<button class="btn btn-primary btn-sm detail-btn" data-id="${row.id}">
-                                {{ __('View Details') }}
+                                {{ __('Lihat Detail') }}
                             </button>`;
                         }
                     }

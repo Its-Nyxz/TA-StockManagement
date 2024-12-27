@@ -1,10 +1,17 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar bg-blue elevation-4">
       <!-- Brand Logo -->
-      <a href="{{ route('dashboard') }}" class="brand-link">
+      <a href="{{ route('dashboard') }}" class="brand-link text-center">
           <img src="{{ asset('icon.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
               style="opacity: .8">
-          <span class="brand-text font-weight-bold">{{ config('app.name') }}</span>
+          <div>
+              <span class="brand-text font-weight-bold d-block h5">
+                  {{ config('app.name') }}
+              </span>
+              <span class="brand-text text-weight-bold d-block small">
+                  {{ config('app.sub') }}
+              </span>
+          </div>
       </a>
 
       <!-- Sidebar -->
@@ -128,7 +135,7 @@
                       </a>
                       <ul class="nav nav-treeview">
                           @can('super&admin')
-                          <li class="nav-item">
+                              <li class="nav-item">
                                   <a href="{{ route('laporan.masuk') }}"
                                       class="nav-link text-white {{ request()->routeIs('laporan.masuk') ? 'active' : '' }}">
                                       <p>{{ __('incoming goods report') }}</p>

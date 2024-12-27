@@ -185,7 +185,8 @@
                                             <div class="form-group">
                                                 <label for="jumlah" class="form-label">{{ __('outgoing amount') }}<span
                                                         class="text-danger">*</span></label>
-                                                <input type="number" name="jumlah" class="form-control">
+                                                <input type="number" id="jumlah" name="jumlah"
+                                                    class="form-control">
                                             </div>
                                         </div>
                                     </div>
@@ -839,6 +840,14 @@
                     satuanSelect.on("change", function() {
                         const factor = $(this).find(":selected").data("conversion-factor");
                         $("#conversion_factor").val(factor || 1); // Update conversion factor
+
+                        // Update stock amount based on the selected unit's conversion factor
+                        let quantityStok = data
+                            .quantity; // Total stock from the response
+                        let convertedStock = quantityStok *
+                            factor; // Convert stock based on the selected unit
+                        $("#jumlah").val(convertedStock.toFixed(
+                            2)); // Update stock system input
                     });
                 }
             });
