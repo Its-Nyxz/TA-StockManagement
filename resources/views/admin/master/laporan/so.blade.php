@@ -1075,6 +1075,20 @@
                     satuanSelect.on("change", function() {
                         const factor = $(this).find(":selected").data("conversion-factor");
                         $("#conversion_factor").val(factor || 1); // Update conversion factor
+
+                        // Update stock amount based on the selected unit's conversion factor
+                        let stokSistem = data
+                            .stok_sistem; // Total stock from the response
+                        let stokFisik = data
+                            .stok_fisik; // Total stock from the response
+                        let convertedStockSistem = stokSistem *
+                            factor; // Convert stock based on the selected unit
+                        let convertedStockFisik = stokFisik *
+                            factor; // Convert stock based on the selected unit
+                        $("#stock_sistem").val(convertedStockSistem.toFixed(
+                            2)); // Update stock system input
+                        $("#stock_fisik").val(convertedStockFisik.toFixed(
+                            2)); // Update stock system input
                     });
                 }
             });
