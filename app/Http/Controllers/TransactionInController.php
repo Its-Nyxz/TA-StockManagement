@@ -91,11 +91,14 @@ class TransactionInController extends Controller
 
     public function save(Request $request): JsonResponse
     {
+        $requestedQuantityInBaseUnit = $request->quantity / $request->conversion_factor;
+
         $data = [
             'user_id' => $request->user_id,
             'supplier_id' => $request->supplier_id,
             'date_received' => $request->date_received,
-            'quantity' => $request->quantity,
+            // 'quantity' => $request->quantity,
+            'quantity' => $requestedQuantityInBaseUnit, // Jumlah dalam satuan input
             'invoice_number' => $request->invoice_number,
             'item_id' => $request->item_id,
             // 'status' => Auth::user()->role->id == 3 ? 0 : 1
@@ -114,13 +117,23 @@ class TransactionInController extends Controller
     {
         $id = $request->id;
         $data = GoodsIn::with('supplier')->where('id', $id)->first();
-        $barang = Item::with('category', 'unit')->find($data->item_id);
+        $barang = Item::with('category', 'unit', 'conversions.fromUnit', 'conversions.toUnit')->find($data->item_id);
         $data['kode_barang'] = $barang->code;
         $data['satuan_barang'] = $barang->unit->name;
         $data['jenis_barang'] = $barang->category->name;
         $data['nama_barang'] = $barang->name;
         $data['supplier_id'] = $data->supplier_id;
         $data['id_barang'] = $barang->id;
+        // Tambahkan conversions dalam format array
+        $data['conversions'] = $barang->conversions->map(function ($conv) {
+            return [
+                'from_unit_id' => $conv->from_unit_id,
+                'to_unit_id' => $conv->to_unit_id,
+                'conversion_factor' => $conv->conversion_factor,
+                'from_unit_name' => optional($conv->fromUnit)->name ?? 'N/A',
+                'to_unit_name' => optional($conv->toUnit)->name ?? 'N/A',
+            ];
+        });
         return response()->json(
             ["data" => $data]
         )->setStatusCode(200);
@@ -130,10 +143,13 @@ class TransactionInController extends Controller
     {
         $id = $request->id;
         $data = GoodsIn::find($id);
+        $requestedQuantityInBaseUnit = $request->quantity / $request->conversionFactor;
+
         $data->user_id = $request->user_id;
         $data->supplier_id = $request->supplier_id;
         $data->date_received = $request->date_received;
-        $data->quantity = $request->quantity;
+        // $data->quantity = $request->quantity;
+        $data->quantity = $requestedQuantityInBaseUnit; // Simpan dalam base unit
         $data->item_id = $request->item_id;
         $status = $data->save();
         if (!$status) {

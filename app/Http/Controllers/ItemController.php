@@ -80,7 +80,7 @@ class ItemController extends Controller
                 ->rawColumns(['total'])
                 ->addColumn('conversions', function ($data) {
                     if ($data->conversions->isEmpty()) {
-                        return 'No conversions available';
+                        return '-'; // This will ensure no content is shown for empty conversions.
                     }
 
                     return $data->conversions->map(function ($conv) {
@@ -136,11 +136,11 @@ class ItemController extends Controller
             }
 
             return response()->json([
-                'message' => __('Saved successfully')
+                'message' => __('Berhasil Menyimpan Data')
             ])->setStatusCode(200);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => __('Failed to save'),
+                'message' => __('Gagal Menyimpan Data'),
                 'error' => $e->getMessage(),
             ])->setStatusCode(500);
         }
@@ -176,6 +176,7 @@ class ItemController extends Controller
         // Tambahkan conversions dalam format array
         $data['conversions'] = $data->conversions->map(function ($conv) {
             return [
+                'id' => $conv->id, // Tambahkan ID konversi
                 'from_unit_id' => $conv->from_unit_id,
                 'to_unit_id' => $conv->to_unit_id,
                 'conversion_factor' => $conv->conversion_factor,
@@ -236,21 +237,40 @@ class ItemController extends Controller
         $item->save();
         // dd($item);
 
-        // Update conversions
         if ($request->has('from_unit') && $request->has('to_unit') && $request->has('conversion_factor')) {
-            // Hapus konversi lama
-            $item->conversions()->delete();
+            if (empty($request->from_unit) || empty($request->to_unit) || empty($request->conversion_factor)) {
+                // Jika data konversi kosong, hapus semua konversi terkait
+                $item->conversions()->delete();
+            } else {
+                // Jika ada ID konversi, hapus yang tidak termasuk dalam daftar
+                if ($request->filled('conversion_ids')) {
+                    $item->conversions()->whereNotIn('id', $request->conversion_ids)->delete();
+                } else {
+                    // Jika tidak ada ID sama sekali, hapus semua konversi terkait item
+                    $item->conversions()->delete();
+                }
 
-            // Tambahkan konversi baru
-            foreach ($request->from_unit as $index => $fromUnit) {
-                UnitConversion::create([
-                    'item_id' => $item->id,
-                    'from_unit_id' => $fromUnit,
-                    'to_unit_id' => $request->to_unit[$index],
-                    'conversion_factor' => $request->conversion_factor[$index],
-                ]);
+                // Perbarui atau buat konversi baru
+                foreach ($request->from_unit as $index => $fromUnit) {
+                    UnitConversion::updateOrCreate(
+                        [
+                            'id' => $request->conversion_ids[$index] ?? null // Jika ID ada, update, jika tidak, buat baru
+                        ],
+                        [
+                            'item_id' => $item->id,
+                            'from_unit_id' => $fromUnit,
+                            'to_unit_id' => $request->to_unit[$index],
+                            'conversion_factor' => $request->conversion_factor[$index],
+                        ]
+                    );
+                }
             }
+        } else {
+            // Jika tidak ada data konversi sama sekali dalam request, hapus semua konversi terkait
+            $item->conversions()->delete();
         }
+
+
         return response()->json([
             "message" => __("data changed successfully")
         ])->setStatusCode(200);

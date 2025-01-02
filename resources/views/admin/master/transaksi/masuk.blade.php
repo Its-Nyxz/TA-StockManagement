@@ -182,12 +182,23 @@
                                                         class="form-control">
                                                 </div>
                                                 <div class="row">
+                                                    {{-- <div class="form-group">
+                                                        <label for="satuan_barang"
+                                                            class="form-label">{{ __('unit') }}</label>
+                                                        <input type="text" name="satuan_barang" readonly
+                                                            class="form-control">
+                                                    </div> --}}
                                                     <div class="col-sm-6 col-12"> <!-- Adjusted for responsiveness -->
                                                         <div class="form-group">
                                                             <label for="satuan_barang"
                                                                 class="form-label">{{ __('unit') }}</label>
-                                                            <input type="text" name="satuan_barang" readonly
-                                                                class="form-control">
+                                                            <select name="satuan_barang" class="form-control"
+                                                                id="satuan_barang">
+                                                                <!-- Options will be dynamically filled -->
+                                                            </select>
+                                                            <input type="hidden" name="conversion_factor"
+                                                                id="conversion_factor" class="form-control"
+                                                                value="1">
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 col-12"> <!-- Adjusted for responsiveness -->
@@ -203,7 +214,8 @@
                                                     <label for="jumlah"
                                                         class="form-label">{{ __('incoming amount') }}<span
                                                             class="text-danger">*</span></label>
-                                                    <input type="number" name="jumlah" class="form-control">
+                                                    <input type="number" id="jumlah" name="jumlah"
+                                                        class="form-control">
                                                 </div>
                                             </div>
                                         </div>
@@ -627,10 +639,59 @@
                         $("input[name='kode_barang']").val(data.code);
                         $("input[name='id_barang']").val(data.id);
                         $("input[name='nama_barang']").val(data.name);
-                        $("input[name='satuan_barang']").val(data.unit_name);
                         $("input[name='jenis_barang']").val(data.category_name);
                         // $("input[name='brand_barang']").val(data.brand_name);
                         // $("select[name='supplier'").val(data.supplier_id).trigger('change');
+                        // $("input[name='satuan_barang']").val(data.unit_name);
+                        // Update dropdown options for satuan_barang
+                        let satuanSelect = $("#satuan_barang");
+                        satuanSelect.empty(); // Clear existing options
+
+                        // Tambahkan unit default sebagai opsi pertama
+                        let addedUnits = new Set(); // Lacak nama satuan yang sudah ditambahkan
+                        addedUnits.add(data.unit_name); // Tambahkan unit default ke dalam set
+
+                        satuanSelect.append(
+                            `<option value="${data.unit.id}" data-conversion-factor="1" selected>${data.unit_name}</option>`
+                        );
+
+                        // Populasi unit dari data konversi
+                        data.conversions.forEach(function(conv) {
+                            // Ambil data dari from_unit dan to_unit
+                            let fromUnit = conv.from_unit || {};
+                            let toUnit = conv.to_unit || {};
+                            let fromUnitName = fromUnit.name || 'N/A';
+                            let toUnitName = toUnit.name || 'N/A';
+
+                            // Ambil conversion factor
+                            let convFactor = conv.conversion_factor;
+
+
+                            // Tambahkan opsi untuk from_unit jika belum ada
+                            if (!addedUnits.has(fromUnitName)) {
+                                satuanSelect.append(
+                                    `<option value="${fromUnit.id}" data-conversion-factor="${convFactor}">${fromUnitName}</option>`
+                                );
+                                addedUnits.add(fromUnitName);
+                            }
+
+                            // Tambahkan opsi untuk to_unit jika belum ada
+                            if (!addedUnits.has(toUnitName)) {
+                                satuanSelect.append(
+                                    `<option value="${toUnit.id}" data-conversion-factor="${convFactor}">${toUnitName} </option>`
+                                );
+                                addedUnits.add(toUnitName);
+                            }
+                        });
+
+                        // Saat satuan berubah, update faktor konversi
+                        satuanSelect.on("change", function() {
+                            let factor = $(this).find(":selected").data(
+                                "conversion-factor");
+                            $("#conversion_factor").val(factor || 1);
+                            // console.log(factor);
+
+                        });
                         $('#modal-barang').modal('hide');
                         $('#TambahData').modal('show');
                     }
@@ -668,6 +729,8 @@
             const supplier_id = $("select[name='supplier'").val();
             const invoice_number = $("input[name='kode'").val();
             const quantity = $("input[name='jumlah'").val();
+            const conversionFactor = $("#conversion_factor").val();
+
 
             if (!item_id || !date_received || !quantity || !supplier_id) {
                 Swal.fire({
@@ -686,6 +749,7 @@
             Form.append('quantity', quantity);
             Form.append('supplier_id', supplier_id);
             Form.append('invoice_number', invoice_number);
+            Form.append('conversion_factor', conversionFactor); // Kirim faktor konversi
             $.ajax({
                 url: `{{ route('transaksi.masuk.save') }}`,
                 type: "post",
@@ -729,6 +793,8 @@
             const supplier_id = $("select[name='supplier'").val();
             const invoice_number = $("input[name='kode'").val();
             const quantity = $("input[name='jumlah'").val();
+            const conversionFactor = $("#conversion_factor").val();
+
             $.ajax({
                 url: `{{ route('transaksi.masuk.update') }}`,
                 type: "put",
@@ -739,7 +805,8 @@
                     date_received,
                     supplier_id,
                     invoice_number,
-                    quantity
+                    quantity,
+                    conversionFactor
                 },
                 success: function(res) {
                     Swal.fire({
@@ -979,8 +1046,34 @@
                     $("input[name='tanggal_masuk']").val(data.date_received);
                     $("input[name='kode_barang']").val(data.kode_barang);
                     $("input[name='jenis_barang']").val(data.jenis_barang);
-                    $("input[name='satuan_barang']").val(data.satuan_barang);
                     $("input[name='jumlah']").val(data.quantity);
+                    // $("input[name='satuan_barang']").val(data.satuan_barang);
+                    // Populasi dropdown satuan
+                    const satuanSelect = $("#satuan_barang");
+                    satuanSelect.empty(); // Hapus opsi sebelumnya
+                    satuanSelect.append(
+                        `<option value="default" data-conversion-factor="1" selected>${data.satuan_barang}</option>`
+                    );
+
+                    data.conversions.forEach(function(conv) {
+                        satuanSelect.append(
+                            `<option value="${conv.to_unit_id}" data-conversion-factor="${conv.conversion_factor}">${conv.to_unit_name}</option>`
+                        );
+                    });
+
+                    // Update conversion factor saat dropdown berubah
+                    satuanSelect.on("change", function() {
+                        const factor = $(this).find(":selected").data("conversion-factor");
+                        $("#conversion_factor").val(factor || 1); // Update conversion factor
+
+                        // Update stock amount based on the selected unit's conversion factor
+                        let quantityStok = data
+                            .quantity; // Total stock from the response
+                        let convertedStock = quantityStok *
+                            factor; // Convert stock based on the selected unit
+                        $("#jumlah").val(convertedStock.toFixed(
+                            2)); // Update stock system input
+                    });
                 }
             });
 

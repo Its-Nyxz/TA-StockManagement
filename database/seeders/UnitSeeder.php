@@ -16,7 +16,7 @@ class UnitSeeder extends Seeder
         $units = [
             'Unit',
             'Rim',
-            'Psc',
+            'Pcs',
             'Kilogram (kg)',
             'Meter (m)',
             'Meter Persegi (m²)',
@@ -27,11 +27,10 @@ class UnitSeeder extends Seeder
             'Batang',
             'Roll'
         ];
-        foreach($units as $unit){
+        foreach ($units as $unit) {
             Unit::create([
-                'name'=>$unit
+                'name' => $unit
             ]);
         }
-        
     }
 }
