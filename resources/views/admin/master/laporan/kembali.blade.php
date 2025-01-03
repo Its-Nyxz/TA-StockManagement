@@ -28,7 +28,8 @@
                                                 <i class="fas fa-sliders-h"></i>
                                             </button>
                                             <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
-                                                    class="fas fa-filter m-1"></i>{{ __('Filter') }}</button>
+                                                    class="fas fa-filter m-1"></i><span
+                                                    class="d-none d-lg-block d-xl-inline">{{ __('Filter') }}</span></button>
                                         </div>
                                     </div>
                                 </div>

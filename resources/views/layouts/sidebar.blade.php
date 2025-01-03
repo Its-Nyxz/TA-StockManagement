@@ -2,16 +2,18 @@
   <aside class="main-sidebar bg-blue elevation-4">
       <!-- Brand Logo -->
       <a href="{{ route('dashboard') }}" class="brand-link text-center">
-          <img src="{{ asset('icon.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+
+          <img src="{{ asset('icon.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3 mt-2"
               style="opacity: .8">
           <div>
-              <span class="brand-text font-weight-bold d-block h5">
+              <span class="brand-text font-weight-bold d-block lg">
                   {{ config('app.name') }}
               </span>
               <span class="brand-text text-weight-bold d-block small">
                   {{ config('app.sub') }}
               </span>
           </div>
+
       </a>
 
       <!-- Sidebar -->
