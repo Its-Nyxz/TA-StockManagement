@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Item;
 use App\Models\User;
+use App\Models\Brand;
 use App\Models\GoodsIn;
 use App\Models\GoodsOut;
 use App\Models\Supplier;
@@ -14,9 +15,9 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Can;
 use App\Http\Requests\StoreStockOpnameRequest;
 use App\Http\Requests\UpdateStockOpnameRequest;
-use Illuminate\Validation\Rules\Can;
 
 class StockOpnameController extends Controller
 {
@@ -27,8 +28,9 @@ class StockOpnameController extends Controller
     {
         $in_status = Item::where('active', 'true')->count();
         $suppliers = Supplier::all();
+        $brands = Brand::all();
         $users = User::all();
-        return view('admin.master.laporan.so', compact('in_status', 'suppliers', 'users'));
+        return view('admin.master.laporan.so', compact('in_status', 'suppliers', 'brands', 'users'));
     }
 
     public function list(Request $request): JsonResponse
@@ -45,6 +47,20 @@ class StockOpnameController extends Controller
 
         if (!empty($request->supplier_id)) {
             $so->where('supplier_id', [$request->supplier_id]);
+        }
+
+        // Filter berdasarkan brand
+        if (!empty($request->brands)) {
+            $so->whereHas('item.brand', function ($query) use ($request) {
+                $query->where('id', $request->brands);
+            });
+        }
+
+        // Filter berdasarkan item_name
+        if (!empty($request->item_name)) {
+            $so->whereHas('item', function ($query) use ($request) {
+                $query->where('name', 'LIKE', '%' . $request->item_name . '%');
+            });
         }
 
         if (Auth::user()->role->id > 2) {

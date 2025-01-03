@@ -38,6 +38,9 @@
                                     </div>
                                     <div class="text-end col-sm-3 pt-4">
                                         <div class = "d-flex justify-content-end">
+                                            <button class="btn btn-primary font-weight-bold m-1" id="toggle-filters">
+                                                <i class="fas fa-sliders-h"></i>
+                                            </button>
                                             <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
                                                     class="fas fa-filter m-1"></i><span
                                                     class="d-none d-lg-block d-xl-inline">{{ __('Filter') }}</span></button>
@@ -48,6 +51,44 @@
                                                 id="modal-button"><i class="fas fa-plus m-1"></i><span
                                                     class="d-none d-lg-block d-xl-inline">
                                                     {{ __('Add data') }}</span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Filter tambahan -->
+                                <div id="additional-filters" style="display: none;">
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <label for="supplier_name">{{ __('supplier') }}: </label>
+                                                <select name="suppliers" id="suppliers" class="form-control">
+                                                    <option selected value="">--
+                                                        {{ __('choose a supplier') }} --</option>
+                                                    @foreach ($suppliers as $supplier)
+                                                        <option value="{{ $supplier->id }}">{{ $supplier->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <label for="item_name">{{ __('item') }}: </label>
+                                                <input type="text" name="item_name" id="item_name"
+                                                    class="form-control w-100">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <div class="form-group">
+                                                <label for="brand_name">{{ __('brand') }}: </label>
+                                                <select name="brands" id="brands" class="form-control">
+                                                    <option selected value="">--
+                                                        {{ __('pilih merk') }} --</option>
+                                                    @foreach ($brands as $brand)
+                                                        <option value="{{ $brand->id }}">{{ $brand->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -237,7 +278,7 @@
             // Define language settings
             const langID = {
                 decimal: "",
-                searchPlaceholder: "Cari Data",
+                searchPlaceholder: "Cari Kode Keluar",
                 emptyTable: "Tabel kosong",
                 info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
                 infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
@@ -375,6 +416,13 @@
             $(document).on('click', '#barang', function() {
                 let supplierId = $("select[name='supplier']").val();
             });
+
+            // Toggle untuk filter tambahan
+            $('#toggle-filters').on('click', function() {
+                $('#additional-filters')
+                    .slideToggle(); // Animasi slide untuk menampilkan/menyembunyikan filter
+            });
+
 
             // pilih data barang
             $(document).on("click", ".pilih-data-barang", function() {
@@ -618,7 +666,7 @@
                 document.getElementById('tanggal_keluar').value = today; // Set the input value
             });
 
-            $('#supplier, #inputer').select2({
+            $('#supplier, #inputer, #suppliers, #brands').select2({
                 theme: 'bootstrap4',
                 allowClear: true,
                 minimumInputLength: 0 // Set this to enable search after 1 character
@@ -692,6 +740,9 @@
                         d.start_date = $("input[name='start_date']").val();
                         d.end_date = $("input[name='end_date']").val();
                         d.inputer = $("#inputer").val();
+                        d.item_name = $("#item_name").val();
+                        d.suppliers = $("#suppliers").val();
+                        d.brands = $("#brands").val();
                     }
                 },
                 columns: [{

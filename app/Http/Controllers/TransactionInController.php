@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -20,9 +21,10 @@ class TransactionInController extends Controller
     public function index(): View
     {
         $suppliers = Supplier::all();
+        $brands = Brand::all();
         $users = User::all();
         $approvals = GoodsIn::with('item', 'supplier')->where('status', 0)->get();
-        return view('admin.master.transaksi.masuk', compact('suppliers', 'users', 'approvals'));
+        return view('admin.master.transaksi.masuk', compact('suppliers', 'brands', 'users', 'approvals'));
     }
 
     public function list(Request $request): JsonResponse
@@ -39,6 +41,25 @@ class TransactionInController extends Controller
 
         if (isset($request->status)) {
             $goodsins->where('status', $request->status);
+        }
+
+        // Filter berdasarkan supplier
+        if (!empty($request->suppliers)) {
+            $goodsins->where('supplier_id', $request->suppliers);
+        }
+
+        // Filter berdasarkan brand
+        if (!empty($request->brands)) {
+            $goodsins->whereHas('item.brand', function ($query) use ($request) {
+                $query->where('id', $request->brands);
+            });
+        }
+
+        // Filter berdasarkan item_name
+        if (!empty($request->item_name)) {
+            $goodsins->whereHas('item', function ($query) use ($request) {
+                $query->where('name', 'LIKE', '%' . $request->item_name . '%');
+            });
         }
 
         if (Auth::user()->role->id > 2) {

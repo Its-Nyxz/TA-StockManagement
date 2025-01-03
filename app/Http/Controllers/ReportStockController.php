@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use Carbon\Carbon;
 use App\Models\Item;
 use App\Models\GoodsIn;
@@ -19,7 +20,8 @@ class ReportStockController extends Controller
     public function index(): View
     {
         $suppliers = Supplier::all();
-        return view('admin.master.laporan.stok', compact('suppliers'));
+        $brands = Brand::all();
+        return view('admin.master.laporan.stok', compact('suppliers', 'brands'));
     }
 
     public function list(Request $request): JsonResponse
@@ -49,6 +51,16 @@ class ReportStockController extends Controller
 
         if (!empty($request->supplier)) {
             $data->where('supplier_id', $request->supplier);
+        }
+
+        // Filter berdasarkan brand
+        if (!empty($request->brands)) {
+            $data->where('brand_id', $request->brands);
+        }
+
+        // Filter berdasarkan item_name
+        if (!empty($request->item_name)) {
+            $data->where('name', 'LIKE', '%' . $request->item_name . '%');
         }
 
         $data->latest()->get();

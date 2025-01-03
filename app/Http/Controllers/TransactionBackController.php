@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Item;
 use App\Models\User;
+use App\Models\Brand;
 use App\Models\GoodsIn;
 use App\Models\Customer;
 use App\Models\GoodsOut;
@@ -29,26 +30,48 @@ class TransactionBackController extends Controller
         $users = User::all();
         $suppliers = Supplier::all();
         $customers = Customer::all();
-        return view('admin.master.transaksi.kembali', compact('users', 'in_status', 'suppliers', 'customers'));
+        $brands = Brand::all();
+        return view('admin.master.transaksi.kembali', compact('users', 'in_status', 'suppliers', 'brands', 'customers'));
     }
 
     public function list(Request $request): JsonResponse
     {
+        // Query dasar dengan relasi yang diperlukan
+        $goodsbacks = GoodsBack::with('item.brand', 'user');
+
+        // Filter berdasarkan rentang tanggal
         if (!empty($request->start_date) && !empty($request->end_date)) {
-            $goodsbacks = GoodsBack::with('item', 'user');
             $goodsbacks->whereBetween('date_retur', [$request->start_date, $request->end_date]);
-            if ($request->inputer) {
-                $goodsbacks->where('user_id', [$request->inputer]);
-            }
-        } else if (!empty($request->inputer)) {
-            $goodsbacks = GoodsBack::with('item', 'user');
-            $goodsbacks->where('user_id', [$request->inputer]);
-        } else {
-            $goodsbacks = GoodsBack::with('item', 'user');
         }
+
+        // Filter berdasarkan user inputer
+        if (!empty($request->inputer)) {
+            $goodsbacks->where('user_id', $request->inputer);
+        }
+
+        // Filter berdasarkan supplier
+        if (!empty($request->suppliers)) {
+            $goodsbacks->where('supplier_id', $request->suppliers);
+        }
+
+        // Filter berdasarkan brand
+        if (!empty($request->brands)) {
+            $goodsbacks->whereHas('item.brand', function ($query) use ($request) {
+                $query->where('id', $request->brands);
+            });
+        }
+
+        // Filter berdasarkan item_name
+        if (!empty($request->item_name)) {
+            $goodsbacks->whereHas('item', function ($query) use ($request) {
+                $query->where('name', 'LIKE', '%' . $request->item_name . '%');
+            });
+        }
+
+        // Batasi data untuk pengguna dengan peran tertentu
         if (Auth::user()->role->id > 2) {
             $goodsbacks->where('user_id', Auth::user()->id);
-        };
+        }
         $goodsbacks->latest()->get();
         if ($request->ajax()) {
             return DataTables::of($goodsbacks)

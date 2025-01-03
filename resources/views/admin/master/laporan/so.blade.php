@@ -46,6 +46,9 @@
                                     </div>
                                     <div class="text-end col-sm-4 col-12 pt-4">
                                         <div class = "d-flex justify-content-end">
+                                            <button class="btn btn-primary font-weight-bold m-1 mt-1" id="toggle-filters">
+                                                <i class="fas fa-sliders-h"></i>
+                                            </button>
                                             <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
                                                     class="fas fa-filter m-1"></i><span
                                                     class="d-none d-lg-block d-xl-inline"></span></button>
@@ -63,6 +66,31 @@
                                             <button class="btn btn-outline-success font-weight-bold m-1 mt-1"
                                                 id="export-excel"><i class="fas fa-file-excel m-1"></i><span
                                                     class="d-none d-lg-block d-xl-inline"></span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Filter tambahan -->
+                                <div id="additional-filters" style="display: none;">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="item_name">{{ __('item') }}: </label>
+                                                <input type="text" name="item_name" id="item_name"
+                                                    class="form-control w-100">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="form-group">
+                                                <label for="brand_name">{{ __('brand') }}: </label>
+                                                <select name="brands" id="brands" class="form-control">
+                                                    <option selected value="">--
+                                                        {{ __('pilih merk') }} --</option>
+                                                    @foreach ($brands as $brand)
+                                                        <option value="{{ $brand->id }}">{{ $brand->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -716,7 +744,7 @@
                 $('#status').val(status);
             });
 
-            $('#supplier,#inputer,#supplier_id').select2({
+            $('#supplier,#inputer,#supplier_id, #brands').select2({
                 theme: 'bootstrap4',
                 allowClear: true,
                 minimumInputLength: 0 // Set this to enable search after 1 character
@@ -725,7 +753,7 @@
             // Define language settings
             const langID = {
                 decimal: "",
-                searchPlaceholder: "Cari Data",
+                searchPlaceholder: "Cari Kode SO",
                 emptyTable: "Tabel kosong",
                 info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
                 infoEmpty: "Menampilkan 0 sampai 0 dari 0 data",
@@ -778,6 +806,12 @@
             const currentLang = $('html').attr('lang');
             const languageSettings = currentLang === 'id' ? langID : langEN;
 
+            // Toggle untuk filter tambahan
+            $('#toggle-filters').on('click', function() {
+                $('#additional-filters')
+                    .slideToggle(); // Animasi slide untuk menampilkan/menyembunyikan filter
+            });
+
             const tabel = $('#data-tabel').DataTable({
                 lengthChange: true,
                 processing: true,
@@ -791,6 +825,8 @@
                         d.end_date = $("input[name='end_date']").val();
                         d.inputer = $("#inputer").val();
                         d.supplier_id = $("#supplier_id").val();
+                        d.item_name = $("#item_name").val();
+                        d.brands = $("#brands").val();
                     }
                 },
                 columns: [{

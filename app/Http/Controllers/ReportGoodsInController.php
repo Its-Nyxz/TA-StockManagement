@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
-use App\Models\GoodsIn;
-use App\Models\Item;
-use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
+use App\Models\Item;
+use App\Models\Brand;
+use App\Models\GoodsIn;
+use App\Models\Supplier;
+use Illuminate\View\View;
+use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+use Illuminate\Http\JsonResponse;
 
 class ReportGoodsInController extends Controller
 {
     public function index(): View
     {
-        return view('admin.master.laporan.masuk');
+        $suppliers = Supplier::all();
+        $brands = Brand::all();
+        return view('admin.master.laporan.masuk', compact('suppliers', 'brands'));
     }
 
     public function list(Request $request): JsonResponse
@@ -26,6 +30,25 @@ class ReportGoodsInController extends Controller
 
         if (isset($request->status)) {
             $goodsins->where('status', $request->status);
+        }
+
+        // Filter berdasarkan supplier
+        if (!empty($request->suppliers)) {
+            $goodsins->where('supplier_id', $request->suppliers);
+        }
+
+        // Filter berdasarkan brand
+        if (!empty($request->brands)) {
+            $goodsins->whereHas('item.brand', function ($query) use ($request) {
+                $query->where('id', $request->brands);
+            });
+        }
+
+        // Filter berdasarkan item_name
+        if (!empty($request->item_name)) {
+            $goodsins->whereHas('item', function ($query) use ($request) {
+                $query->where('name', 'LIKE', '%' . $request->item_name . '%');
+            });
         }
 
         $goodsins->latest()->get();
