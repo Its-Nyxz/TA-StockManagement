@@ -190,11 +190,11 @@
         </svg>
 
         <div class="message">
-            Page not found
+            Halaman Tidak Ditemukan
         </div>
         <div class="message">
             {{-- <a href="{{ route('dashboard') }}">Back to Dahsboard</a> --}}
-            <a href="javascript:void(0);" onclick="window.history.back();">Back</a>
+            <a href="javascript:void(0);" onclick="window.history.back();">Kembali</a>
         </div>
     </div>
     <script></script>
