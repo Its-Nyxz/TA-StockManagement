@@ -24,13 +24,12 @@
                                     </div>
                                     <div class="col-sm-4 pt-4">
                                         <div class="d-flex">
-                                            <button class="btn btn-primary font-weight-bold m-1" id="toggle-filters">
+                                            <button class="btn btn-primary font-weight-bold m-1" id="toggle-filters"
+                                                title="Toggle Sortir">
                                                 <i class="fas fa-sliders-h"></i>
                                             </button>
-                                            <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"><i
-                                                    class="fas fa-filter m-1"></i>
-                                                <span
-                                                    class="d-none d-lg-block d-xl-inline">{{ __('Filter') }}</span></button>
+                                            <button class="btn btn-primary font-weight-bold m-1 mt-1" id="filter"
+                                                title="Sortir"><i class="fas fa-filter m-1"></i></button>
                                         </div>
                                     </div>
                                 </div>
