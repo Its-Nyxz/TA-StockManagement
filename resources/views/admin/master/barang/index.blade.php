@@ -47,22 +47,39 @@
                                             <div class="form-group">
                                                 <label for="jenisbarang" class="form-label">{{ __('types of goods') }} <span
                                                         class="text-danger">*</span></label>
-                                                <select name="jenisbarang" id="jenisbarang" class="form-control">
-                                                    <option value="">-- {{ __('select category') }} --</option>
-                                                    @foreach ($jenisbarang as $jb)
-                                                        <option value="{{ $jb->id }}">{{ $jb->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <div class="input-group">
+                                                    <select name="jenisbarang" id="jenisbarang" class="form-control">
+                                                        <option value="">-- {{ __('select category') }} --</option>
+                                                        @foreach ($jenisbarang as $jb)
+                                                            <option value="{{ $jb->id }}">{{ $jb->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-primary" type="button"
+                                                            id="add-jenis" data-toggle="modal" data-target="#modalJenis">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="satuan" class="form-label">{{ __('unit of goods') }} <span
                                                         class="text-danger">*</span></label>
-                                                <select name="satuan" id="satuan" class="form-control">
-                                                    <option value="">-- {{ __('select unit') }} --</option>
-                                                    @foreach ($satuan as $s)
-                                                        <option value="{{ $s->id }}">{{ $s->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <div class="input-group">
+                                                    <select name="satuan" id="satuan" class="form-control">
+                                                        <option value="">-- {{ __('select unit') }} --</option>
+                                                        @foreach ($satuan as $s)
+                                                            <option value="{{ $s->id }}">{{ $s->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-primary" type="button"
+                                                            id="add-satuan" data-toggle="modal" data-target="#modalSatuan">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div id="conversion-section">
                                                 <div class="form-group">
@@ -90,23 +107,42 @@
                                             <div class="form-group">
                                                 <label for="merk" class="form-label">{{ __('brand of goods') }} <span
                                                         class="text-danger">*</span></label>
-                                                <select name="merk" id="merk" class="form-control">
-                                                    <option value="">-- {{ __('select brand') }} --</option>
-                                                    @foreach ($merk as $m)
-                                                        <option value="{{ $m->id }}">{{ $m->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <div class="input-group">
+                                                    <select name="merk" id="merk" class="form-control">
+                                                        <option value="">-- {{ __('select brand') }} --</option>
+                                                        @foreach ($merk as $m)
+                                                            <option value="{{ $m->id }}">{{ $m->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-primary" type="button"
+                                                            id="add-merk" data-toggle="modal" data-target="#modalMerk">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="supplier" class="form-label">{{ __('supplier of goods') }}
                                                     <span class="text-danger">*</span></label>
-                                                <select name="supplier" id="supplier" class="form-control">
-                                                    <option selected value="">--{{ __('select supplier') }} --
-                                                    </option>
-                                                    @foreach ($supplier as $sp)
-                                                        <option value="{{ $sp->id }}">{{ $sp->name }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <div class="input-group">
+                                                    <select name="supplier" id="supplier" class="form-control">
+                                                        <option selected value="">--{{ __('select supplier') }} --
+                                                        </option>
+                                                        @foreach ($supplier as $sp)
+                                                            <option value="{{ $sp->id }}">{{ $sp->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-primary" type="button"
+                                                            id="add-supplier" data-toggle="modal"
+                                                            data-target="#modalSupplier">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="stock_limit">Batas Bawah Stok<span
@@ -121,9 +157,9 @@
                                                     class="form-control">
                                             </div>
                                             <!-- <div class="form-group">
-                                                                                                                                                                                                                                                                                                                                <label for="harga" class="form-label">{{ __('price of goods') }} <span class="text-danger">*</span></label>
-                                                                                                                                                                                                                                                                                                                                <input type="text"  id="harga" name="harga" class="form-control" placeholder="RP. 0">
-                                                                                                                                                                                                                                                                                                                            </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <label for="harga" class="form-label">{{ __('price of goods') }} <span class="text-danger">*</span></label>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <input type="text"  id="harga" name="harga" class="form-control" placeholder="RP. 0">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div> -->
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
@@ -141,6 +177,112 @@
                                         id="kembali">{{ __('back') }}</button>
                                     <button type="button" class="btn btn-success" id="simpan"
                                         data-action="simpan">{{ __('save') }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal AddJenis -->
+                    <div class="modal fade" id="modalJenis" tabindex="-1" role="dialog"
+                        aria-labelledby="modalJenisLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalJenisLabel">{{ __('Tambahkan Jenis') }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="form-add-jenis">
+                                        <div class="form-group">
+                                            <label for="jenis-name">{{ __('Nama') }}</label>
+                                            <input type="text" id="jenis-name" class="form-control"
+                                                placeholder="{{ __('Masukan Nama Jenis') }}">
+                                        </div>
+                                        <button type="submit"
+                                            class="btn btn-primary btn-block">{{ __('save') }}</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal AddSatuan -->
+                    <div class="modal fade" id="modalSatuan" tabindex="-1" role="dialog"
+                        aria-labelledby="modalSatuanLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalSatuanLabel">{{ __('Tambahkan Satuan') }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="form-add-satuan">
+                                        <div class="form-group">
+                                            <label for="satuan-name">{{ __('Nama') }}</label>
+                                            <input type="text" id="satuan-name" class="form-control"
+                                                placeholder="{{ __('Masukan Nama Satuan') }}">
+                                        </div>
+                                        <button type="submit"
+                                            class="btn btn-primary btn-block">{{ __('save') }}</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal AddMerk -->
+                    <div class="modal fade" id="modalMerk" tabindex="-1" role="dialog"
+                        aria-labelledby="modalMerkLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalMerkLabel">{{ __('Tambahkan Merk') }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="form-add-merk">
+                                        <div class="form-group">
+                                            <label for="merk-name">{{ __('Nama') }}</label>
+                                            <input type="text" id="merk-name" class="form-control"
+                                                placeholder="{{ __('Masukan Nama Merk') }}">
+                                        </div>
+                                        <button type="submit"
+                                            class="btn btn-primary btn-block">{{ __('save') }}</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal AddPemasok -->
+                    <div class="modal fade" id="modalSupplier" tabindex="-1" role="dialog"
+                        aria-labelledby="modalSupplierLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalSupplierLabel">{{ __('Tambahkan Pemasok') }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="form-add-supplier">
+                                        <div class="form-group">
+                                            <label for="supplier-name">{{ __('Nama') }}</label>
+                                            <input type="text" id="supplier-name" class="form-control"
+                                                placeholder="{{ __('Masukan Nama Pemasok') }}">
+                                            <label for="supplier-name">{{ __('Alamat') }}</label>
+                                            <textarea name="" id="supplier-addres" class="form-control" cols="30" rows="2"
+                                                placeholder="{{ __('Masukan Alamat Pemasok') }}"></textarea>
+                                            <label for="supplier-nohp">{{ __('No Hp') }}</label>
+                                            <input type="number" id="supplier-nohp" class="form-control"
+                                                placeholder="{{ __('Masukan No HP Pemasok') }}">
+                                        </div>
+                                        <button type="submit"
+                                            class="btn btn-primary btn-block">{{ __('save') }}</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -566,6 +708,173 @@
                 }
             });
 
+            // Tambah Jenis Barang
+            $('#form-add-jenis').on('submit', function(e) {
+                e.preventDefault();
+                let name = $('#jenis-name').val();
+
+                $.ajax({
+                    url: `{{ route('barang.jenis.store') }}`, // Route menuju controller
+                    type: 'POST',
+                    data: {
+                        name: name,
+                        _token: $('meta[name="csrf-token"]').attr('content') // Token CSRF Laravel
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Tambahkan data ke dropdown
+                            $('#jenisbarang').append(new Option(name, response.data.id));
+                            $('#modalJenis').modal('hide');
+                            $('#jenis-name').val(''); // Bersihkan input
+
+                            // Tampilkan notifikasi SweetAlert
+                            Swal.fire({
+                                icon: 'success',
+                                title: '{{ __('Berhasil') }}',
+                                text: '{{ __('Berhasil menambahkan Jenis Barang baru!') }}',
+                                timer: 3000, // Durasi dalam milidetik
+                                showConfirmButton: false
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '{{ __('Error') }}',
+                            text: xhr.responseJSON.message,
+                            timer: 3000, // Durasi dalam milidetik
+                            showConfirmButton: false
+                        });
+                    }
+                });
+            });
+            // Tambah Satuan Barang
+            $('#form-add-satuan').on('submit', function(e) {
+                e.preventDefault();
+                let name = $('#satuan-name').val();
+
+                $.ajax({
+                    url: `{{ route('barang.satuan.store') }}`, // Route menuju controller
+                    type: 'POST',
+                    data: {
+                        name: name,
+                        _token: $('meta[name="csrf-token"]').attr('content') // Token CSRF Laravel
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Tambahkan data ke dropdown
+                            $('#satuanbarang').append(new Option(name, response.data.id));
+                            $('#modalsatuan').modal('hide');
+                            $('#satuan-name').val(''); // Bersihkan input
+
+                            // Tampilkan notifikasi SweetAlert
+                            Swal.fire({
+                                icon: 'success',
+                                title: '{{ __('Berhasil') }}',
+                                text: '{{ __('Berhasil menambahkan Satuan Barang baru!') }}',
+                                timer: 3000, // Durasi dalam milidetik
+                                showConfirmButton: false
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '{{ __('Error') }}',
+                            text: xhr.responseJSON.message,
+                            timer: 3000, // Durasi dalam milidetik
+                            showConfirmButton: false
+                        });
+                    }
+                });
+            });
+            // Tambah Merk Barang
+            $('#form-add-merk').on('submit', function(e) {
+                e.preventDefault();
+                let name = $('#merk-name').val();
+
+                $.ajax({
+                    url: `{{ route('barang.merk.store') }}`, // Route menuju controller
+                    type: 'POST',
+                    data: {
+                        name: name,
+                        _token: $('meta[name="csrf-token"]').attr('content') // Token CSRF Laravel
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Tambahkan data ke dropdown
+                            $('#merkbarang').append(new Option(name, response.data.id));
+                            $('#modalmerk').modal('hide');
+                            $('#merk-name').val(''); // Bersihkan input
+
+                            // Tampilkan notifikasi SweetAlert
+                            Swal.fire({
+                                icon: 'success',
+                                title: '{{ __('Berhasil') }}',
+                                text: '{{ __('Berhasil menambahkan Merk Barang baru!') }}',
+                                timer: 3000, // Durasi dalam milidetik
+                                showConfirmButton: false
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '{{ __('Error') }}',
+                            text: xhr.responseJSON.message,
+                            timer: 3000, // Durasi dalam milidetik
+                            showConfirmButton: false
+                        });
+                    }
+                });
+            });
+            // Tambah Supplier Barang
+            $('#form-add-supplier').on('submit', function(e) {
+                e.preventDefault();
+                let name = $('#supplier-name').val();
+                let address = $('#supplier-addres').val();
+                let phone_number = $('#supplier-nohp').val();
+
+                $.ajax({
+                    url: `{{ route('suppliers.store') }}`, // Route menuju controller
+                    type: 'POST',
+                    data: {
+                        name: name,
+                        address: address,
+                        phone_number: phone_number,
+                        _token: $('meta[name="csrf-token"]').attr('content') // Token CSRF Laravel
+                    },
+
+                    success: function(response) {
+                        if (response.success) {
+                            // Tambahkan data ke dropdown
+                            $('#supplierbarang').append(new Option(name, response.data.id));
+                            $('#modalsupplier').modal('hide');
+                            $('#supplier-name').val(''); // Bersihkan input
+                            $('#supplier-addres').val(''); // Bersihkan input
+                            $('#supplier-nohp').val(''); // Bersihkan input
+
+                            // Tampilkan notifikasi SweetAlert
+                            Swal.fire({
+                                icon: 'success',
+                                title: '{{ __('Berhasil') }}',
+                                text: '{{ __('Berhasil menambahkan Pemasok Barang baru!') }}',
+                                timer: 3000, // Durasi dalam milidetik
+                                showConfirmButton: false
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '{{ __('Error') }}',
+                            text: xhr.responseJSON.message,
+                            timer: 3000, // Durasi dalam milidetik
+                            showConfirmButton: false
+                        });
+                    }
+                });
+            });
             // Awalnya sembunyikan #conversion-section
             $("#conversion-section").hide();
 

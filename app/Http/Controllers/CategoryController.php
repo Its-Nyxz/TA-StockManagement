@@ -127,4 +127,20 @@ class CategoryController extends Controller
     {
         return Excel::download(new CategoryTemplateExport, 'jenis_template.xlsx');
     }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $jenis = Category::create([
+            'name' => $validated['name'],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'data' => $jenis
+        ]);
+    }
 }

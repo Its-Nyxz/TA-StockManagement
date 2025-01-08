@@ -67,6 +67,7 @@ Route::middleware(['auth', "localization"])->group(function () {
             Route::delete('/hapus', 'delete')->name('barang.jenis.delete');
             Route::post('/import', 'import')->name('barang.jenis.import');
             Route::get('/template', 'template')->name('barang.jenis.template');
+            Route::post('/store',  'store')->name('barang.jenis.store');
         });
     });
 
@@ -81,6 +82,7 @@ Route::middleware(['auth', "localization"])->group(function () {
             Route::delete('/hapus', 'delete')->name('barang.satuan.delete');
             Route::post('/import', 'import')->name('barang.satuan.import');
             Route::get('/template', 'template')->name('barang.satuan.template');
+            Route::post('/store', 'store')->name('barang.satuan.store');
         });
     });
 
@@ -95,6 +97,7 @@ Route::middleware(['auth', "localization"])->group(function () {
             Route::delete('/hapus', 'delete')->name('barang.merk.delete');
             Route::post('/import', 'import')->name('barang.merk.import');
             Route::get('/template', 'template')->name('barang.merk.template');
+            Route::post('/store', 'store')->name('barang.merk.store');
         });
     });
 
@@ -123,6 +126,7 @@ Route::middleware(['auth', "localization"])->group(function () {
             Route::delete('/hapus', 'delete')->name('supplier.delete');
             Route::post('/import', 'import')->name('suppliers.import');
             Route::get('/template', 'template')->name('suppliers.template');
+            Route::post('/store', 'store')->name('suppliers.store');
         });
     });
 

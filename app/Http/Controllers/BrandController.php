@@ -136,4 +136,20 @@ class BrandController extends Controller
     {
         return Excel::download(new BrandTemplateExport, 'merk_template.xlsx');
     }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $merk = Brand::create([
+            'name' => $validated['name'],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'data' => $merk
+        ]);
+    }
 }

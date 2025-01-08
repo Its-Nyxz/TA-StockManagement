@@ -12,8 +12,8 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
-    'sub' => env('APP_SUBNAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Stok Management'),
+    'sub' => env('APP_SUBNAME', 'DUTA SAE'),
 
     /*
     |--------------------------------------------------------------------------

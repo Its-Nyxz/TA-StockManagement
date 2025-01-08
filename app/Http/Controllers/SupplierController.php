@@ -128,4 +128,27 @@ class SupplierController extends Controller
     {
         return Excel::download(new SupplierTemplateExport, 'supplier_template.xlsx');
     }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'phone_number' => [
+                'required',
+                'regex:/^[0-9]{1,20}$/', // Hanya angka, maksimal 20 digit
+            ],
+        ]);
+
+        $supplier = Supplier::create([
+            'name' => $validated['name'],
+            'address' => $validated['address'],
+            'phone_number' => $validated['phone_number'],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'data' => $supplier
+        ]);
+    }
 }

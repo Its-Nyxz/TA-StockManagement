@@ -126,4 +126,20 @@ class UnitController extends Controller
     {
         return Excel::download(new UnitTemplateExport, 'satuan_template.xlsx');
     }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $satuan = Unit::create([
+            'name' => $validated['name'],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'data' => $satuan
+        ]);
+    }
 }
