@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Unit;
+use Illuminate\Support\Str;
+use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UnitSeeder extends Seeder
 {
@@ -29,7 +30,8 @@ class UnitSeeder extends Seeder
         ];
         foreach ($units as $unit) {
             Unit::create([
-                'name' => $unit
+                'name' => $unit,
+                'slug' => Str::slug($unit)
             ]);
         }
     }

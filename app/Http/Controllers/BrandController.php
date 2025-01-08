@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 use App\Imports\BrandImport;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -143,8 +144,20 @@ class BrandController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
+        $slug = Str::slug($validated['name']);
+
+        // Cek apakah slug sudah ada di database
+        if (Brand::where('slug', $slug)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Satuan dengan nama ini sudah terdaftar.'
+            ], 422); // 422: Unprocessable Entity
+        }
+
+        // Jika tidak ada, buat data baru
         $merk = Brand::create([
             'name' => $validated['name'],
+            'slug' => $slug
         ]);
 
         return response()->json([

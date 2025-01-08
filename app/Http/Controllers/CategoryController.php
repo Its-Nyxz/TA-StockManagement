@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Imports\CategoryImport;
 use Yajra\DataTables\DataTables;
@@ -134,8 +135,20 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
+        $slug = Str::slug($validated['name']);
+
+        // Cek apakah slug sudah ada di database
+        if (Category::where('slug', $slug)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Jenis dengan nama ini sudah terdaftar.'
+            ], 422); // 422: Unprocessable Entity
+        }
+
+        // Jika tidak ada, buat data baru
         $jenis = Category::create([
             'name' => $validated['name'],
+            'slug' => $slug
         ]);
 
         return response()->json([

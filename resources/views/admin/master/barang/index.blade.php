@@ -157,9 +157,9 @@
                                                     class="form-control">
                                             </div>
                                             <!-- <div class="form-group">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <label for="harga" class="form-label">{{ __('price of goods') }} <span class="text-danger">*</span></label>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <input type="text"  id="harga" name="harga" class="form-control" placeholder="RP. 0">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <label for="harga" class="form-label">{{ __('price of goods') }} <span class="text-danger">*</span></label>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <input type="text"  id="harga" name="harga" class="form-control" placeholder="RP. 0">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div> -->
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
@@ -723,7 +723,10 @@
                     success: function(response) {
                         if (response.success) {
                             // Tambahkan data ke dropdown
-                            $('#jenisbarang').append(new Option(name, response.data.id));
+                            const newOption = new Option(response.data.name, response.data.id,
+                                true, true);
+                            $('#jenisbarang').append(newOption).val(response.data.id).trigger(
+                                'change');
                             $('#modalJenis').modal('hide');
                             $('#jenis-name').val(''); // Bersihkan input
 
@@ -763,8 +766,11 @@
                     success: function(response) {
                         if (response.success) {
                             // Tambahkan data ke dropdown
-                            $('#satuanbarang').append(new Option(name, response.data.id));
-                            $('#modalsatuan').modal('hide');
+                            const newOption = new Option(response.data.name, response.data.id,
+                                true, true);
+                            $('#satuan').append(newOption).val(response.data.id).trigger(
+                                'change');
+                            $('#modalSatuan').modal('hide');
                             $('#satuan-name').val(''); // Bersihkan input
 
                             // Tampilkan notifikasi SweetAlert
@@ -803,8 +809,11 @@
                     success: function(response) {
                         if (response.success) {
                             // Tambahkan data ke dropdown
-                            $('#merkbarang').append(new Option(name, response.data.id));
-                            $('#modalmerk').modal('hide');
+                            const newOption = new Option(response.data.name, response.data.id,
+                                true, true);
+                            $('#merk').append(newOption).val(response.data.id).trigger(
+                                'change');
+                            $('#modalMerk').modal('hide');
                             $('#merk-name').val(''); // Bersihkan input
 
                             // Tampilkan notifikasi SweetAlert
@@ -848,8 +857,11 @@
                     success: function(response) {
                         if (response.success) {
                             // Tambahkan data ke dropdown
-                            $('#supplierbarang').append(new Option(name, response.data.id));
-                            $('#modalsupplier').modal('hide');
+                            const newOption = new Option(response.data.name, response.data.id,
+                                true, true);
+                            $('#supplier').append(newOption).val(response.data.id).trigger(
+                                'change');
+                            $('#modalSupplier').modal('hide');
                             $('#supplier-name').val(''); // Bersihkan input
                             $('#supplier-addres').val(''); // Bersihkan input
                             $('#supplier-nohp').val(''); // Bersihkan input

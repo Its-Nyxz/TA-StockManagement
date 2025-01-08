@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Unit;
 use Illuminate\View\View;
 use App\Imports\UnitImport;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\JsonResponse;
@@ -133,8 +134,20 @@ class UnitController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
+        $slug = Str::slug($validated['name']);
+
+        // Cek apakah slug sudah ada di database
+        if (Unit::where('slug', $slug)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Satuan dengan nama ini sudah terdaftar.'
+            ], 422); // 422: Unprocessable Entity
+        }
+
+        // Jika tidak ada, buat data baru
         $satuan = Unit::create([
             'name' => $validated['name'],
+            'slug' => $slug
         ]);
 
         return response()->json([
