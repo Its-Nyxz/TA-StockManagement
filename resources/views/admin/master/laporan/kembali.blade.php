@@ -263,6 +263,18 @@
                 buttons: [{
                         extend: 'excel',
                         class: 'buttons-excel',
+                        action: function(e, dt, button, config) {
+                            if (dt.data().any()) {
+                                $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt,
+                                    button, config);
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal',
+                                    text: 'Tidak ada data untuk diekspor!',
+                                });
+                            }
+                        },
                         title: function() {
                             const startDate = $("input[name='start_date']").val();
                             const endDate = $("input[name='end_date']").val();
@@ -281,6 +293,30 @@
                     {
                         extend: 'print',
                         class: 'buttons-print',
+                        action: function(e, dt, button, config) {
+                            if (dt.data().any()) {
+                                $.fn.dataTable.ext.buttons.print.action.call(this, e, dt, button,
+                                    config);
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal',
+                                    text: 'Tidak ada data untuk dicetak!',
+                                });
+                            }
+                        },
+                        action: function(e, dt, button, config) {
+                            if (dt.data().any()) {
+                                $.fn.dataTable.ext.buttons.print.action.call(this, e, dt, button,
+                                    config);
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal',
+                                    text: 'Tidak ada data untuk dicetak!',
+                                });
+                            }
+                        },
                         title: function() {
                             const startDate = $("input[name='start_date']").val();
                             const endDate = $("input[name='end_date']").val();
@@ -299,6 +335,18 @@
                     {
                         extend: 'pdf',
                         class: 'buttons-pdf',
+                        action: function(e, dt, button, config) {
+                            if (dt.data().any()) {
+                                $.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button,
+                                    config);
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal',
+                                    text: 'Tidak ada data untuk diekspor ke PDF!',
+                                });
+                            }
+                        },
                         title: function() {
                             const startDate = $("input[name='start_date']").val();
                             const endDate = $("input[name='end_date']").val();
