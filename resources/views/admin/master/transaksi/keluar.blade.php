@@ -338,7 +338,7 @@
                 language: languageSettings,
                 // ajax: `{{ route('barang.list') }}`,
                 ajax: {
-                    url: `{{ route('barang.list.in') }}`,
+                    url: `{{ route('barang.list.out') }}`,
                     data: function(d) {
                         let supplierId = $("select[name='supplier']").val();
                         d.supplier_id = supplierId;

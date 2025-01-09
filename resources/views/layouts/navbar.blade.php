@@ -30,8 +30,8 @@
 
         @can('super&admin')
             <li class="nav-item dropdown d-flex justify-content-center align-items-center">
-                <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown" title="{{ __('Low or Empty Stock Notifications') }}"
-                    role="button">
+                <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown"
+                    title="{{ __('Limit or Empty Stock Notifications') }}" role="button">
                     <i class="fas fa-solid fa-envelope"></i>
                     @if (count(getLowStockNotifCount()) > 0)
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -39,9 +39,10 @@
                         </span>
                     @endif
                 </a>
-                <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right" style="max-height: 25rem; overflow-y: auto;">
+                <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right"
+                    style="max-height: 25rem; overflow-y: auto;">
                     <span class="dropdown-header">{{ count(getLowStockNotifCount()) }}
-                        {{ __('Low or Empty Stock Notifications') }}</span>
+                        {{ __('Limit or Empty Stock Notifications') }}</span>
                     <div class="dropdown-divider"></div>
                     @foreach (Notification::getLowStockNotifGet() as $stoks)
                         <div class="dropdown-item d-flex justify-content-between mb-2">
@@ -49,7 +50,7 @@
                                 <strong>{{ $stoks->item_code }}</strong><br>
                                 <small>{{ $stoks->supplier }}</small><br>
                                 <small>{{ Str::limit($stoks->item_name, 20, '...') }}</small> /
-                                <small>{{ $stoks->unit}}</small><br>
+                                <small>{{ $stoks->unit }}</small><br>
                                 <small>{{ $stoks->merk }}</small>
                             </div>
                             <span class="text-danger text-md">{{ $stoks->total_stock }}</span>
@@ -63,8 +64,8 @@
                 </div>
             </li>
             <li class="nav-item dropdown d-flex justify-content-center align-items-center">
-                <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown" title="{{ __('Approval Notifications') }}"
-                    role="button">
+                <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown"
+                    title="{{ __('Approval Notifications') }}" role="button">
                     <i class="fas fa-solid fa-inbox"></i>
                     @if (getGoodsInApproval()->count() > 0)
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -72,7 +73,8 @@
                         </span>
                     @endif
                 </a>
-                <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right" style="max-height: 25rem; overflow-y: auto;">
+                <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right"
+                    style="max-height: 25rem; overflow-y: auto;">
                     <span class="dropdown-header">{{ getGoodsInApproval()->count() }}
                         {{ __('Approval Notifications') }} </span>
                     <div class="dropdown-divider"></div>
@@ -94,8 +96,8 @@
                 </div>
             </li>
             <li class="nav-item dropdown d-flex justify-content-center align-items-center">
-                <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown" title="{{ __("Today's Stock Opname History") }}"
-                    role="button">
+                <a class="nav-link h5 position-relative" href="#" id="notificationDropdown" data-toggle="dropdown"
+                    title="{{ __("Today's Stock Opname History") }}" role="button">
                     <i class="fas fa-solid fa-cubes"></i>
                     @if (getStockOpnames()->count() > 0)
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -103,7 +105,8 @@
                         </span>
                     @endif
                 </a>
-                <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right" style="max-height: 25rem; overflow-y: auto;">
+                <div class="dropdown-menu dropdown-menu-xl dropdown-menu-right"
+                    style="max-height: 25rem; overflow-y: auto;">
                     <span class="dropdown-header">{{ getStockOpnames()->count() }}
                         {{ __("Today's Stock Opname History") }} </span>
                     <div class="dropdown-divider"></div>
@@ -134,7 +137,8 @@
             <div class="user-panel mt-3 pb-3 mb-3 d-flex justify-content-center align-items-center"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="cursor:pointer;">
                 <div class="info font-weight-bold" style="text-transform:capitalize;">
-                    <span class="d-none d-md-block" style="color:gray !important;" id="user">{{ Auth::user()->name }}</span>
+                    <span class="d-none d-md-block" style="color:gray !important;"
+                        id="user">{{ Auth::user()->name }}</span>
                 </div>
                 <div class="image">
                     <img src="{{ empty(Auth::user()->image) ? asset('user.png') : asset('storage/profile/' . Auth::user()->image) }}"

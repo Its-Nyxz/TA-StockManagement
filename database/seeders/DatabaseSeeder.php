@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        $this -> call([
+        $this->call([
             RoleSeeder::class,
             UserSeeder::class,
             CategorySeeder::class,
@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             CustomerSeeder::class,
             ItemSeeder::class,
             SettingSeeder::class,
+            TentangSeeder::class,
         ]);
         // User::factory()->create([
         //     'name' => 'Test User',

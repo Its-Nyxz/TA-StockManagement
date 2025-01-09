@@ -22,6 +22,7 @@ use App\Http\Controllers\ReportGoodsOutController;
 use App\Http\Controllers\TransactionOutController;
 use App\Http\Controllers\ReportFinancialController;
 use App\Http\Controllers\ReportGoodsBackController;
+use App\Http\Controllers\TentangController;
 use App\Http\Controllers\TransactionBackController;
 
 Route::middleware(["localization"])->group(function () {
@@ -152,6 +153,7 @@ Route::middleware(['auth', "localization"])->group(function () {
     Route::controller(TransactionOutController::class)->prefix('/transaksi/keluar')->group(function () {
         Route::get('/', 'index')->name('transaksi.keluar');
         Route::get('/list', 'list')->name('transaksi.keluar.list');
+        Route::get('/barang/list/out', 'listOut')->name('barang.list.out');
         Route::post('/simpan', 'save')->name('transaksi.keluar.save');
         Route::post('/info', 'detail')->name('transaksi.keluar.detail');
         Route::put('/ubah', 'update')->name('transaksi.keluar.update');
@@ -162,6 +164,7 @@ Route::middleware(['auth', "localization"])->group(function () {
     Route::controller(TransactionBackController::class)->prefix('/transaksi/kembali')->middleware('employee.middleware')->group(function () {
         Route::get('/', 'index')->name('transaksi.kembali');
         Route::get('/list', 'list')->name('transaksi.kembali.list');
+        Route::get('/barang/list/back', 'listBack')->name('barang.list.back');
         Route::post('/simpan', 'save')->name('transaksi.kembali.save');
         Route::post('/info', 'detail')->name('transaksi.kembali.detail');
         Route::put('/ubah', 'update')->name('transaksi.kembali.update');
@@ -228,6 +231,8 @@ Route::middleware(['auth', "localization"])->group(function () {
     // pengaturan profile
     Route::get('/settings/profile', [ProfileController::class, 'index'])->name('settings.profile');
     Route::post('/settings/profile', [ProfileController::class, 'update'])->name('settings.profile.update');
+    Route::get('/settings/tentang', [TentangController::class, 'index'])->name('settings.tentang');
+    Route::post('/settings/tentang', [TentangController::class, 'update'])->name('settings.tentang.update');
 
     // logout
     Route::get('/logout', [LoginController::class, 'logout'])->name('login.delete');

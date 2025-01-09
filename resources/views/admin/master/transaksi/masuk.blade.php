@@ -302,7 +302,7 @@
                                                             <th class="border-bottom-0">{{ __('date of entry') }}</th>
                                                             <th class="border-bottom-0">{{ __('incoming item code') }}
                                                             </th>
-                                                            <th class="border-bottom-0">{{ __('item code') }}</th>
+                                                            {{-- <th class="border-bottom-0">{{ __('item code') }}</th> --}}
                                                             <th class="border-bottom-0">{{ __('supplier') }}</th>
                                                             <th class="border-bottom-0">{{ __('brand') }}</th>
                                                             <th class="border-bottom-0">{{ __('item') }}</th>
@@ -321,9 +321,9 @@
                                                                 <td>
                                                                     {{ $item->invoice_number }}
                                                                 </td>
-                                                                <td>
+                                                                {{-- <td>
                                                                     {{ $item->item->code }}
-                                                                </td>
+                                                                </td> --}}
                                                                 <td>
                                                                     {{ $item->supplier->name }}
                                                                 </td>

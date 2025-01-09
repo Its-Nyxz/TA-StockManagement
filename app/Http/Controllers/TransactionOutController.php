@@ -232,4 +232,62 @@ class TransactionOutController extends Controller
             "message" => __("data deleted successfully")
         ])->setStatusCode(200);
     }
+
+    public function listOut(Request $request): JsonResponse
+    {
+        $items = Item::with('category', 'unit', 'brand', 'supplier', 'goodsIns', 'goodsOuts', 'goodsBacks', 'stockOpnames')->where('supplier_id', $request->supplier_id)->latest()->get();
+        // dd($items);
+        if ($request->ajax()) {
+            return DataTables::of($items)
+                ->addColumn('img', function ($data) {
+                    $imageUrl = empty($data->image)
+                        ? asset('default.png')
+                        : asset('storage/barang/' . $data->image);
+
+                    return "<img src='" . $imageUrl . "' style='width:100%;max-width:240px;aspect-ratio:1;object-fit:cover;padding:1px;border:1px solid #ddd'/>";
+                })
+                ->addColumn('category_name', function ($data) {
+                    return $data->category->name;
+                })
+                ->addColumn('unit_name', function ($data) {
+                    return $data->unit->name;
+                })
+                ->addColumn('brand_name', function ($data) {
+                    return $data->brand->name;
+                })
+                ->addColumn('supplier_name', function ($data) {
+                    return $data->supplier->name;
+                })
+                ->addColumn("total", function ($data) {
+                    // Menghitung jumlah hanya untuk goodsIns dengan status 1
+                    $totalQuantityIn = $data->goodsIns->where('status', 1)->sum('quantity');
+                    $totalQuantityOut = $data->goodsOuts->sum('quantity');
+                    $totalQuantityRetur = $data->goodsBacks->sum('quantity');
+                    $totalQuantitySO = $data->stockOpnames->sum('quantity');
+
+                    // Mengambil item dengan relasi unit
+                    $item = Item::with("unit")->find($data->id);
+                    if (!$item || !$item->unit) {
+                        return '0.00'; // Default jika item atau unit tidak ditemukan
+                    }
+
+                    // Hitung total stok
+                    $totalStock = ($item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur) + $totalQuantitySO;
+                    $totalStock = max(0, $totalStock); // Pastikan tidak negatif
+
+                    // Format angka dan tambahkan unit
+                    $formattedTotal = number_format($totalStock, 2); // Format dengan 2 desimal
+                    return $formattedTotal . " / " . $item->unit->name;
+                })
+                ->rawColumns(['total'])
+
+                ->addColumn('tindakan', function ($data) {
+                    $button = "<button class='ubah btn btn-success m-1' id='" . $data->id . "'><i class='fas fa-pen m-1'></i>" . __("edit") . "</button>";
+                    $button .= "<button class='hapus btn btn-danger m-1' id='" . $data->id . "'><i class='fas fa-trash m-1'></i>" . __("delete") . "</button>";
+                    return $button;
+                })
+                ->rawColumns(['img', 'tindakan'])
+                ->make(true);
+        }
+    }
 }

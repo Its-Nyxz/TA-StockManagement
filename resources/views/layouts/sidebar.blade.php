@@ -198,6 +198,13 @@
                                   <p>{{ __('profile') }}</p>
                               </a>
                           </li>
+                          <li class="nav-item">
+                              <a href="{{ route('settings.tentang') }}"
+                                  class="nav-link text-white {{ request()->routeIs('settings.tentang') ? 'active' : '' }}">
+                                  <i class="fas fa-regular-circle"></i>
+                                  <p>{{ __('about us') }}</p>
+                              </a>
+                          </li>
                       </ul>
                   </li>
                   <li class="nav-item">

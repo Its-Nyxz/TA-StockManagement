@@ -135,7 +135,7 @@ class ReportStockController extends Controller
                             "<span class='badge badge-danger'>" . __("Stock Empty") . "</span>";
                     } elseif ($count <= $stockLimit) {
                         return "<span class='text-red font-weight-bold'>" . $result . "</span> " .
-                            "<span class='badge badge-warning'>" . __("Stock Running Low") . "</span>";
+                            "<span class='badge badge-warning'>" . __("Stock Limit") . "</span>";
                     } else {
                         return "<span class='text-success font-weight-bold'>" . $result . "</span>";
                     }

@@ -81,7 +81,7 @@
                                         class="d-none d-lg-block d-xl-inline">{{ __('messages.export-to', ['file' => 'pdf']) }}</span></button>
                                 <button class="btn btn-outline-success font-weight-bold m-1" id="export-excel"><i
                                         class="fas fa-file-excel m-1"></i><span
-                                        class="d-none d-lg-block d-xl-inline">{{ __('messages.export-to', ['file' => 'excel']) }}</span></button>
+                                        class="d-none d-lg-block d-xl-inline">{{ __('messages.export', ['file' => 'excel']) }}</span></button>
                             </div>
                         </div>
                     </div>
