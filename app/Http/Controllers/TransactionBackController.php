@@ -323,7 +323,7 @@ class TransactionBackController extends Controller
                 })
                 ->addColumn("total", function ($data) {
                     // Menghitung jumlah hanya untuk goodsIns dengan status 1
-                    $totalQuantityIn = $data->goodsIns->where('status', 0)->sum('quantity');
+                    $totalQuantityIn = $data->goodsIns->sum('quantity');
                     $totalQuantityOut = $data->goodsOuts->sum('quantity');
                     $totalQuantityRetur = $data->goodsBacks->sum('quantity');
                     $totalQuantitySO = $data->stockOpnames->sum('quantity');
@@ -336,7 +336,6 @@ class TransactionBackController extends Controller
 
                     // Hitung total stok
                     $totalStock = ($item->quantity + $totalQuantityIn - $totalQuantityOut - $totalQuantityRetur) + $totalQuantitySO;
-                    // $totalStock = ($item->quantity + $totalQuantityIn);
                     $totalStock = max(0, $totalStock); // Pastikan tidak negatif
 
                     // Format angka dan tambahkan unit
