@@ -14,12 +14,12 @@ class TentangSeeder extends Seeder
     public function run(): void
     {
         Tentang::create([
-            'judul' => 'Universitas Sahid Surakarta',
+            'judul' => 'Duta Sae',
             'logo' => null,
-            'deskripsi' => 'Tugas akhir mahasiswa program studi informatika',
+            'deskripsi' => 'Sistem manajemen stok di Toko Bangunan Duta Sae untuk membantu pencatatan barang toko.',
             'kontak_email' => null,
-            'kontak_telepon' => null,
-            'alamat' => null,
+            'kontak_telepon' => 7685127,
+            'alamat' => 'Ngantirejo, Malangjiwan, Kec. Colomadu, Kabupaten Karanganyar, Jawa Tengah 57177',
         ]);
     }
 }
