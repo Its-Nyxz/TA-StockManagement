@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Brand;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
@@ -21,6 +22,7 @@ class BrandImport implements ToModel, WithHeadingRow, WithValidation
             return strtolower(preg_replace('/\s+/', ' ', trim($value)));
         }, $row);
 
+        $slug = Str::slug($row['name']);
         // Normalisasi nama untuk cek duplikasi
         $normalizedName = $row['name'];
 
@@ -32,6 +34,7 @@ class BrandImport implements ToModel, WithHeadingRow, WithValidation
         return new Brand([
             'name' => ucwords($normalizedName), // Menyimpan nama dalam format kapitalisasi kata
             'description' => $row['keterangan'] ?? null,
+            'slug' => $slug,
         ]);
     }
 

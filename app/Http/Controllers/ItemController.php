@@ -311,7 +311,6 @@ class ItemController extends Controller
         $request->validate([
             'file' => 'required|mimes:xlsx,csv',
         ]);
-
         try {
             // Load data from the file to check if it contains any rows
             $file = $request->file('file');
@@ -328,7 +327,7 @@ class ItemController extends Controller
             return redirect()->back()->with('success', 'Data imported successfully');
         } catch (\Exception $e) {
             // Log and return error if import fails
-            return redirect()->back()->with('error', 'Failed to import data. ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal Mengimport Data. ' . $e->getMessage());
         }
     }
 

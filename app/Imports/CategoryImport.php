@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Category;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
@@ -10,10 +11,10 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 class CategoryImport implements ToModel, WithHeadingRow, WithValidation
 {
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+     * @param array $row
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
     public function model(array $row)
     {
         // Menghapus spasi berlebihan dan mengonversi ke huruf kecil untuk semua kolom
@@ -21,6 +22,7 @@ class CategoryImport implements ToModel, WithHeadingRow, WithValidation
             return strtolower(preg_replace('/\s+/', ' ', trim($value)));
         }, $row);
 
+        $slug = Str::slug($row['name']);
         // Normalisasi nama untuk cek duplikasi
         $normalizedName = $row['name'];
 
@@ -32,6 +34,7 @@ class CategoryImport implements ToModel, WithHeadingRow, WithValidation
         return new Category([
             'name' => ucwords($normalizedName), // Menyimpan nama dalam format kapitalisasi kata
             'description' => $row['keterangan'] ?? null,
+            'slug' => $slug,
         ]);
     }
 
@@ -49,4 +52,3 @@ class CategoryImport implements ToModel, WithHeadingRow, WithValidation
         ];
     }
 }
-

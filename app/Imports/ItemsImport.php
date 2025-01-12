@@ -3,10 +3,11 @@
 namespace App\Imports;
 
 use App\Models\Item;
-use App\Models\Category;
-use App\Models\Brand;
 use App\Models\Unit;
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Supplier;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
@@ -27,11 +28,23 @@ class ItemsImport implements ToModel, WithHeadingRow, WithValidation
             throw new \Exception("Terdapat Nama Variant Barang yang sudah ada, yaitu " . ucwords($normalizedName));
         }
 
+        // Membuat slug dari nilai pada $row untuk jenis, merk, satuan, dan supplier
+        $slugJenis = Str::slug($row['jenis']);
+        $slugMerk = Str::slug($row['merk']);
+        $slugSatuan = Str::slug($row['satuan']);
+        // $slugSupplier = Str::slug($row['supplier']);
+
         // Pencarian ID relasi dengan case-insensitive dan menghapus spasi
-        $categoryId = Category::whereRaw('LOWER(TRIM(REPLACE(name, " ", ""))) = ?', [str_replace(' ', '', $row['jenis'])])->value('id');
-        $brandId = Brand::whereRaw('LOWER(TRIM(REPLACE(name, " ", ""))) = ?', [str_replace(' ', '', $row['merk'])])->value('id');
-        $unitId = Unit::whereRaw('LOWER(TRIM(REPLACE(name, " ", ""))) = ?', [str_replace(' ', '', $row['satuan'])])->value('id');
+        // $categoryId = Category::whereRaw('LOWER(TRIM(REPLACE(name, " ", ""))) = ?', [str_replace(' ', '', $row['jenis'])])->value('id');
+        // $brandId = Brand::whereRaw('LOWER(TRIM(REPLACE(name, " ", ""))) = ?', [str_replace(' ', '', $row['merk'])])->value('id');
+        // $unitId = Unit::whereRaw('LOWER(TRIM(REPLACE(name, " ", ""))) = ?', [str_replace(' ', '', $row['satuan'])])->value('id');
         $supplierId = Supplier::whereRaw('LOWER(TRIM(REPLACE(name, " ", ""))) = ?', [str_replace(' ', '', $row['supplier'])])->value('id');
+
+        // Pencarian ID relasi berdasarkan slug
+        $categoryId = Category::where('slug', $slugJenis)->value('id');
+        $brandId = Brand::where('slug', $slugMerk)->value('id');
+        $unitId = Unit::where('slug', $slugSatuan)->value('id');
+        // $supplierId = Supplier::where('slug', $slugSupplier)->value('id');
 
         if (!$categoryId || !$brandId || !$unitId || !$supplierId) {
             throw new \Exception("Data terkait tidak ditemukan untuk satu atau beberapa bidang dalam baris: " . json_encode($row));
@@ -56,9 +69,9 @@ class ItemsImport implements ToModel, WithHeadingRow, WithValidation
         return [
             'name' => 'required|string|max:255',
             'jumlah' => 'required|integer|min:0',
-            'jenis' => 'required|string|exists:categories,name',
-            'satuan' => 'required|string|exists:units,name',
-            'merk' => 'required|string|exists:brands,name',
+            'jenis' => 'required|string|exists:categories,slug',
+            'satuan' => 'required|string|exists:units,slug',
+            'merk' => 'required|string|exists:brands,slug',
             'supplier' => 'required|string|exists:suppliers,name',
         ];
     }
