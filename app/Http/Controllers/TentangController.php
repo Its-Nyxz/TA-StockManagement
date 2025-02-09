@@ -68,7 +68,7 @@ class TentangController extends Controller
         $tentang->alamat = $request->alamat;
         $tentang->save();
 
-        return response()->json(['message' => __('Data updated successfully!')]);
+        return response()->json(['message' => __('saved successfully')]);
     }
 
     /**

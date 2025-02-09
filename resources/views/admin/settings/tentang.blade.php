@@ -94,7 +94,7 @@
                             <div class="form-group mb-3">
                                 <label class="form-label font-weight-bold">{{ __('Alamat') }}</label>
                                 <p class="text-none">{{ $tentang->alamat ?? __('Tidak tersedia') }}</p>
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 </div>
