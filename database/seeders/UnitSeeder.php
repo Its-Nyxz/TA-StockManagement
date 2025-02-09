@@ -18,6 +18,7 @@ class UnitSeeder extends Seeder
             'Unit',
             'Rim',
             'Pcs',
+            'Dos',
             'Kilogram (kg)',
             'Meter (m)',
             'Meter Persegi (m²)',
@@ -26,7 +27,10 @@ class UnitSeeder extends Seeder
             'Sak',
             'Lembar',
             'Batang',
-            'Roll'
+            'Pasang',
+            'Roll',
+            'Ikat',
+            'Pack'
         ];
         foreach ($units as $unit) {
             Unit::create([
