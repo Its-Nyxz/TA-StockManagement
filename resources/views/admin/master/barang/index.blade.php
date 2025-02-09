@@ -8,12 +8,12 @@
                 <div class="card w-100">
                     <div class="card-header row">
                         <div class="d-flex justify-content-end align-items-center w-100">
-                            @can('super')
+                            {{-- @can('super')
                                 <button type="button" class="btn btn-primary m-1 mt-1" id="upload-modal-button"
                                     data-bs-toggle="modal" data-bs-target="#uploadModal">
                                     <i class="fas fa-file-import"></i>
                                 </button>
-                            @endcan
+                            @endcan --}}
                             @can('super&admin')
                                 <button class="btn btn-success" type="button" data-toggle="modal" data-target="#TambahData"
                                     id="modal-button"><i class="fas fa-plus"></i> {{ __('Add data') }}</button>

@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Unit;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
@@ -16,6 +17,7 @@ class UnitImport implements ToModel, WithHeadingRow, WithValidation
             return strtolower(preg_replace('/\s+/', ' ', trim($value)));
         }, $row);
 
+        $slug = Str::slug($row['name']);
         // Normalisasi nama untuk cek duplikasi
         $normalizedName = $row['name'];
 
@@ -27,6 +29,7 @@ class UnitImport implements ToModel, WithHeadingRow, WithValidation
         return new Unit([
             'name' => ucwords($normalizedName), // Menyimpan nama dalam format kapitalisasi kata
             'description' => $row['keterangan'] ?? null,
+            'slug' => $slug,
         ]);
     }
 

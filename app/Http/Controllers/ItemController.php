@@ -91,6 +91,19 @@ class ItemController extends Controller
                 })
                 ->rawColumns(['conversions']) // Tambahkan ini agar HTML dirender
                 ->addColumn('tindakan', function ($data) {
+                    // Menggunakan count untuk memeriksa apakah item digunakan di tabel lain
+                    $goodsInsCount = $data->goodsIns->count();
+                    $goodsOutsCount = $data->goodsOuts->count();
+                    $goodsBacksCount = $data->goodsBacks->count();
+                    $stockOpnamesCount = $data->stockOpnames->count();
+
+                    // Jika ada entri di tabel lain, tombol hapus tidak akan ditampilkan
+                    if ($goodsInsCount > 0 || $goodsOutsCount > 0 || $goodsBacksCount > 0 || $stockOpnamesCount > 0) {
+                        $button = "<button class='ubah btn btn-success m-1' id='" . $data->id . "'><i class='fas fa-pen m-1'></i>" . __("Edit") . "</button>";
+                        return $button; // Hanya tombol Edit jika item sudah digunakan
+                    }
+
+                    // Jika item tidak digunakan di tabel lain, tampilkan tombol hapus
                     $button = "<button class='ubah btn btn-success m-1' id='" . $data->id . "'><i class='fas fa-pen m-1'></i>" . __("Edit") . "</button>";
                     $button .= "<button class='hapus btn btn-danger m-1' id='" . $data->id . "'><i class='fas fa-trash m-1'></i>" . __("Delete") . "</button>";
                     return $button;
@@ -298,7 +311,6 @@ class ItemController extends Controller
         $request->validate([
             'file' => 'required|mimes:xlsx,csv',
         ]);
-
         try {
             // Load data from the file to check if it contains any rows
             $file = $request->file('file');
@@ -315,7 +327,7 @@ class ItemController extends Controller
             return redirect()->back()->with('success', 'Data imported successfully');
         } catch (\Exception $e) {
             // Log and return error if import fails
-            return redirect()->back()->with('error', 'Failed to import data. ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal Mengimport Data. ' . $e->getMessage());
         }
     }
 

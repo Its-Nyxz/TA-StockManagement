@@ -15,20 +15,24 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            'Bahan Bangunan',
-            'Peralatan Tukang',
-            'Material Kayu',
+            'Semen',
+            'Cat',
+            'Paku',
+            'Sekrup',
+            'Baut',
+            'Bor',
+            'Mortar',
             'Baja',
             'Pelapis',
             'Jendela',
-            'Perlengkapan Listrik',
-            'Saniter',
-            'Material Atap',
-            'Cat',
+            'Kuas',
             'Pintu',
             'Pipa',
-            'Dapur',
             'Keramik',
+            'Material Kayu',
+            'Material Atap',
+            'Peralatan Tukang',
+            'Perlengkapan Listrik',
             'Perlengkapan Kamar Mandi',
             'Alat Pelindung Diri (APD)'
         ];

@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Supplier;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
@@ -16,6 +17,7 @@ class SupplierImport implements ToModel, WithHeadingRow, WithValidation
             return strtolower(preg_replace('/\s+/', ' ', trim($value)));
         }, $row);
 
+        $slug = Str::slug($row['name']);
         // Memeriksa duplikasi berdasarkan nama yang telah dinormalisasi
         $normalizedName = $row['name'];
 
@@ -29,6 +31,7 @@ class SupplierImport implements ToModel, WithHeadingRow, WithValidation
             'phone_number' => $row['phone_number'],
             'email' => $row['email'] ?? null,
             'website' => $row['website'] ?? null,
+            'slug' => $slug,
         ]);
     }
 

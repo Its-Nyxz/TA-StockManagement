@@ -15,15 +15,19 @@ class BrandSeeder extends Seeder
     public function run(): void
     {
         $brands = [
-            'Dulux',
-            'Nippon Paint',
-            'KIA',
-            'Broco',
-            'Philips',
-            'Wavin',
-            'HWI (Hyundai Welding Indonesia)',
-            'Makita',
-            'Semen Gresik'
+
+            'Aquaproof',
+            'No Drop',
+            'Property',
+            'Indaco',
+            'Rucika',
+            'Altex',
+            'Reno',
+            'Haston',
+            'Stayvic',
+            'Matrix',
+            'Semen Gresik',
+            'Semen PCC'
         ];
 
         foreach ($brands as $brand) {
@@ -31,4 +35,3 @@ class BrandSeeder extends Seeder
         }
     }
 }
-  
